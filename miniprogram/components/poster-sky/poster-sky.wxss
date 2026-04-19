@@ -1,0 +1,50 @@
+.sky {
+  position: relative;
+  overflow: hidden;
+}
+.tone-light {
+  background: linear-gradient(180deg, #eef4fb 0%, #d3e3f5 45%, #b7cfea 100%);
+}
+.tone-soft {
+  background: linear-gradient(180deg, #f3f6fb 0%, #e4edf7 100%);
+}
+.tone-deep {
+  background: linear-gradient(180deg, #c2d6ee 0%, #8fb1d6 55%, #6a93c1 100%);
+}
+
+.texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.25) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(20,40,80,0.03) 0 1px, transparent 1px 2px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rays {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.ray {
+  position: absolute;
+  left: 14%;
+  top: 112%;
+  transform-origin: 0% 50%;
+  filter: blur(6rpx);
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+}

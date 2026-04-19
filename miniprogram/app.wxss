@@ -1,0 +1,35 @@
+/* Design tokens lifted from DCT第二期报名.html */
+page {
+  --ink:       #0b1f3a;
+  --ink-soft:  #1d3a6b;
+  --sky-1:     #e7f0fa;
+  --sky-2:     #c9ddf3;
+  --sky-3:     #9dbfe3;
+  --blue:      #2c5ca0;
+  --blue-deep: #1a3a78;
+  --gold:      #e9b949;
+  --gold-deep: #c9a24a;
+  --paper:     #f6f2e8;
+  --mute:      #6b7a91;
+  --line:      #d5ddea;
+
+  background: #f6f8fc;
+  color: var(--ink);
+  font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+view, text { box-sizing: border-box; }
+
+.serif {
+  font-family: "Songti SC", "STSong", "PingFang SC", serif;
+}
+.mono {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 2rpx;
+}
+
+/* hairline helper — mini program hairlines look chunky otherwise */
+.hairline-b { border-bottom: 1rpx solid #eef2f8; }
+.hairline-t { border-top: 1rpx solid #eef2f8; }

@@ -1,0 +1,41 @@
+.star {
+  position: absolute;
+  pointer-events: none;
+}
+.star-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,246,208,1) 0%, rgba(255,228,154,0.55) 40%, rgba(255,208,106,0) 75%);
+}
+/* Four-point star built from two thin diamonds (horizontal + vertical) */
+.star-ray {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: #ffe7a5;
+  opacity: 0.95;
+}
+.star-ray-y {
+  width: 18%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(50% 0%, 65% 50%, 50% 100%, 35% 50%);
+}
+.star-ray-x {
+  width: 100%;
+  height: 18%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(0% 50%, 50% 35%, 100% 50%, 50% 65%);
+}
+.star-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 28%;
+  height: 28%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.9;
+}

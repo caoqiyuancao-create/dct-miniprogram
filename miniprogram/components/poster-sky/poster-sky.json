@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "star-4": "/components/star-4/star-4"
+  }
+}

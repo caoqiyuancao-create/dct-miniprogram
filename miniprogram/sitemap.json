@@ -1,0 +1,6 @@
+{
+  "desc": "DCT salon registration mini program",
+  "rules": [
+    { "action": "allow", "page": "*" }
+  ]
+}

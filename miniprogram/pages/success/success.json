@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "已提交",
+  "navigationBarBackgroundColor": "#eef4fb",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f6f8fc",
+  "usingComponents": {
+    "poster-sky": "/components/poster-sky/poster-sky",
+    "star-4":     "/components/star-4/star-4"
+  }
+}

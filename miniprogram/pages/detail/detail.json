@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "活动须知",
+  "navigationBarBackgroundColor": "#6a93c1",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f6f8fc",
+  "usingComponents": {
+    "poster-sky": "/components/poster-sky/poster-sky"
+  }
+}

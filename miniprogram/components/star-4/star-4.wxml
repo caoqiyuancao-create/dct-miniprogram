@@ -1,0 +1,6 @@
+<view class="star" style="{{_style}}">
+  <view class="star-glow"></view>
+  <view class="star-ray star-ray-y"></view>
+  <view class="star-ray star-ray-x"></view>
+  <view class="star-core"></view>
+</view>

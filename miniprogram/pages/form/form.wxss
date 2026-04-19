@@ -1,0 +1,151 @@
+.page {
+  background: #f6f8fc;
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+}
+
+.hero {
+  padding: 12rpx 44rpx 44rpx;
+}
+.hero-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #0f2855;
+}
+.hero-sub {
+  font-size: 25rpx;
+  color: #3d5f94;
+  margin-top: 12rpx;
+  line-height: 1.6;
+}
+
+.body {
+  padding: 36rpx 32rpx 0;
+}
+
+.group-label {
+  font-size: 22rpx;
+  color: #55709a;
+  letter-spacing: 4rpx;
+  padding: 0 12rpx 16rpx;
+  text-transform: uppercase;
+  margin-top: 8rpx;
+}
+
+.group-card {
+  background: #fff;
+  border-radius: 32rpx;
+  border: 1rpx solid #e3e9f3;
+  overflow: hidden;
+  margin-bottom: 36rpx;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  padding: 0 32rpx;
+  min-height: 100rpx;
+  border-bottom: 1rpx solid #eef2f8;
+}
+.field-last { border-bottom: none; }
+.field-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #0f2855;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.field-input {
+  flex: 1;
+  background: transparent;
+  font-size: 28rpx;
+  color: #0f2855;
+  height: 80rpx;
+}
+.ph {
+  color: #a0acc0;
+  font-size: 26rpx;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 240rpx;
+  padding: 28rpx 32rpx;
+  background: #fff;
+  border-radius: 32rpx;
+  font-size: 27rpx;
+  line-height: 1.7;
+  color: #0f2855;
+  box-sizing: border-box;
+}
+
+.consent {
+  display: flex;
+  gap: 20rpx;
+  align-items: flex-start;
+  padding: 36rpx 32rpx 16rpx;
+}
+.checkbox {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 18rpx;
+  margin-top: 4rpx;
+  flex-shrink: 0;
+  background: #e3e9f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkbox-on {
+  background: #2c5ca0;
+}
+.check {
+  width: 18rpx;
+  height: 10rpx;
+  border-left: 4rpx solid #fff;
+  border-bottom: 4rpx solid #fff;
+  transform: rotate(-45deg);
+  margin-top: -4rpx;
+}
+.consent-text {
+  font-size: 24rpx;
+  color: #3d5f94;
+  line-height: 1.6;
+  flex: 1;
+}
+.consent-link {
+  color: #2c5ca0;
+  text-decoration: underline;
+}
+
+.submit-wrap {
+  padding: 40rpx 4rpx 40rpx;
+}
+.submit {
+  width: 100%;
+  height: 100rpx;
+  border-radius: 50rpx;
+  background: linear-gradient(180deg, #2c5ca0 0%, #1a3a78 100%);
+  color: #fff;
+  border: none;
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: 6rpx;
+  box-shadow: 0 16rpx 44rpx rgba(26,58,120,0.3);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.submit::after { border: none; }
+.submit-hover { opacity: 0.92; }
+.submit-disabled {
+  opacity: 0.6;
+  box-shadow: none;
+}
+.submit-sub {
+  margin-top: 20rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #8496b3;
+}

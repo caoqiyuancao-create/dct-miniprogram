@@ -1,0 +1,80 @@
+<view class="page">
+
+  <poster-sky tone="deep" min-height="440rpx">
+    <view class="hero">
+      <view class="mono hero-eyebrow">DCT · 怎么玩</view>
+      <view class="serif hero-title">认真玩，认真想</view>
+    </view>
+  </poster-sky>
+
+  <!-- flow -->
+  <view class="section">
+    <view class="mono section-kicker">活动流程 · 120 – 150 分钟</view>
+    <view class="card flow-card">
+      <view class="flow-row" wx:for="{{flow}}" wx:key="t" wx:for-item="item">
+        <view class="mono flow-time">{{item.t}}</view>
+        <view class="flow-label">{{item.l}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- event info -->
+  <view class="section">
+    <view class="mono section-kicker">时间 · 地点 · 入场</view>
+    <view class="card info-card">
+      <view class="info-row">
+        <view class="mono info-label">时间</view>
+        <view class="info-col">
+          <view class="info-value">2026 年 4 月 25 日（周六）</view>
+          <view class="info-sub">18:40 入场 · 19:00 开始</view>
+        </view>
+      </view>
+      <view class="sep"></view>
+      <view class="info-row">
+        <view class="mono info-label">地点</view>
+        <view class="info-col">
+          <view class="info-value">武侯区 玉林 DCT 客厅</view>
+          <view class="info-sub">报名通过后微信通知具体地址</view>
+        </view>
+      </view>
+      <view class="sep"></view>
+      <view class="info-row">
+        <view class="mono info-label">入场</view>
+        <view class="info-col">
+          <view class="info-value">88 元 / 位</view>
+          <view class="info-sub">含一份甜品 + 一杯酒 · 可打包带走</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- bar rules -->
+  <view class="section">
+    <view class="mono section-kicker">DCT · 吧规</view>
+    <view class="rules-intro">我们认真玩，所以我们也认真设边界。</view>
+    <view class="card rules-card">
+      <view class="rules-row" wx:for="{{rules}}" wx:key="k" wx:for-item="item" wx:for-index="i">
+        <view class="mono rule-num">{{i + 1}}</view>
+        <view class="rule-body">
+          <view class="rule-k">{{item.k}}</view>
+          <view class="rule-v">{{item.v}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- entry criteria -->
+  <view class="section">
+    <view class="mono section-kicker">入场</view>
+    <view class="chips">
+      <view class="chip" wx:for="{{chips}}" wx:key="*this" wx:for-item="t">{{t}}</view>
+    </view>
+  </view>
+
+  <view class="cta-wrap">
+    <button class="cta" bindtap="goForm" hover-class="cta-hover">
+      <text class="cta-text">我已读完 · 去报名</text>
+    </button>
+  </view>
+
+</view>

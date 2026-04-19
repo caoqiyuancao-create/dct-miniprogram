@@ -1,0 +1,38 @@
+# ---- Node / npm ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json.*
+
+# ---- WeChat DevTools ----
+# Per-user devtools settings (auto-regenerated), should not be shared.
+project.private.config.json
+miniprogram_npm/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ---- Editors / IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- Claude Code ----
+.claude/
+
+# ---- Unrelated test project ----
+mini_test_1/
+
+# ---- Build / temp ----
+dist/
+build/
+*.log
+*.tmp
+.tmp/

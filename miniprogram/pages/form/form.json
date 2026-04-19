@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "报名 · 第二期",
+  "navigationBarBackgroundColor": "#f3f6fb",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f6f8fc",
+  "usingComponents": {
+    "poster-sky": "/components/poster-sky/poster-sky"
+  }
+}

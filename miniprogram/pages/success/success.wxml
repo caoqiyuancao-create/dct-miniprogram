@@ -1,0 +1,55 @@
+<view class="page">
+
+  <poster-sky tone="light" min-height="720rpx">
+    <view class="hero">
+      <view class="constellation">
+        <star-4
+          wx:for="{{constellation}}"
+          wx:key="s"
+          x="{{item.x}}"
+          y="{{item.y}}"
+          s="{{item.s}}"
+          o="{{item.o}}"
+        />
+      </view>
+      <view class="serif hero-title">已收到</view>
+      <view class="hero-sub">
+        <view>谢谢你愿意和我们一起</view>
+        <view>在绩效逻辑之外，聊点真的东西</view>
+      </view>
+    </view>
+  </poster-sky>
+
+  <!-- timeline -->
+  <view class="section">
+    <view class="card timeline">
+      <view class="step" wx:for="{{steps}}" wx:key="label" wx:for-item="step" wx:for-index="i">
+        <view class="step-rail">
+          <view class="dot dot-{{step.state}}">
+            <view wx:if="{{step.state === 'done'}}" class="dot-check"></view>
+          </view>
+          <view wx:if="{{!step.last}}" class="line"></view>
+        </view>
+        <view class="step-body step-body-{{step.state}}">
+          <view class="step-label">{{step.label}}</view>
+          <view class="step-sub">{{step.sub}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- notice -->
+  <view class="section">
+    <view class="notice">
+      <view class="notice-bullet"></view>
+      <view class="notice-text">
+        DCT 会综合学科背景与交流意愿筛选本期参与者。若本期暂未入选，我们会优先邀请你参加下一期同类主题。
+      </view>
+    </view>
+  </view>
+
+  <view class="cta-wrap">
+    <button class="back-btn" bindtap="backToLanding" hover-class="back-hover">回到主题介绍</button>
+  </view>
+
+</view>

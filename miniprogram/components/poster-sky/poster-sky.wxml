@@ -1,0 +1,31 @@
+<view class="sky tone-{{tone}}" style="{{minHeight ? 'min-height:' + minHeight + ';' : ''}}">
+  <view class="texture"></view>
+
+  <block wx:if="{{rays}}">
+    <view class="rays">
+      <view
+        wx:for="{{rayList}}"
+        wx:key="index"
+        class="ray"
+        style="width:{{item.len}}%; height:{{item.w}}rpx; transform: rotate({{item.deg}}deg); background: linear-gradient(90deg, rgba(255,255,255,{{item.op}}) 0%, rgba(255,255,255,{{item.op * 0.6}}) 50%, rgba(255,255,255,0) 100%);"
+      ></view>
+    </view>
+  </block>
+
+  <block wx:if="{{stars}}">
+    <view class="stars">
+      <star-4
+        wx:for="{{starList}}"
+        wx:key="index"
+        x="{{item.x}}"
+        y="{{item.y}}"
+        s="{{item.s}}"
+        o="{{item.o}}"
+      />
+    </view>
+  </block>
+
+  <view class="content">
+    <slot></slot>
+  </view>
+</view>

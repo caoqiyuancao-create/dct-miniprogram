@@ -1,0 +1,172 @@
+<view class="page">
+
+  <!-- HERO -->
+  <poster-sky tone="light" min-height="880rpx">
+    <view class="hero">
+      <view class="hero-left">
+        <view class="mono eyebrow">DCT · VOL.02 · 2026.04.25</view>
+        <view class="serif title">
+          <view>六星</view>
+          <view>之路</view>
+        </view>
+        <view class="subline">
+          <view class="star-bullet star-gold"></view>
+          <text class="subline-text">目标管理与坚持哲学</text>
+        </view>
+        <view class="subline-dash">——写给学术追梦人的漫谈</view>
+      </view>
+      <view class="hero-portrait-wrap">
+        <image class="hero-portrait" src="/assets/gao-portrait.jpg" mode="aspectFill" />
+        <view class="hero-portrait-fade"></view>
+      </view>
+    </view>
+
+    <!-- speaker card -->
+    <view class="speaker-wrap">
+      <view class="speaker-card">
+        <view class="speaker-avatar">
+          <image src="/assets/gao-avatar-poster.png" mode="aspectFill" class="speaker-avatar-img" />
+        </view>
+        <view class="speaker-info">
+          <view class="speaker-name">
+            <text>高晓蓉</text>
+            <text class="speaker-title"> 教授</text>
+          </view>
+          <view class="speaker-bio">
+            <view>西南交通大学光电工程研究所</view>
+            <view>马拉松六星跑者 "Six Star Finisher"</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </poster-sky>
+
+  <!-- OPENING PITCH -->
+  <view class="section section-top">
+    <view class="serif opening-title">
+      <view>在学术里保持严谨，</view>
+      <view>在生活中追求热爱。</view>
+    </view>
+    <view class="opening-body">
+      DCT 第二期，我们很荣幸邀请到高晓蓉教授来到客厅，与我们分享她关于<text class="opening-accent">目标、坚持与多重人生角色</text>的思考。
+    </view>
+  </view>
+
+  <!-- THREE POINTS -->
+  <view class="section">
+    <view class="mono section-kicker">SHE WILL SHARE</view>
+    <view class="serif section-title">从真实经历出发，三个侧面</view>
+    <view class="points">
+      <view class="point-card" wx:for="{{points}}" wx:key="num">
+        <view class="mono point-num">{{item.num}}</view>
+        <view class="point-body">
+          <view class="serif point-title">{{item.title}}</view>
+          <view class="point-sub">{{item.sub}}</view>
+          <view class="point-text">{{item.body}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- CLOSING LINE -->
+  <view class="section">
+    <view class="closing">
+      <view class="closing-text">
+        这不仅是一场成功经验分享，更是<text class="serif closing-accent">一封写给所有学术追梦人的信</text>——关于如何在生活里，持续相信、持续行动，持续成为自己想成为的人。
+      </view>
+    </view>
+  </view>
+
+  <!-- EVENT INFO -->
+  <view class="section">
+    <view class="mono section-kicker">WHEN · WHERE · HOW</view>
+    <view class="info-card">
+      <view class="info-row">
+        <view class="mono info-label">时间</view>
+        <view class="info-col">
+          <view class="info-value">2026 年 4 月 25 日（周六）</view>
+          <view class="info-sub">18:40 入场  ·  19:00 开始</view>
+        </view>
+      </view>
+      <view class="sep"></view>
+      <view class="info-row">
+        <view class="mono info-label">地点</view>
+        <view class="info-col">
+          <view class="info-value">武侯区 玉林 DCT 客厅</view>
+          <view class="info-sub">报名通过后微信通知具体地址</view>
+        </view>
+      </view>
+      <view class="sep"></view>
+      <view class="info-row">
+        <view class="mono info-label">入场</view>
+        <view class="info-col">
+          <view class="info-value">88 元 / 位</view>
+          <view class="info-sub">含一份甜品 + 一杯酒 · 可打包带走</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- SEASONAL MENU -->
+  <view class="section">
+    <view class="mono section-kicker">EARLY SUMMER · LIMITED</view>
+    <view class="menu-card">
+      <view class="serif menu-title">初夏季节限定</view>
+      <view class="menu-sub">Mulberry season, from Panzhihua</view>
+      <view class="menu-sep"></view>
+      <view class="menu-list">
+        <view class="menu-row" wx:for="{{menu}}" wx:key="name">
+          <view class="star-bullet star-brown"></view>
+          <view class="serif menu-name">{{item.name}}</view>
+          <view class="mono menu-tag">{{item.tag}}</view>
+        </view>
+      </view>
+      <view class="menu-foot">
+        <view>本期不提供正餐，建议先吃过晚饭再来～</view>
+        <view>担心甜品负担也可以打包带走。</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- WHAT IS DCT -->
+  <view class="section">
+    <view class="dct-head">
+      <image src="/assets/logo.png" class="dct-logo" />
+      <view class="dct-head-text">
+        <view class="mono section-kicker">WHAT IS DCT ?</view>
+        <view class="serif dct-head-title">认真地胡思乱想</view>
+      </view>
+    </view>
+    <view class="dct-tagline">——用科学的态度，聊天马行空的奇思妙想</view>
+    <view class="dct-latin">Doctors' Crazy Thinking · Dog, Chef &amp; Therapist</view>
+    <view class="dct-body">
+      <view>一个家庭学术沙龙。在绩效逻辑之外，留一块真诚分享、自由交流、严肃思考的精神自留地。</view>
+      <view class="dct-body-line2">在客厅里聊学术，也聊生活；聊目标，也聊热爱。</view>
+    </view>
+    <view class="serif dct-invite">期待和你一起，建设这块精神自留地。</view>
+  </view>
+
+  <!-- RULES ENTRY -->
+  <view class="section">
+    <view class="rules-entry" bindtap="goDetail" hover-class="tap-hover">
+      <view class="rules-entry-text">
+        <view class="rules-entry-title">活动须知与 DCT · 吧规</view>
+        <view class="rules-entry-sub">报名前建议先读一下</view>
+      </view>
+      <view class="chevron"></view>
+    </view>
+  </view>
+
+  <!-- CTA -->
+  <view class="cta-wrap">
+    <button class="cta" bindtap="goForm" hover-class="cta-hover">
+      <view class="star-bullet star-cta"></view>
+      <text class="cta-text">报名参加第二期</text>
+      <view class="star-bullet star-cta"></view>
+    </button>
+    <view class="cta-sub">
+      我们会根据学科背景与意愿综合筛选，<text class="cta-sub-accent">24 小时内回复</text>
+    </view>
+  </view>
+
+</view>

@@ -345,8 +345,30 @@
 
 </div>
 
-<!-- CloudBase Web SDK (CDN) -->
-<script src="https://static.cloudbase.net/cloudbase-js-sdk/2.8.0/cloudbase.full.js"></script>
+<!-- CloudBase Web SDK (CDN with fallbacks — try Tencent first, then jsdelivr, then unpkg) -->
+<script>
+  (function loadCloudbase() {
+    var urls = [
+      'https://static.cloudbase.net/cloudbase-js-sdk/2.19.3/cloudbase.full.js',
+      'https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@2.19.3/dist/cloudbase.full.js',
+      'https://unpkg.com/@cloudbase/js-sdk@2.19.3/dist/cloudbase.full.js'
+    ];
+    var i = 0;
+    function tryNext() {
+      if (i >= urls.length) {
+        console.error('[dct] all cloudbase CDNs failed');
+        return;
+      }
+      var s = document.createElement('script');
+      s.src = urls[i++];
+      s.async = false;
+      s.onerror = function () { console.warn('[dct] cdn failed:', s.src); tryNext(); };
+      s.onload  = function () { console.log('[dct] cloudbase loaded from:', s.src); };
+      document.head.appendChild(s);
+    }
+    tryNext();
+  })();
+</script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 </body>

@@ -242,11 +242,22 @@ function readForm() {
 let cloudApp = null;
 let authReady = null;
 
+async function waitForSDK(timeoutMs = 8000) {
+  if (typeof cloudbase !== 'undefined') return;
+  const start = Date.now();
+  while (typeof cloudbase === 'undefined') {
+    if (Date.now() - start > timeoutMs) {
+      throw new Error('云端 SDK 加载失败，请检查网络后刷新重试');
+    }
+    await new Promise(r => setTimeout(r, 150));
+  }
+}
+
 function initCloud() {
   if (cloudApp) return cloudApp;
   const env = (window.__DCT_CONFIG__ && window.__DCT_CONFIG__.env) || '';
   if (!env) throw new Error('CloudBase env not configured');
-  if (typeof cloudbase === 'undefined') throw new Error('cloudbase SDK not loaded');
+  if (typeof cloudbase === 'undefined') throw new Error('云端 SDK 加载失败，请检查网络后刷新重试');
   cloudApp = cloudbase.init({ env });
   return cloudApp;
 }
@@ -254,6 +265,7 @@ function initCloud() {
 async function ensureAuth() {
   if (authReady) return authReady;
   authReady = (async () => {
+    await waitForSDK();
     const app = initCloud();
     const auth = app.auth({ persistence: 'local' });
     const state = await auth.getLoginState();

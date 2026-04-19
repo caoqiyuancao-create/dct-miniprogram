@@ -5,23 +5,24 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 const COLLECTION = 'signups';
 
-// Auto-create the collection if it doesn't exist. Idempotent; swallows "already exists" errors.
+// Auto-create the collection if it doesn't exist. Idempotent.
 async function ensureCollection(name) {
   try {
     await db.createCollection(name);
   } catch (e) {
     const msg = (e && (e.errMsg || e.message)) || '';
-    // -501001 / "already exists" are fine — means someone else (or a previous call) made it.
-    if (!/already|exist/i.test(msg)) {
-      // Other errors we still want to surface.
-      throw e;
-    }
+    if (!/already|exist/i.test(msg)) throw e;
   }
 }
 
+// Called from:
+// - WeChat mini program (wx.cloud.callFunction)    → event = raw form, has OPENID in context
+// - H5 web (CloudBase Web SDK anonymous)           → event = raw form, OPENID is '' or anon
+//
+// Dedup key is `phone` (primary) — works for both channels. OPENID is stored
+// as reference when available, but doesn't drive dedup anymore.
 exports.main = async (event, context) => {
-  const { OPENID } = cloud.getWXContext();
-  const now = db.serverDate();
+  const { OPENID = '', SOURCE = '' } = cloud.getWXContext() || {};
 
   const form = {
     name:   String(event.name   || '').trim(),
@@ -39,19 +40,26 @@ exports.main = async (event, context) => {
   await ensureCollection(COLLECTION);
   const col = db.collection(COLLECTION);
 
-  // Use openid as dedupe key — one signup per WeChat user, re-submit overwrites.
-  const existing = await col.where({ _openid: OPENID }).limit(1).get();
+  const now = db.serverDate();
+  const meta = {
+    channel: OPENID ? 'miniprogram' : 'web',
+    openid:  OPENID || null,
+    source:  SOURCE || null
+  };
+
+  // Dedup by phone — same phone re-submits overwrite the prior record.
+  const existing = await col.where({ phone: form.phone }).limit(1).get();
 
   if (existing.data && existing.data.length > 0) {
     const id = existing.data[0]._id;
     await col.doc(id).update({
-      data: { ...form, updatedAt: now }
+      data: { ...form, ...meta, updatedAt: now }
     });
     return { ok: true, id, action: 'updated' };
   }
 
   const res = await col.add({
-    data: { ...form, createdAt: now, updatedAt: now }
+    data: { ...form, ...meta, createdAt: now, updatedAt: now }
   });
   return { ok: true, id: res._id, action: 'created' };
 };

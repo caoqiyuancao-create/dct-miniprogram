@@ -26,6 +26,7 @@ $RECYCLE.BIN/
 
 # ---- Claude Code ----
 .claude/
+.mcp.json
 
 # ---- Unrelated test project ----
 mini_test_1/

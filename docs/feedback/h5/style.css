@@ -1,0 +1,631 @@
+/* ============================================================
+   DCT 意见反馈 H5 · style
+   视觉对齐设计稿 untitled/project/src/scheme-a-form.jsx
+   钢笔批注问卷 / 横线笔记纸 / 红色钢笔字 / 装订孔 / 邮戳
+   ============================================================ */
+
+:root {
+  /* —— 钢笔批注问卷调色板（设计稿 :root） —— */
+  --ink:        #0b1f3a;
+  --ink-soft:   #1d3a6b;
+  --sky-1:      #e7f0fa;
+  --sky-2:      #c9ddf3;
+  --blue:       #2c5ca0;
+  --blue-deep:  #1a3a78;
+  --gold:       #e9b949;
+  --gold-deep:  #b88a26;
+  --paper:      #f6f2e8;
+  --paper-2:    #efe7d3;
+  --paper-warm: #fbf6e9;        /* 主问卷纸底色 */
+  --bg-outer:   #ece6d8;        /* 屏幕外侧暖灰 */
+  --red-pen:    #b8413a;        /* 红色钢笔 */
+  --green-pen:  #3d6a4a;
+  --mute:       #6b7a91;
+  --line:       #d5ddea;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg-outer);
+  color: var(--ink);
+  font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* —— 字体辅助类 —— */
+.serif    { font-family: "Noto Serif SC", "Songti SC", "STSong", serif; }
+.mono     { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; }
+.hand     { font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", cursive; }
+.hand-zh  { font-family: "Ma Shan Zheng", "Noto Serif SC", cursive; }
+.brush    { font-family: "Ma Shan Zheng", "Noto Serif SC", serif; }
+.stamp    { font-family: "Special Elite", "JetBrains Mono", monospace; }
+
+/* —— 应用容器：移动优先，桌面居中 —— */
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--paper-warm);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 0; height: 0; }
+
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+input, textarea { font: inherit; }
+
+/* —— 屏幕切换 —— */
+.screen { display: block; }
+.screen[hidden] { display: none; }
+
+/* ============================================================
+   横线笔记纸 + 红钢笔垂直边距 + 装订孔（form / thanks 共用）
+   ============================================================ */
+.paper {
+  background: var(--paper-warm);
+  background-image:
+    /* 横线（每 28px 一行） */
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 27px,
+      rgba(44, 92, 160, 0.18) 27px,
+      rgba(44, 92, 160, 0.18) 28px
+    ),
+    /* 左侧红色钢笔垂直线（49px–50px） */
+    linear-gradient(
+      to right,
+      transparent 49px,
+      rgba(184, 65, 58, 0.5) 49px,
+      rgba(184, 65, 58, 0.5) 50px,
+      transparent 50px
+    );
+  padding: 0 24px 0 60px;
+  position: relative;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+}
+
+/* —— 装订孔（左侧绝对定位的圆形小孔） —— */
+.binding {
+  position: absolute;
+  left: 18px;
+  top: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+  z-index: 0;
+  pointer-events: none;
+}
+.binding > .hole {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--bg-outer);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================================
+   填写页 · 海报头
+   ============================================================ */
+.poster-hero {
+  margin: 20px 0 16px;
+  position: relative;
+  border-top: 1.5px solid rgba(11, 31, 58, 0.4);
+  border-bottom: 1.5px solid rgba(11, 31, 58, 0.4);
+  background: var(--ink);
+  overflow: hidden;
+}
+.poster-hero-img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.poster-hero-mask {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(11, 31, 58, 0) 50%, rgba(11, 31, 58, 0.85) 100%);
+}
+.poster-hero-cap {
+  position: absolute;
+  left: 14px; right: 14px; bottom: 12px;
+  color: var(--paper-warm);
+}
+.poster-hero-cap .meta {
+  font-size: 9px;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+.poster-hero-cap .title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 3px;
+  letter-spacing: 1px;
+}
+.poster-hero-cap .speaker {
+  font-size: 11px;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* ============================================================
+   抬头
+   ============================================================ */
+.head {
+  padding-top: 14px;
+  padding-bottom: 12px;
+  position: relative;
+}
+.head .head-eyebrow {
+  font-size: 9px;
+  color: var(--blue-deep);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.head h1 {
+  margin: 6px 0 2px;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+.head .head-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.head .head-sub .num {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 700;
+  color: var(--blue-deep);
+}
+.head .head-tip {
+  font-size: 11px;
+  color: var(--mute);
+  margin-top: 8px;
+  line-height: 20px;
+  font-style: italic;
+  max-width: 260px;
+}
+.head .head-stamp {
+  position: absolute;
+  right: 0; top: 8px;
+  transform: rotate(6deg);
+  text-align: center;
+  pointer-events: none;
+}
+.head .head-stamp .vol {
+  font-size: 22px; font-weight: 700;
+  color: var(--red-pen);
+  line-height: 1;
+}
+.head .head-stamp .thanks {
+  font-size: 14px;
+  color: var(--red-pen);
+  margin-top: 2px;
+}
+
+.divider-rule {
+  border-top: 1.5px solid rgba(11, 31, 58, 0.7);
+  border-bottom: 1.5px solid rgba(11, 31, 58, 0.7);
+  height: 4px;
+  margin-bottom: 18px;
+}
+
+/* ============================================================
+   每一题 Section
+   ============================================================ */
+section.q {
+  margin-bottom: 22px;
+  position: relative;
+}
+section.q .q-head {
+  display: flex; align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+section.q .q-num {
+  font-size: 11px;
+  color: var(--red-pen);
+  font-weight: 500;
+  letter-spacing: 1px;
+  transform: translateY(-1px);
+  font-family: "JetBrains Mono", monospace;
+}
+section.q .q-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+  font-family: "Noto Serif SC", serif;
+}
+section.q .q-sub {
+  font-size: 11px;
+  color: var(--mute);
+  margin-bottom: 8px;
+  margin-left: 32px;
+  font-style: italic;
+  font-family: "Noto Serif SC", serif;
+}
+section.q .q-body {
+  margin-left: 0;
+}
+
+/* ============================================================
+   五星题
+   ============================================================ */
+.stars {
+  display: flex;
+  gap: 6px;
+  padding: 6px 0 2px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.stars .star-btn {
+  border: none; background: transparent;
+  cursor: pointer;
+  padding: 0;
+  width: 32px; height: 32px;
+  display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.stars .star-btn:focus-visible svg path {
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.stars .star-label {
+  margin-left: 8px;
+  color: var(--red-pen);
+  font-size: 22px;
+  font-family: "Caveat", "Ma Shan Zheng", cursive;
+  transform: rotate(-4deg);
+  align-self: center;
+}
+
+/* ============================================================
+   A+ → C 评级
+   ============================================================ */
+.grade-row {
+  display: flex; gap: 4px;
+  padding: 4px 0 6px;
+  flex-wrap: wrap;
+}
+.grade-btn {
+  width: 36px; height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  font-family: "Noto Serif SC", serif;
+}
+.grade-btn span {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.grade-btn.active span {
+  color: var(--red-pen);
+}
+.grade-btn .ring {
+  position: absolute; inset: 0;
+  border: 2px solid var(--red-pen);
+  border-radius: 50%;
+  transform: rotate(-4deg) scale(1.05);
+  pointer-events: none;
+}
+
+/* ============================================================
+   钢笔字单行输入（评级题补充 / 署名）
+   ============================================================ */
+.pen-line-input {
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid var(--ink-soft);
+  background: transparent;
+  outline: none;
+  padding: 4px 2px;
+  font-size: 14px;
+  font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", serif;
+  color: var(--blue-deep);
+  margin-top: 4px;
+}
+.pen-line-input::placeholder {
+  color: var(--mute);
+  font-family: "Noto Serif SC", serif;
+  font-style: italic;
+  font-size: 12px;
+}
+.signing-row {
+  display: flex; align-items: baseline;
+  gap: 8px;
+  padding-top: 6px;
+}
+.signing-row .signing-prefix {
+  font-size: 13px;
+  color: var(--mute);
+  font-family: "Noto Serif SC", serif;
+}
+.signing-row .pen-line-input {
+  width: 180px; max-width: 60%;
+  margin-top: 0;
+}
+
+/* ============================================================
+   钢笔字多行输入（长文题）
+   ============================================================ */
+.pen-textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  resize: none;
+  font-size: 14px;
+  line-height: 28px;
+  font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", serif;
+  color: var(--blue-deep);
+  padding: 0;
+  display: block;
+}
+.pen-textarea::placeholder {
+  color: var(--mute);
+  font-family: "Noto Serif SC", serif;
+  font-style: italic;
+}
+
+/* ============================================================
+   推荐三选一
+   ============================================================ */
+.yesno-list {
+  display: flex; flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+.yesno-row {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+.yesno-row .label {
+  font-size: 14px;
+  color: var(--ink);
+  font-family: "Noto Serif SC", serif;
+}
+.pen-checkbox {
+  width: 22px; height: 22px;
+  position: relative;
+  border: 1.5px solid var(--ink-soft);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+.pen-checkbox.checked::after {
+  content: "";
+  position: absolute;
+  left: -2px; top: -3px;
+  width: 22px; height: 22px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'><path d='M3 11 L9 17 L20 4' fill='none' stroke='%23b8413a' stroke-width='2.5' stroke-linecap='round'/></svg>") no-repeat center / contain;
+}
+
+/* ============================================================
+   交卷按钮
+   ============================================================ */
+.submit-wrap {
+  padding: 24px 0 32px;
+}
+.submit-btn {
+  width: 100%;
+  padding: 14px 0;
+  background: var(--ink);
+  color: var(--paper-warm);
+  border: none;
+  border-radius: 0;
+  font-family: "Noto Serif SC", serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--gold);
+}
+.submit-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--gold); }
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.colophon {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 9px;
+  color: var(--mute);
+  letter-spacing: 1px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ============================================================
+   感谢页
+   ============================================================ */
+.thanks-paper {
+  display: flex; flex-direction: column;
+  min-height: 100vh;
+}
+.thanks-paper .thanks-eyebrow {
+  font-size: 9px;
+  color: var(--blue-deep);
+  letter-spacing: 2px;
+  font-family: "JetBrains Mono", monospace;
+  padding-top: 50px;
+}
+/* 邮戳大圆章 */
+.stamp-big {
+  margin: 24px auto;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  border: 3px solid var(--red-pen);
+  color: var(--red-pen);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transform: rotate(-7deg);
+  position: relative;
+  box-shadow: inset 0 0 0 6px transparent, inset 0 0 0 8px rgba(184, 65, 58, 0.15);
+}
+.stamp-big .stamp-tag {
+  font-size: 10px; letter-spacing: 2px;
+  font-family: "JetBrains Mono", monospace;
+}
+.stamp-big .stamp-zh {
+  font-size: 38px; font-weight: 900; line-height: 1;
+  margin: 6px 0;
+  font-family: "Noto Serif SC", serif;
+}
+.stamp-big .stamp-meta {
+  font-size: 10px; letter-spacing: 1px;
+  font-family: "JetBrains Mono", monospace;
+}
+.stamp-big .stamp-loc {
+  font-size: 9px; letter-spacing: 2px;
+  margin-top: 4px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* DCT logo 小圆 */
+.thanks-logo {
+  display: flex; justify-content: center;
+  margin-bottom: 12px;
+}
+.thanks-logo .logo-circle {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 4px;
+  box-shadow: 0 0 0 1.5px var(--gold), 0 4px 10px rgba(11, 31, 58, 0.15);
+}
+.thanks-logo .logo-circle img {
+  width: 100%; height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.thanks-title {
+  margin: 0 0 10px;
+  font-size: 28px; font-weight: 900;
+  color: var(--ink);
+  letter-spacing: 2px;
+  text-align: center;
+  font-family: "Noto Serif SC", serif;
+}
+.thanks-sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-align: center;
+  line-height: 26px;
+  margin-bottom: 18px;
+  font-family: "Noto Serif SC", serif;
+}
+
+/* 钢笔手写信 */
+.handwritten-letter {
+  margin-top: 8px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px dashed rgba(11, 31, 58, 0.35);
+  position: relative;
+}
+.handwritten-letter .body {
+  font-size: 18px; line-height: 30px;
+  color: var(--blue-deep);
+  font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", cursive;
+}
+.handwritten-letter .sign {
+  font-size: 16px; margin-top: 8px;
+  text-align: right;
+  color: var(--red-pen);
+  font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", cursive;
+}
+.handwritten-letter .seal {
+  position: absolute;
+  right: -8px; bottom: -10px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 3px;
+  box-shadow: 0 0 0 2px var(--red-pen), 0 4px 10px rgba(11, 31, 58, 0.15);
+  transform: rotate(8deg);
+}
+.handwritten-letter .seal img {
+  width: 100%; height: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+/* 感谢页底部链接 */
+.thanks-actions {
+  margin-top: 28px;
+  display: flex; flex-direction: column;
+  gap: 10px;
+  padding-bottom: 30px;
+}
+.thanks-actions .btn-outline {
+  display: block;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1.5px solid var(--ink);
+  color: var(--ink);
+  text-decoration: none;
+  text-align: center;
+  font-family: "Noto Serif SC", serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+.thanks-actions .btn-link {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--mute);
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: 1px;
+  padding: 4px 0;
+}
+
+/* ============================================================
+   Toast
+   ============================================================ */
+.toast {
+  position: fixed;
+  left: 50%; top: 40%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  z-index: 1000;
+  max-width: 80vw;
+  pointer-events: none;
+  text-align: center;
+  line-height: 1.5;
+}
+.toast[hidden] { display: none; }
+
+/* —— 离线 fallback：网络断时 Google Fonts 不可用，用系统字体不至于难看 —— */
+@supports not (font-family: "Caveat") {
+  .hand, .pen-line-input, .pen-textarea, .stars .star-label,
+  .head .head-stamp .vol, .head .head-stamp .thanks,
+  .handwritten-letter .body, .handwritten-letter .sign {
+    font-family: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "Noto Serif SC", cursive;
+  }
+}

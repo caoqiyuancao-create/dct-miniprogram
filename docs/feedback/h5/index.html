@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DCT · 意见反馈 · 第二期 · 六星之路</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="DCT 第二期 · 六星之路 意见反馈 · 你的真实想法是 DCT 长大的方式" />
+  <meta name="theme-color" content="#fbf6e9" />
+  <link rel="icon" href="../assets/dct-logo.png" />
+
+  <!-- Google Fonts：钢笔批注问卷的视觉支撑 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Ma+Shan+Zheng&family=Caveat:wght@500;700&family=Special+Elite&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- ============ SCREEN: FORM ============ -->
+    <section class="screen" data-screen="form">
+      <div class="paper" id="form-paper">
+        <!-- 装订孔（9 个） -->
+        <div class="binding">
+          <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+          <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+          <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        </div>
+
+        <!-- 海报头：海报图 + 渐变蒙版 + 底部叠字 -->
+        <div class="poster-hero">
+          <div class="poster-hero-img" id="poster-hero-img">
+            <div class="poster-hero-mask"></div>
+            <div class="poster-hero-cap">
+              <div class="meta mono" id="poster-meta"></div>
+              <div class="title serif" id="poster-title"></div>
+              <div class="speaker serif" id="poster-speaker"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 抬头 -->
+        <header class="head">
+          <div class="head-eyebrow mono">DCT · DOCTORS&apos; CRAZY THINKING · FEEDBACK</div>
+          <h1 class="serif">意见反馈</h1>
+          <div class="head-sub serif">
+            第 <span class="num" id="head-vol">02</span> 期 · <span id="head-title">六星之路</span>
+          </div>
+          <div class="head-tip serif">
+            你的真实想法是 DCT 长大的方式。匿名也无妨，留个昵称我们会更想念你。
+          </div>
+          <div class="head-stamp">
+            <div class="vol hand" id="stamp-vol">vol.02</div>
+            <div class="thanks hand">感谢你的诚实</div>
+          </div>
+        </header>
+
+        <div class="divider-rule"></div>
+
+        <!-- 题目区：JS 注入 -->
+        <form id="feedback-form" autocomplete="off" novalidate>
+          <div id="questions"></div>
+
+          <div class="submit-wrap">
+            <button type="submit" class="submit-btn" id="submit-btn">交&nbsp;&nbsp;卷</button>
+            <div class="colophon">DCT · 客厅家庭学术沙龙 · 2026</div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: THANKS ============ -->
+    <section class="screen" data-screen="thanks" hidden>
+      <div class="paper thanks-paper">
+        <!-- 装订孔（7 个） -->
+        <div class="binding">
+          <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+          <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+          <div class="hole"></div>
+        </div>
+
+        <div class="thanks-eyebrow">DCT · FEEDBACK · RECEIVED</div>
+
+        <!-- 大邮戳 -->
+        <div class="stamp-big">
+          <div class="stamp-tag">RECEIVED</div>
+          <div class="stamp-zh">已收到</div>
+          <div class="stamp-meta" id="stamp-date">2026 · 04 · 25</div>
+          <div class="stamp-loc">DCT · 玉林</div>
+        </div>
+
+        <!-- DCT logo -->
+        <div class="thanks-logo">
+          <div class="logo-circle">
+            <img src="../assets/dct-logo.png" alt="DCT" />
+          </div>
+        </div>
+
+        <h1 class="thanks-title">感谢您的参与与反馈！</h1>
+
+        <div class="thanks-sub">
+          这一份反馈已经被钢笔批注、<br />
+          归入 DCT 第 <span id="thanks-vol">2</span> 期的合订本。
+        </div>
+
+        <!-- 钢笔手写信 -->
+        <div class="handwritten-letter">
+          <div class="body">
+            DCT 客厅是大家一起搭的，<br />
+            你的每一句话，我们都会读。<br />
+            下一次，我们留一杯酒等你。
+          </div>
+          <div class="sign">
+            —— DCT 主创 · <span id="thanks-date">2026 年 4 月 25 日</span>
+          </div>
+          <div class="seal">
+            <img src="../assets/dct-logo.png" alt="DCT" />
+          </div>
+        </div>
+
+        <div class="thanks-actions">
+          <a class="btn-outline" id="follow-link" href="#">关 注 DCT 客 厅 · 看 下 一 期</a>
+          <button class="btn-link" id="reset-link" type="button">← 再填一次</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" hidden></div>
+
+  </div>
+
+  <!-- CloudBase Web SDK（参考 candidate/docs：CDN 三连 fallback） -->
+  <script>
+    (function loadCloudbase() {
+      var urls = [
+        'https://static.cloudbase.net/cloudbase-js-sdk/2.19.3/cloudbase.full.js',
+        'https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@2.19.3/dist/cloudbase.full.js',
+        'https://unpkg.com/@cloudbase/js-sdk@2.19.3/dist/cloudbase.full.js'
+      ];
+      var i = 0;
+      function tryNext() {
+        if (i >= urls.length) {
+          console.error('[dct-feedback] all cloudbase CDNs failed');
+          return;
+        }
+        var s = document.createElement('script');
+        s.src = urls[i++];
+        s.async = false;
+        s.onerror = function () { console.warn('[dct-feedback] cdn failed:', s.src); tryNext(); };
+        s.onload = function () { console.log('[dct-feedback] cloudbase loaded from:', s.src); };
+        document.head.appendChild(s);
+      }
+      tryNext();
+    })();
+  </script>
+  <script src="data.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DCT · 反馈合订本 · 主创视角</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#fbf6e9" />
+  <link rel="icon" href="../assets/dct-logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Ma+Shan+Zheng&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- 模式提示：mock vs live —— 等 cloudfunction 接通就切 live -->
+    <div class="mode-banner" id="mode-banner">
+      DEMO · 当前是 mock 数据 · cloudfunction 接通后会自动切到真实反馈
+    </div>
+
+    <div class="paper">
+      <!-- 装订孔（多 16 个，对齐设计稿） -->
+      <div class="binding">
+        <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        <div class="hole"></div>
+      </div>
+
+      <!-- 抬头 -->
+      <header class="head" style="position:relative;">
+        <div class="head-eyebrow">FEEDBACK · BOUND VOLUME · ADMIN</div>
+        <h1>反馈合订本</h1>
+        <div class="head-sub serif">
+          第 <span class="num" id="head-vol">02</span> 期 · <span id="head-title">六星之路</span>
+        </div>
+        <div class="head-stamp">共 <span id="head-total">18</span> 份</div>
+      </header>
+
+      <div class="divider-rule"></div>
+
+      <!-- 题目区 -->
+      <div id="qsections"></div>
+
+      <div class="colophon">
+        DCT · <span id="colophon-date">2026 年 4 月 25 日</span> · 仅主创可见
+      </div>
+    </div>
+  </div>
+
+  <!-- 共用反馈数据中心（题目维度） -->
+  <script src="../h5/data.js"></script>
+  <!-- 汇总 mock 数据 -->
+  <script src="summary-mock.js"></script>
+  <script src="admin.js"></script>
+</body>
+
+</html>

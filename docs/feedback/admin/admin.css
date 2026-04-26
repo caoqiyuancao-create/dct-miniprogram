@@ -1,0 +1,307 @@
+/* ============================================================
+   DCT 意见反馈 · 主创汇总（合订本）· admin.css
+   视觉对齐 scheme-a-summary.jsx：合订本 / 钢笔批注
+   ============================================================ */
+
+:root {
+  --ink:        #0b1f3a;
+  --ink-soft:   #1d3a6b;
+  --blue:       #2c5ca0;
+  --blue-deep:  #1a3a78;
+  --gold:       #e9b949;
+  --gold-deep:  #b88a26;
+  --paper-warm: #fbf6e9;
+  --bg-outer:   #ece6d8;
+  --red-pen:    #b8413a;
+  --mute:       #6b7a91;
+  --line:       #d5ddea;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg-outer);
+  color: var(--ink);
+  font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.serif { font-family: "Noto Serif SC", "Songti SC", "STSong", serif; }
+.mono  { font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace; }
+.hand  { font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", cursive; }
+.brush { font-family: "Ma Shan Zheng", "Noto Serif SC", serif; }
+
+::-webkit-scrollbar { width: 0; height: 0; }
+
+/* —— 应用容器 —— */
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--paper-warm);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* —— mode banner（提醒主创：这是 mock 还是真实数据） —— */
+.mode-banner {
+  background: var(--ink);
+  color: var(--paper-warm);
+  padding: 8px 12px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-align: center;
+  font-family: "JetBrains Mono", monospace;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.mode-banner.live { background: var(--blue-deep); }
+
+/* —— 笔记纸 —— */
+.paper {
+  background: var(--paper-warm);
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 27px,
+      rgba(44, 92, 160, 0.18) 27px,
+      rgba(44, 92, 160, 0.18) 28px
+    ),
+    linear-gradient(
+      to right,
+      transparent 49px,
+      rgba(184, 65, 58, 0.5) 49px,
+      rgba(184, 65, 58, 0.5) 50px,
+      transparent 50px
+    );
+  padding: 24px 24px 40px 60px;
+  position: relative;
+  font-family: "Noto Serif SC", serif;
+  min-height: calc(100vh - 32px);
+}
+
+.binding {
+  position: absolute;
+  left: 18px;
+  top: 70px;
+  display: flex; flex-direction: column;
+  gap: 90px;
+  pointer-events: none;
+}
+.binding > .hole {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--bg-outer);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* —— 抬头 —— */
+.head .head-eyebrow {
+  font-size: 9px;
+  color: var(--blue-deep);
+  letter-spacing: 2px;
+  font-family: "JetBrains Mono", monospace;
+}
+.head h1 {
+  margin: 4px 0 2px;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--ink);
+  font-family: "Noto Serif SC", serif;
+}
+.head .head-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.head .head-sub .num { font-family: "JetBrains Mono", monospace; }
+.head .head-stamp {
+  position: absolute;
+  right: 18px; top: 30px;
+  transform: rotate(-6deg);
+  color: var(--red-pen);
+  font-size: 18px;
+  font-family: "Caveat", "Ma Shan Zheng", cursive;
+  pointer-events: none;
+}
+.divider-rule {
+  border-top: 1.5px solid rgba(11, 31, 58, 0.7);
+  border-bottom: 1.5px solid rgba(11, 31, 58, 0.7);
+  height: 4px;
+  margin: 14px 0 18px;
+}
+
+/* —— 题目块 —— */
+section.q {
+  margin-bottom: 22px;
+}
+section.q .q-head {
+  display: flex; align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+section.q .q-num {
+  font-size: 11px;
+  color: var(--red-pen);
+  letter-spacing: 1px;
+  font-family: "JetBrains Mono", monospace;
+}
+section.q .q-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  font-family: "Noto Serif SC", serif;
+}
+section.q .q-sub {
+  font-size: 11px;
+  color: var(--mute);
+  margin-bottom: 6px;
+  margin-left: 32px;
+  font-style: italic;
+}
+
+/* —— 整体平均星 —— */
+.stars-summary {
+  display: flex; align-items: center;
+  gap: 14px;
+  padding: 4px 0 6px;
+}
+.stars-summary .avg {
+  font-size: 38px;
+  font-weight: 900;
+  color: var(--blue-deep);
+  line-height: 1;
+  font-family: "Noto Serif SC", serif;
+}
+.stars-summary .stars-line {
+  color: var(--red-pen);
+  font-size: 18px;
+  font-family: "Caveat", "Ma Shan Zheng", cursive;
+  line-height: 1;
+}
+.stars-summary .n-line {
+  font-size: 11px;
+  color: var(--mute);
+  margin-top: 2px;
+  font-family: "Noto Serif SC", serif;
+}
+
+/* —— 评级分布条 —— */
+.dist-row {
+  margin-top: 6px;
+}
+.dist-meta {
+  display: flex; justify-content: flex-end;
+  margin-bottom: 4px;
+  font-size: 10px;
+  color: var(--mute);
+  letter-spacing: 0.5px;
+  font-family: "JetBrains Mono", monospace;
+}
+.dist-bar {
+  display: flex;
+  height: 10px;
+  border: 1px solid var(--ink-soft);
+  background: #fff;
+}
+.dist-bar > .seg-a { background: var(--blue-deep); }
+.dist-bar > .seg-b { background: var(--gold); }
+.dist-bar > .seg-c { background: var(--red-pen); }
+
+/* —— 作答列表 —— */
+.responses {
+  display: flex; flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.responses .resp {
+  position: relative;
+  padding-left: 12px;
+}
+.responses .resp::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 2px;
+  background: var(--red-pen);
+  opacity: 0.55;
+}
+.responses .resp .text {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--blue-deep);
+  font-family: "Caveat", "Ma Shan Zheng", "Noto Serif SC", cursive;
+}
+.responses .resp .meta {
+  display: flex; align-items: baseline;
+  gap: 8px;
+  margin-top: 2px;
+}
+.responses .resp .author {
+  font-size: 11px;
+  color: var(--mute);
+  font-family: "Noto Serif SC", serif;
+}
+.responses .resp .grade-tag {
+  font-size: 9px;
+  padding: 1px 5px;
+  background: var(--ink);
+  color: var(--paper-warm);
+  letter-spacing: 0.5px;
+  font-family: "JetBrains Mono", monospace;
+}
+.responses .empty {
+  font-size: 12px;
+  color: var(--mute);
+  font-style: italic;
+  padding: 4px 0;
+  font-family: "Noto Serif SC", serif;
+}
+
+/* —— 推荐三选一 —— */
+.rec-row {
+  display: flex; gap: 6px;
+}
+.rec-pill {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1.5px solid;
+  background: rgba(255, 255, 255, 0.5);
+}
+.rec-pill .label {
+  font-size: 11px;
+  font-family: "Noto Serif SC", serif;
+}
+.rec-pill .n {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 2px;
+  font-family: "JetBrains Mono", monospace;
+}
+.rec-pill.rec-yes { border-color: var(--blue-deep); color: var(--blue-deep); }
+.rec-pill.rec-maybe { border-color: var(--gold-deep); color: var(--gold-deep); }
+.rec-pill.rec-no { border-color: var(--red-pen); color: var(--red-pen); }
+
+/* —— 高频词 —— */
+.topwords {
+  display: flex; flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: baseline;
+}
+.topwords .w {
+  color: var(--ink);
+  font-family: "Ma Shan Zheng", "Noto Serif SC", serif;
+}
+
+.colophon {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 9px;
+  color: var(--mute);
+  letter-spacing: 1px;
+  font-family: "JetBrains Mono", monospace;
+}

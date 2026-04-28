@@ -1,0 +1,48 @@
+<view class="origin-story">
+  <view class="origin-head">
+    <view class="origin-brand">DCT · 家庭学术沙龙</view>
+    <view class="origin-time">{{elapsedText}}</view>
+  </view>
+
+  <view class="origin-stage">
+    <view class="origin-track" style="{{trackStyle}}">
+      <view class="origin-rail"></view>
+      <view class="origin-glow" style="{{glowStyle}}"></view>
+      <view
+        wx:for="{{scenes}}"
+        wx:key="image"
+        class="origin-panel {{index === activeIndex ? 'origin-panel-active' : ''}}"
+        style="{{item.baseStyle}}"
+      >
+        <image class="origin-panel-img" src="{{item.image}}" mode="widthFix" />
+        <view class="origin-sweep"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="origin-caption {{captionChanging ? 'origin-caption-changing' : ''}}">
+    <view class="origin-kicker">SCENE {{caption.num}}</view>
+    <view class="origin-title">{{caption.title}}</view>
+    <view class="origin-line">{{caption.line}}</view>
+  </view>
+
+  <view class="origin-spark origin-spark-a"></view>
+  <view class="origin-spark origin-spark-b"></view>
+  <view class="origin-spark origin-spark-c"></view>
+
+  <view class="origin-controls">
+    <button class="origin-control" bindtap="replay" hover-class="origin-control-hover">↻</button>
+    <view class="origin-progress">
+      <view class="origin-progress-fill" style="{{progressStyle}}"></view>
+    </view>
+    <button class="origin-control" bindtap="toggle" hover-class="origin-control-hover">{{toggleLabel}}</button>
+  </view>
+
+  <view class="origin-opening {{openingHidden ? 'origin-opening-hidden' : ''}}">
+    <view class="origin-opening-inner">
+      <view class="origin-opening-kicker">DCT ORIGIN STORY</view>
+      <view class="origin-opening-title">天时地利人和</view>
+      <view class="origin-opening-line">一群认真聊天的人，怎样把一个想法变成客厅里的学术沙龙。</view>
+    </view>
+  </view>
+</view>

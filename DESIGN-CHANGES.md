@@ -88,6 +88,39 @@
 
 ---
 
+### CHG-20260428-02 · landing 接入 DCT 起源故事动画
+
+**页面**：`landing`
+**区块**：`<dct-origin-story />`
+**设计意图**：把 PPT 第三页的 8 个漫画分镜做成连续镜头式故事动画：先出现“天时地利人和”开场，再沿 8 个分镜横向推进，配合推拉镜头、扫光、聚焦光、星光和字幕同步，形成接近 AE 时间线的叙事感。
+**原样**：
+```xml
+<!-- HERO -->
+<poster-sky>...</poster-sky>
+
+<!-- OPENING PITCH -->
+```
+**目标**：
+```xml
+<!-- HERO -->
+<poster-sky>...</poster-sky>
+
+<dct-origin-story />
+
+<!-- OPENING PITCH -->
+```
+**实现说明**：
+- 新增 `miniprogram/components/dct-origin-story/` 独立组件。
+- 新增 `miniprogram/assets/story-panels/panel-01.jpg` 至 `panel-08.jpg`，由 PPT 第三页两张长漫画图裁切得到。
+- 动画当前用原生小程序视图层完成，不依赖 AE JSON；后续如果产出 Lottie JSON，可在同一区块替换为 `lottie-miniprogram` 播放器。
+- 组件提供重播和暂停按钮，避免用户无法控制自动播放。
+- 组件通过 IntersectionObserver 在滚到可见时才开始播放，避免页面加载时用户还没看到动画就播完。
+
+**给 Claude Code 的粘贴说明**：
+> 按 DESIGN-CHANGES.md 的 CHG-20260428-02 检查 landing 的 DCT 起源故事动画接入。保留组件独立性，后续 AE/Lottie JSON 到位后可替换内部动画实现。
+
+---
+
 ### CHG-20260428-01 · Lottie 分层动画接入准备
 
 **页面**：`landing / components`

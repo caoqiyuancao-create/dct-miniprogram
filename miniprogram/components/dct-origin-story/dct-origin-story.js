@@ -1,6 +1,6 @@
 const TOTAL = 36000;
 const INTRO = 2200;
-const VIEWPORT_CENTER = 375;
+const STEP = (TOTAL - INTRO) / 7;
 
 const sceneCopy = [
   {
@@ -38,23 +38,15 @@ const sceneCopy = [
 ];
 
 const layout = [
-  { left: 140, top: 148, width: 584, rotate: -2.4, center: 432 },
-  { left: 808, top: 76, width: 584, rotate: 1.5, center: 1100 },
-  { left: 1476, top: 152, width: 584, rotate: -1.2, center: 1768 },
-  { left: 2144, top: 84, width: 584, rotate: 1.8, center: 2436 },
-  { left: 2812, top: 156, width: 584, rotate: -1.6, center: 3104 },
-  { left: 3480, top: 76, width: 584, rotate: 1.1, center: 3772 },
-  { left: 4148, top: 126, width: 584, rotate: -1, center: 4440 },
-  { left: 4816, top: 160, width: 652, rotate: 1.2, center: 5142 }
+  { left: 140, top: 148, width: 584, rotate: -2.4 },
+  { left: 808, top: 76, width: 584, rotate: 1.5 },
+  { left: 1476, top: 152, width: 584, rotate: -1.2 },
+  { left: 2144, top: 84, width: 584, rotate: 1.8 },
+  { left: 2812, top: 156, width: 584, rotate: -1.6 },
+  { left: 3480, top: 76, width: 584, rotate: 1.1 },
+  { left: 4148, top: 126, width: 584, rotate: -1 },
+  { left: 4816, top: 160, width: 652, rotate: 1.2 }
 ];
-
-function easeOutCubic(t) {
-  return 1 - Math.pow(1 - t, 3);
-}
-
-function mix(a, b, t) {
-  return a + (b - a) * t;
-}
 
 function pad2(n) {
   return String(n).padStart(2, '0');
@@ -80,19 +72,14 @@ Component({
     captionChanging: false,
     elapsedText: '00:00',
     openingHidden: false,
-    toggleLabel: 'Ⅱ',
-    trackStyle: '',
-    glowStyle: '',
-    progressStyle: ''
+    playing: false,
+    paused: false,
+    toggleLabel: 'Ⅱ'
   },
 
   lifetimes: {
     attached() {
-      this.startedAt = Date.now();
-      this.pausedAt = 0;
-      this.isPaused = true;
-      this.currentCaptionIndex = -1;
-      this.tick();
+      this.resetState();
     },
     ready() {
       this.visibilityObserver = this.createIntersectionObserver({
@@ -110,92 +97,125 @@ Component({
         this.visibilityObserver.disconnect();
         this.visibilityObserver = null;
       }
-      this.clearTimer();
+      this.clearTicker();
     }
   },
 
   methods: {
+    resetState() {
+      this.startedAt = 0;
+      this.pausedAt = 0;
+      this.currentCaptionIndex = 0;
+      this.setData({
+        activeIndex: 0,
+        captionChanging: false,
+        caption: {
+          num: '01',
+          title: sceneCopy[0].title,
+          line: sceneCopy[0].line
+        },
+        elapsedText: '00:00',
+        openingHidden: false,
+        playing: false,
+        paused: false,
+        toggleLabel: 'Ⅱ'
+      });
+    },
+
     replay() {
-      this.clearTimer();
+      this.clearTicker();
       this.startedAt = Date.now();
       this.pausedAt = 0;
-      this.isPaused = false;
-      this.currentCaptionIndex = -1;
+      this.currentCaptionIndex = 0;
       this.setData({
-        toggleLabel: 'Ⅱ',
-        openingHidden: false
+        activeIndex: 0,
+        captionChanging: false,
+        caption: {
+          num: '01',
+          title: sceneCopy[0].title,
+          line: sceneCopy[0].line
+        },
+        elapsedText: '00:00',
+        openingHidden: false,
+        // Toggle the class off/on so CSS animations restart reliably.
+        playing: false,
+        paused: false,
+        toggleLabel: 'Ⅱ'
       });
-      this.tick();
-      this.timer = setInterval(() => this.tick(), 80);
+      setTimeout(() => {
+        this.setData({ playing: true });
+        this.startTicker();
+      }, 30);
     },
 
     toggle() {
-      if (this.pausedAt >= TOTAL) {
+      if (!this.data.playing || this.pausedAt >= TOTAL) {
         this.replay();
         return;
       }
 
-      if (this.isPaused) {
+      if (this.data.paused) {
         this.startedAt = Date.now() - this.pausedAt;
-        this.isPaused = false;
-        this.setData({ toggleLabel: 'Ⅱ' });
-        this.tick();
-        this.timer = setInterval(() => this.tick(), 80);
+        this.setData({
+          paused: false,
+          toggleLabel: 'Ⅱ'
+        });
+        this.startTicker();
         return;
       }
 
       this.pausedAt = Math.min(Date.now() - this.startedAt, TOTAL);
-      this.isPaused = true;
-      this.clearTimer();
-      this.setData({ toggleLabel: '▶' });
+      this.clearTicker();
+      this.setData({
+        paused: true,
+        toggleLabel: '▶'
+      });
     },
 
-    clearTimer() {
-      if (this.timer) {
-        clearInterval(this.timer);
-        this.timer = null;
+    startTicker() {
+      this.clearTicker();
+      this.tick();
+      this.ticker = setInterval(() => this.tick(), 500);
+    },
+
+    clearTicker() {
+      if (this.ticker) {
+        clearInterval(this.ticker);
+        this.ticker = null;
       }
     },
 
     tick() {
-      const elapsed = this.isPaused ? this.pausedAt : Math.min(Date.now() - this.startedAt, TOTAL);
-      const progress = Math.min(Math.max((elapsed - INTRO) / (TOTAL - INTRO), 0), 1);
-      const exact = progress * (layout.length - 1);
-      const baseIndex = Math.min(Math.floor(exact), layout.length - 1);
-      const nextIndex = Math.min(baseIndex + 1, layout.length - 1);
-      const captionIndex = Math.min(Math.round(exact), layout.length - 1);
-      const local = easeOutCubic(exact - baseIndex);
-      const center = mix(layout[baseIndex].center, layout[nextIndex].center, local);
-      const y = mix(layout[baseIndex].top + 240, layout[nextIndex].top + 240, local);
-      const pulse = Math.sin((exact % 1) * Math.PI);
-      const zoom = 1.04 + pulse * 0.115;
-      const tx = VIEWPORT_CENTER - center * zoom;
+      const elapsed = Math.min(Date.now() - this.startedAt, TOTAL);
       const seconds = Math.floor(elapsed / 1000);
+      const sceneProgress = Math.max((elapsed - INTRO) / STEP, 0);
+      const captionIndex = Math.min(Math.round(sceneProgress), sceneCopy.length - 1);
 
       if (captionIndex !== this.currentCaptionIndex) {
         this.updateCaption(captionIndex);
       }
 
       this.setData({
-        activeIndex: captionIndex,
         openingHidden: elapsed > INTRO,
-        elapsedText: `00:${pad2(seconds)}`,
-        trackStyle: `transform:translateX(${tx.toFixed(1)}rpx) scale(${zoom.toFixed(3)})`,
-        glowStyle: `transform:translate(${center.toFixed(1)}rpx, ${y.toFixed(1)}rpx) translate(-50%, -50%);opacity:${(0.56 + pulse * 0.16).toFixed(2)}`,
-        progressStyle: `width:${((elapsed / TOTAL) * 100).toFixed(2)}%`
+        elapsedText: `00:${pad2(seconds)}`
       });
 
       if (elapsed >= TOTAL) {
         this.pausedAt = TOTAL;
-        this.isPaused = true;
-        this.clearTimer();
-        this.setData({ toggleLabel: '▶' });
+        this.clearTicker();
+        this.setData({
+          paused: true,
+          toggleLabel: '▶'
+        });
       }
     },
 
     updateCaption(index) {
       this.currentCaptionIndex = index;
-      this.setData({ captionChanging: true });
+      this.setData({
+        activeIndex: index,
+        captionChanging: true
+      });
       setTimeout(() => {
         this.setData({
           captionChanging: false,

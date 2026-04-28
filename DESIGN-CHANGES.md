@@ -115,6 +115,7 @@
 - 动画当前用原生小程序视图层完成，不依赖 AE JSON；后续如果产出 Lottie JSON，可在同一区块替换为 `lottie-miniprogram` 播放器。
 - 组件提供重播和暂停按钮，避免用户无法控制自动播放。
 - 组件通过 IntersectionObserver 在滚到可见时才开始播放，避免页面加载时用户还没看到动画就播完。
+- 性能修正：镜头位移、聚焦光和进度条改为 WXSS keyframes 驱动，JS 只低频更新字幕和时间，避免高频 `setData` 导致小程序卡顿。
 
 **给 Claude Code 的粘贴说明**：
 > 按 DESIGN-CHANGES.md 的 CHG-20260428-02 检查 landing 的 DCT 起源故事动画接入。保留组件独立性，后续 AE/Lottie JSON 到位后可替换内部动画实现。

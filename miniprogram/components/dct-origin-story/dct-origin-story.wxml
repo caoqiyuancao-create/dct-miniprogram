@@ -5,9 +5,9 @@
   </view>
 
   <view class="origin-stage">
-    <view class="origin-track" style="{{trackStyle}}">
+    <view class="origin-track {{playing ? 'origin-track-playing' : ''}} {{paused ? 'origin-motion-paused' : ''}}">
       <view class="origin-rail"></view>
-      <view class="origin-glow" style="{{glowStyle}}"></view>
+      <view class="origin-glow {{playing ? 'origin-glow-playing' : ''}} {{paused ? 'origin-motion-paused' : ''}}"></view>
       <view
         wx:for="{{scenes}}"
         wx:key="image"
@@ -33,7 +33,7 @@
   <view class="origin-controls">
     <button class="origin-control" bindtap="replay" hover-class="origin-control-hover">↻</button>
     <view class="origin-progress">
-      <view class="origin-progress-fill" style="{{progressStyle}}"></view>
+      <view class="origin-progress-fill {{playing ? 'origin-progress-playing' : ''}} {{paused ? 'origin-motion-paused' : ''}}"></view>
     </view>
     <button class="origin-control" bindtap="toggle" hover-class="origin-control-hover">{{toggleLabel}}</button>
   </view>

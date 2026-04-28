@@ -1,7 +1,12 @@
 # DCT 小程序 · 设计变更单（DESIGN-CHANGES）
 
-> 这是**设计稿（这里）→ 实现（Claude Code · 微信小程序）**之间的桥梁。
+> 这是**设计稿（原型）→ 实现（小程序代码）**之间的桥梁。
 > 所有 UI 层面的改动都写在这份文档里，功能层面的改动走 GitHub。
+
+> **2026-04-28 整合说明**：之前仓库里有两份变更单（根 `./DESIGN-CHANGES.md` + 设计端导出的 `prototype/DESIGN-CHANGES.md`），编号撞了。本次统一：
+> - **本文档（根）= 活的工作文档**：进行中 + 已合并历史都放这里
+> - **`prototype/DESIGN-CHANGES.md` = 设计端只读快照**：随 `prototype-vN` tag 整体替换，不再单独编辑
+> - **冲突时以本文档为准**——但本文档在新增条目前应同步参考 `prototype/DESIGN-CHANGES.md` 的最新条目，避免漏吸收设计意图
 
 ---
 
@@ -24,14 +29,14 @@
 **范围：** 颜色、字号、间距、圆角、阴影、文案、图标、卡片排版、图片位置、微动效（`hover-class`）
 **流程：**
 1. 告诉 Claude 你想怎么改（或在 HTML 原型上标注）
-2. Claude 在这里改原型，**同时**在本文档尾部追加一条变更单
+2. Claude 在这里改原型，**同时**在本文档"进行中"区追加一条变更单
 3. 你复制最新的变更单整段 → 粘贴给 Claude Code → 它按单子改 WXML/WXSS
 
 ### ⚙️ 功能改动（走 GitHub · 不漏）
 **范围：** 新页面、新字段、接口/云函数、数据流、状态管理、跳转逻辑、表单校验
 **流程：**
 1. 直接告诉 Claude Code 你要什么功能，它实现后 push 到 GitHub
-2. 下次在这里设计时，Claude 先 `github_read_file` 拉最新代码，确认当前实现状态
+2. 下次在这里设计时，Claude 先 `git log` 拉最新代码，确认当前实现状态
 3. 如果功能变动带 UI，再在本文档记一条 UI 变更单
 
 ### 🤝 混合改动
@@ -43,8 +48,8 @@
 
 每一条变更单用 `---` 分隔，包含这些字段：
 
-- **编号**：`CHG-YYYYMMDD-NN`（年月日-序号）
-- **页面**：`landing / detail / form / success / components/poster-sky / components/star-4`
+- **编号**：`CHG-YYYYMMDD-NN`（年月日-序号；同一天多条按序号递增；**不要复用已存在的编号**）
+- **页面**：`home / about / review / review-detail / landing / detail / form / success / components/poster-sky / components/star-4 / components/dct-origin-story`
 - **区块**：用 WXML 里实际的 class 名定位（例如 `.hero-portrait-wrap`、`.speaker-card`、`.cta`）
 - **原样**：改前的 WXSS / WXML 片段（或描述）
 - **目标**：改后的 WXSS / WXML 片段 + 一句设计意图
@@ -59,179 +64,118 @@
 
 ## 🧭 小程序 ↔ 原型 文件对照表
 
-| 原型文件（这里） | 小程序文件（GitHub） |
-|---|---|
-| `src/screen-landing.jsx` | `miniprogram/pages/landing/landing.wxml` + `landing.wxss` |
-| `src/screen-detail.jsx`  | `miniprogram/pages/detail/detail.wxml` + `detail.wxss` |
-| `src/screen-form.jsx`    | `miniprogram/pages/form/form.wxml` + `form.wxss` |
-| `src/screen-success.jsx` | `miniprogram/pages/success/success.wxml` + `success.wxss` |
-| `src/poster-bg.jsx`      | `miniprogram/components/poster-sky/` |
-| `src/miniprogram-chrome.jsx` | （小程序自带导航栏，不需要实现） |
+| 原型文件（设计端） | 小程序文件（实现端） | 页面作用 |
+|---|---|---|
+| `prototype/data/issues.js`                        | `miniprogram/data/issues.js`                                   | **期次数据中心**（全局单一数据源） |
+| `prototype/src/screen-home.jsx`                   | `miniprogram/pages/home/home.{wxml,wxss,js}`                   | 主页（品牌 + 3 入口） |
+| `prototype/src/screen-about.jsx`                  | `miniprogram/pages/about/about.{wxml,wxss,js}`                 | 关于 DCT（动画 + 长图文） |
+| `prototype/src/screen-review.jsx` · `ScreenReview`        | `miniprogram/pages/review/review.{wxml,wxss,js}`        | 往期回顾列表 |
+| `prototype/src/screen-review.jsx` · `ScreenReviewDetail`  | `miniprogram/pages/review-detail/review-detail.{wxml,wxss,js}` | 单期回顾详情 |
+| `prototype/src/screen-landing.jsx`                | `miniprogram/pages/landing/landing.{wxml,wxss,js}`             | 本期着陆 |
+| `prototype/src/screen-detail.jsx`                 | `miniprogram/pages/detail/detail.{wxml,wxss,js}`               | 活动须知 & 吧规 |
+| `prototype/src/screen-form.jsx`                   | `miniprogram/pages/form/form.{wxml,wxss,js}`                   | 报名填表 |
+| `prototype/src/screen-success.jsx`                | `miniprogram/pages/success/success.{wxml,wxss,js}`             | 提交成功 |
+| `prototype/src/poster-bg.jsx`                     | `miniprogram/components/poster-sky/`                           | 蓝天渐变 + 光芒背景 |
+| —（无原型，已实现）                                 | `miniprogram/components/dct-origin-story/`                     | DCT 起源故事动画（8 幕） |
+| `prototype/src/miniprogram-chrome.jsx`            | （小程序自带导航栏，不需要实现）                                  | — |
 
 **单位换算（很重要）：**
 - 原型里的 `px` → 小程序用 `rpx`
 - **换算关系**：`1px（原型，iPhone 14 Pro 宽 390px）≈ 2rpx`
-- 字号、间距、圆角、阴影 blur 都要 ×2（Claude Code 已经这么做了，沿用即可）
+- 字号、间距、圆角、阴影 blur 都要 ×2
 
-**颜色系统（已在实现里确立，请优先复用）：**
-- 主墨蓝 `#0f2855` · 副墨蓝 `#1a3a78` · 正文蓝 `#2a3d5c` / `#3d5f94`
-- 灰蓝辅文 `#55709a` / `#6b7a91` · 分割线 `#e3e9f3` / `#e9eef6`
-- 背景天蓝 `#e7f0fa → #c9ddf3 → #9dbfe3`（渐变）
-- 金色点缀 `#c9a24a` · 高亮 `#e9b949` · 暖米 `#fbf6ec → #f5e8d0`
-- 通用底色 `#f6f8fc` / 卡片白 `#fff`
+**颜色系统（CHG-20260428-02 U6 已写入 `app.wxss` 作为 CSS 变量）：**
+
+| Token | 值 | 用途 |
+|---|---|---|
+| `--ink` | `#0f2855` | 标题主墨蓝 |
+| `--navy` | `#1a3a78` | 副墨蓝 / CTA 底部 |
+| `--navy-soft` | `#2c5ca0` | CTA 顶部 / 链接 |
+| `--text` | `#2a3d5c` | 正文 |
+| `--text-soft` | `#3d5f94` | 次级正文 |
+| `--muted` | `#55709a` | 辅助灰蓝 |
+| `--muted-soft` | `#6b7a91` | 更弱辅助 |
+| `--divider` | `#e3e9f3` | 分割线 |
+| `--bg` | `#f6f8fc` | 通用底色 |
+| `--card` | `#fff` | 卡片白 |
+| `--gold` | `#c9a24a` | 主金色（六星意象） |
+| `--gold-hi` | `#e9b949` | 高亮金 |
+| `--warm-bg` → `--warm-bg-2` | `#fbf6ec → #f5e8d0` | 暖米渐变（菜单 / 暖卡片） |
+| `--warm-ink` | `#6b4c1e` | 暖深色文字 |
+| `--warm-text` | `#8a6a2e` | 暖辅文 |
+
+> **U6 收尾 TODO**：landing.wxss 已 var() 化；detail/form/success.wxss 还有 45 处硬编码色票待批量替换（值 1:1 对应，零视觉差，等 landing 真机验证后做）。
 
 ---
 
-## 📝 变更单
+## 📝 进行中变更单
 
 <!-- 最新的变更单放在最上方 -->
 
 ---
 
-### CHG-20260428-04 · 同步 prototype 多期架构到小程序
+### CHG-20260428-09 · about 页 6 幕动画 — AE/Lottie 后期接入
 
-**页面**：`app.json` / `data/issues.js` / `pages/home` / `pages/about` / `pages/review` / `pages/review-detail`
-**区块**：新版原型 `prototype/` 中尚未落地的小程序主入口、关于页、往期回顾页、单期回顾详情页和期次数据中心。
-**设计意图**：把小程序从“单期报名页”补齐为 DCT 官方小程序的多期结构：先进入品牌主页，再进入本期报名、关于 DCT、往期回顾。后续换期只需要维护 `data/issues.js`。
-**原样**：
-```json
-"pages": [
-  "pages/landing/landing",
-  "pages/detail/detail",
-  "pages/form/form",
-  "pages/success/success"
-]
-```
-**目标**：
-```json
-"pages": [
-  "pages/home/home",
-  "pages/about/about",
-  "pages/review/review",
-  "pages/review-detail/review-detail",
-  "pages/landing/landing",
-  "pages/detail/detail",
-  "pages/form/form",
-  "pages/success/success"
-],
-"entryPagePath": "pages/home/home"
-```
-**实现说明**：
-- 新增 `miniprogram/data/issues.js`，从 `prototype/data/issues.js` 转为小程序 CommonJS 数据中心，包含品牌信息、当前期、未来期、往期期次和选择器。
-- 新增 `pages/home`：大 Logo、slogan 轮播、公告条、本期报名入口、关于 DCT 入口、往期回顾入口。
-- 新增 `pages/about`：6 幕开场动画、DCT 起源长文、三位主创占位卡、DCT 三层含义、客厅理念和底部 CTA。
-- 新增 `pages/review`：往期列表采用杂志封面卡片，支持跳转单期详情。
-- 新增 `pages/review-detail`：单期 cover、speaker、recap、highlights、photos 占位和返回入口。
-**给 Claude Code 的粘贴说明**：
-> 按 DESIGN-CHANGES.md 的 CHG-20260428-04 检查 prototype 多期架构是否已同步到小程序。重点确认 app.json 入口、data/issues.js、home/about/review/review-detail 四个新页面，以及 landing/detail/form/success 是否保持原有行为。
+**类型**：⚙️ 功能改动 + 资源依赖
+**页面**：`pages/about` / `components/dct-origin-story`（候选复用）
+**设计意图**：当前 about 页 6 幕动画是用纯 WXML/WXSS keyframes 实现的占位版本，QY 不满意。**计划**用 AE 制作连续卡通动画 → Bodymovin 导出 Lottie JSON → 小程序用 `lottie-miniprogram` 播放。
+
+**前置依赖（已就绪）：**
+- `lottie-miniprogram@^1.0.12` 已加入 `miniprogram/package.json`（来自旧 root 文档 CHG-20260428-01 "Lottie 分层动画接入准备"）
+- 微信开发者工具中需"工具 → 构建 npm"生成 `miniprogram_npm/`
+- AE 制作时**避免依赖 expression**（小程序端 Lottie 不支持）
+
+**待 QY 提供：**
+- AE 项目源文件 + Bodymovin 导出的 `.json`
+- 分层素材（背景、人物、气泡、文字、道具）
+
+**实施步骤（素材到位后）：**
+1. 把 `.json` 放到 `miniprogram/assets/animations/about-story.json`
+2. 在 `pages/about` 的动画区块用 `<canvas type="2d" id="about-anim">` 替换现有 WXML 动画
+3. JS 里用 `lottie-miniprogram` 加载 + 播放，提供 replay / pause 控制
+4. 保留现有 `dct-origin-story` 组件做 fallback（如 Lottie 加载失败）
+
+**给 Claude Code 的粘贴说明：**
+> 按 DESIGN-CHANGES.md 的 CHG-20260428-09 接入 about 页 AE/Lottie 动画。素材路径 `miniprogram/assets/animations/about-story.json`。先在 about 页测试，不要动 landing 上现有 dct-origin-story。
 
 ---
 
-### CHG-20260428-03 · 小程序启动分析性能修正
+### CHG-20260428-08 · about 页文案重构（忠实第一期开场 PDF）
 
-**页面**：`project`
-**区块**：`miniprogram/project.config.json`
-**设计意图**：当前故事动画没有运行时死循环，但开发者工具在 `analyzing codes` 阶段会扫描工程依赖。由于项目根目录同时包含根 `node_modules` 与云函数 `node_modules`，需要先把这些目录从小程序代码分析/打包范围里排除，避免模拟器启动前无响应。
-**原样**：
-```json
-"nodeModules": true,
-"packOptions": {
-  "ignore": []
-}
-```
-**目标**：
-```json
-"nodeModules": false,
-"packOptions": {
-  "ignore": [
-    { "type": "folder", "value": "node_modules" },
-    { "type": "folder", "value": "cloudfunctions/submitSignup/node_modules" },
-    { "type": "folder", "value": "cloudfunctions/submitSignup/miniprogram_npm" },
-    { "type": "folder", "value": "cloudfunctions/submitFeedback/node_modules" }
-  ]
-}
-```
-**实现说明**：
-- 先关闭开发者工具的小程序 npm 扫描开关；当前落地的故事动画是原生 WXML/WXSS/JS 组件，不依赖 `lottie-miniprogram` 运行。
-- 保留 `package.json` 里的 `lottie-miniprogram` 依赖，后续真正接入 AE/Lottie JSON 时再打开 npm 构建。
-- 在 `packOptions.ignore` 排除根依赖与云函数依赖，降低开发者工具分析代码时的目录规模。
-**给 Claude Code 的粘贴说明**：
-> 按 DESIGN-CHANGES.md 的 CHG-20260428-03 处理小程序启动卡在 analyzing codes 的问题。优先保证开发者工具不要扫描根 node_modules 和云函数 node_modules；Lottie 依赖先保留但暂不启用 npm 扫描。
+**类型**：🎨 纯 UI 改动（文案 + 结构）
+**页面**：`pages/about/about`
+**设计意图**：把现有 about 页改成与第一期开场 PDF 同一套叙事——突出"非典型精神科 PhD 三人组"的身份反差、DCT 的三层含义、客厅作为反讲堂的选择。**漫画 / 真实头像后续会补**，先用 PORTRAIT 占位块。
 
----
+**改动列表：**
 
-### CHG-20260428-02 · landing 接入 DCT 起源故事动画
+1. **6 幕动画 caption 改写**：
+   - `从一片蓝天开始` → `一切从天时地利人和说起` / sub: `2026 · 一个客厅 · 三个 PhD`
+   - `三个人的夜谈` → `一只狗、一道菜、一次对话` / sub: `Dog · Chef · Therapist`
+   - `一个问题` → `在绩效之外` / sub: `留一块精神自留地`（视觉换成「方块田 + 金色小芽」）
+   - `于是在客厅` → `Doctors' Crazy Thinking` / sub: `认真地胡思乱想`（视觉换成大字品牌锁屏）
+   - `星芒亮起` → `客厅里的家庭学术沙龙`（视觉沿用客厅 SVG）
+   - `等你来` → `欢迎你也来` / sub: `一起建设这块自留地`
 
-**页面**：`landing`
-**区块**：`<dct-origin-story />`
-**设计意图**：把 PPT 第三页的 8 个漫画分镜做成连续镜头式故事动画：先出现“天时地利人和”开场，再沿 8 个分镜横向推进，配合推拉镜头、扫光、聚焦光、星光和字幕同步，形成接近 AE 时间线的叙事感。
-**原样**：
-```xml
-<!-- HERO -->
-<poster-sky>...</poster-sky>
+2. **下方长图文 5 个 section**（替换原 3 个）：
+   - **WHY · DCT 从何而来**
+   - **WHO · 三位主创 · D · C · T**（3 张主创卡：包文欣/狗子/Dog · 徐佳淇/厨子/Chef · 曹栖源/治疗师/Therapist · 64×64 PORTRAIT 占位 + 卡片下方斜体灰字 `※ 主创真实形象 / 漫画头像将于后续插入此处。`）
+   - **WHAT · DCT 的三层意思**（MeaningRow 三行表，03 行金色高亮）
+   - **HOW · 为什么是「客厅里」**
+   - **WHO MAY JOIN · 什么样的人会来？**
 
-<!-- OPENING PITCH -->
-```
-**目标**：
-```xml
-<!-- HERO -->
-<poster-sky>...</poster-sky>
+3. **底部 CTA 卡片**：在 `期待和你一起...` 下方新增一行 monospace 字距 1：`DCT · EST. 2026 · CHENGDU`
 
-<dct-origin-story />
+**小程序实现要点**：
+- `CreatorCard` 在 WXML 写成可复用 `template`，数据走 `data` 数组
+- `MeaningRow` 用 `wx:for`，`highlight` 字段控制高亮样式
+- 头像占位的 PORTRAIT 文字将来换成 `<image src="{{item.avatar}}">`，留好字段
 
-<!-- OPENING PITCH -->
-```
-**实现说明**：
-- 新增 `miniprogram/components/dct-origin-story/` 独立组件。
-- 新增 `miniprogram/assets/story-panels/panel-01.jpg` 至 `panel-08.jpg`，由 PPT 第三页两张长漫画图裁切得到。
-- 动画当前用原生小程序视图层完成，不依赖 AE JSON；后续如果产出 Lottie JSON，可在同一区块替换为 `lottie-miniprogram` 播放器。
-- 组件提供重播和暂停按钮，避免用户无法控制自动播放。
-- 组件通过 IntersectionObserver 在滚到可见时才开始播放，避免页面加载时用户还没看到动画就播完。
-- 性能修正：镜头位移、聚焦光和进度条改为 WXSS keyframes 驱动，JS 只低频更新字幕和时间，避免高频 `setData` 导致小程序卡顿。
-
-**给 Claude Code 的粘贴说明**：
-> 按 DESIGN-CHANGES.md 的 CHG-20260428-02 检查 landing 的 DCT 起源故事动画接入。保留组件独立性，后续 AE/Lottie JSON 到位后可替换内部动画实现。
+**给 Claude Code 的粘贴说明：**
+> 按 DESIGN-CHANGES.md 的 CHG-20260428-08 重写 about 页文案与结构，主创头像继续用占位（蓝渐变 + 大字 D/C/T），等真实漫画头像补来再换。**注意 6 幕动画后续会被 CHG-20260428-09 用 Lottie 替换**——做文案重构时不要花时间优化动画细节。
 
 ---
 
-### CHG-20260428-01 · Lottie 分层动画接入准备
-
-**页面**：`landing / components`
-**区块**：`PPT 第三页 · 8 幕故事分层动画`
-**设计意图**：把 PPT 第三页的 8 个漫画分镜升级为 AE/Lottie 风格的分层故事动画，而不是普通长图滚动或整图淡入。当前先完成小程序端 Lottie 播放能力准备，后续等 AE 导出的 `.json` 和分层素材到位后接入具体动画。
-**原样**：
-```json
-// miniprogram/project.config.json
-"nodeModules": false
-```
-**目标**：
-```json
-// miniprogram/project.config.json
-"nodeModules": true
-```
-并在 `miniprogram/package.json` 中加入：
-```json
-"dependencies": {
-  "lottie-miniprogram": "^1.0.12"
-}
-```
-**实现说明**：
-- 已安装 `lottie-miniprogram`，用于小程序 `<canvas type="2d">` 播放 Lottie 动画。
-- 微信开发者工具中还需要执行一次「工具 → 构建 npm」，生成 `miniprogram_npm/` 后才能在小程序运行时引用。
-- Lottie 动画 JSON 推荐由 AE 的 LottieFiles/Bodymovin 导出；小程序端不支持 Lottie expression，AE 制作时需要避免依赖 expression。
-- 当前漫画 JPG 需要先拆成背景、人物、气泡、文字、道具等图层，才能实现“动画片式”的人物/道具独立运动。
-**原型参考**：
-- `D:\DCT_program\.codex-analysis\slide3\story_animation_demo.html`：8 幕基础故事版
-- `D:\DCT_program\.codex-analysis\slide3\story_animation_cinematic.html`：连续镜头电影版
-
-**给 Claude Code 的粘贴说明**：
-> 按 DESIGN-CHANGES.md 的 CHG-20260428-01 接入 Lottie 分层动画能力。先保留现有 landing 页面，不直接替换上线入口；等 AE/Lottie JSON 素材确认后，再新增播放组件并接入。
-
-<!-- （示例 · 你可以参考这个格式。实际改动来时 Claude 会追加新条目） -->
-
----
-
-### CHG-20260419-00 · 示例（可删）
+### CHG-20260419-00 · 示例（保留作为模板）
 
 **页面**：`landing`
 **区块**：`.cta`（底部报名按钮）
@@ -255,5 +199,101 @@
 
 **粘贴给 Claude Code：**
 > 按 DESIGN-CHANGES.md 的 CHG-20260419-00 改一下，只动 UI，别动逻辑。
+
+---
+
+## ✅ 已合并
+
+> 所有已完成的变更单按时间倒序归档在这里。`commit` 字段为 git 短 hash，方便追溯。
+> 编号保留各自原编号方便历史检索（之前两份文档存在编号冲突，已通过本次合并消除）。
+
+---
+
+### CHG-20260428-07 · landing 实现审计后修复 3 处 — 2026-04-28 · `8bf92db`
+
+**修复内容**：
+1. perf：`_handleScroll` 不再每帧调 `wx.getSystemInfoSync()`，onLoad 缓存 windowHeight + windowWidth 一次
+2. bug：进度条永远到不了 100% — 之前 `_totalHeight` 只 onReady 测一次，dct-origin-story 8 张异步图加载完页面变高就锁死了。现改成滚动时 1.5s 节流懒重测 boundingClientRect
+3. visual：`.speaker-wrap` padding-top 80rpx（与原型对齐），有 reg-banner 时收紧到 48rpx 给 banner 留位
+
+**文件**：`miniprogram/pages/landing/landing.{js,wxml,wxss}`
+
+---
+
+### CHG-20260428-06 · 多期架构升级（home / about / review / review-detail + 数据层） — 2026-04-28 · `84164b5`
+
+> 合并自原 root CHG-20260428-04 + prototype CHG-20260419-10（同一件事不同编号）。
+
+**完成内容**：
+- 新增 `miniprogram/data/issues.js`（CommonJS 数据中心：current / brand / issues 数组 + getCurrent / getPastIssues / getById）
+- 新增 4 个页面：`pages/home`、`pages/about`、`pages/review`、`pages/review-detail`
+- 改 `app.json`：把 home 放第一位 + `entryPagePath: "pages/home/home"`
+- landing/detail/form/success 不动，只是不再是首页
+
+**注**：about 页 6 幕动画用 WXML/WXSS keyframes 占位实现，**QY 不满意**，将由 CHG-20260428-09 用 AE/Lottie 替换。文案也需 CHG-20260428-08 重写。
+
+---
+
+### CHG-20260428-05 · 小程序启动分析性能修正（analyzing codes 卡顿） — 2026-04-28 · `84164b5`
+
+> 原 root CHG-20260428-03。
+
+**完成内容**：
+- `project.config.json` 把 `nodeModules: true → false`（关闭开发者工具的 npm 扫描）
+- `packOptions.ignore` 新增排除 `node_modules` / `cloudfunctions/submitSignup/node_modules` / `cloudfunctions/submitSignup/miniprogram_npm` / `cloudfunctions/submitFeedback/node_modules`
+- 保留 `lottie-miniprogram` 依赖在 `package.json`（CHG-20260428-09 会启用）
+
+---
+
+### CHG-20260428-04 · 功能升级 F1-F5（报名状态 / 倒计时 / 日历 / 分享 / 邀请券） — 2026-04-28 · `04bf5e4`
+
+> 原 prototype CHG-20260428-03。
+
+**完成内容**：
+- **F1** 报名状态记忆：新增 `cloudfunctions/registration`（read-only by openid）+ landing onLoad 自动查询 + 状态横幅（pending/approved/rejected）+ CTA 文案动态切换"查看我的报名"
+- **F5** hero 倒计时 chip：`距开场还有 N 天` / `今晚见` / `已结束`
+- **F2** success 页"加入手机日历"按钮（`wx.addPhoneCalendar` 提前 1 天提醒）
+- **F3** landing 自定义分享（`onShareAppMessage` + `onShareTimeline`，imageUrl 占位 cloud:// 待上传）
+- **F4** success 页"生成邀请券"Canvas 海报（v1 占位：渐变 + 标题 + 8 角星 + 日期；二维码留 TODO 等 wxacode.getUnlimited）
+
+---
+
+### CHG-20260428-03 · landing UI 升级（U1-U7 + 颜色 token） — 2026-04-28 · `04bf5e4`
+
+> 原 prototype CHG-20260428-02。
+
+**完成内容**：
+- **U6** 全局颜色 token 写入 `app.wxss`（16 个变量）+ landing.wxss 完整 var() 化
+- **U1** 顶部金色滚动进度条（sticky · 3rpx · gold 渐变 + 阴影）
+- **U2** 吸底浮动 CTA（fixed · scrollTop > 720rpx 显示 · backdrop-blur）
+- **U3** hero portrait 276rpx → 240rpx
+- **U4** 三张 points 卡片加 lanes/footprint/compass 图标（CSS 实现，非 SVG）+ 编号移到标题右侧
+- **U5** 季节限定菜单加"不含正餐"chip 替换原斜体小字
+- **U7** data 数组化（`infoRows`/`points`/`menu`）+ `<image>` lazy-load + binderror + a11y aria-label + `::after` 替代 `<view class="sep">`
+
+**U6 后半 TODO**：detail/form/success.wxss 还有 45 处硬编码色票，等 landing 真机验证后批量替换。
+
+---
+
+### CHG-20260428-02 · landing 接入 DCT 起源故事动画 — 2026-04-15 ~ 04-28 · `a976ee9` / `5d60c0b`
+
+> 原 root CHG-20260428-02。
+
+**完成内容**：
+- 新增 `miniprogram/components/dct-origin-story/` 独立组件（8 幕，36 秒）
+- 新增 `miniprogram/assets/story-panels/panel-01.jpg` 至 `panel-08.jpg`（PPT 第三页两张漫画图裁切）
+- 镜头位移、聚焦光、进度条改用 WXSS keyframes 驱动；JS 只低频更新字幕
+- IntersectionObserver 滚到可见才开始播放
+- 提供 replay / pause 按钮
+
+**未来去向**：CHG-20260428-09 用 AE/Lottie 接入后，可能从 landing 整体迁移或退役，由 about 页的 Lottie 动画接班。
+
+---
+
+### CHG-20260428-01 · prototype-v1 同步 — 2026-04-28 · `067e633`
+
+**完成内容**：
+- 设计端导出的 `prototype/_zip` 解压为 `prototype/` 目录，包含 `src/` 7 个 React 屏 + `data/issues.js` + `assets/` + `DESIGN-CHANGES.md`
+- `prototype/` 在仓库内**只读**，每次设计端更新整体替换 + tag `prototype-vN`
 
 ---

@@ -86,6 +86,41 @@
 
 <!-- 最新的变更单放在最上方 -->
 
+---
+
+### CHG-20260428-01 · Lottie 分层动画接入准备
+
+**页面**：`landing / components`
+**区块**：`PPT 第三页 · 8 幕故事分层动画`
+**设计意图**：把 PPT 第三页的 8 个漫画分镜升级为 AE/Lottie 风格的分层故事动画，而不是普通长图滚动或整图淡入。当前先完成小程序端 Lottie 播放能力准备，后续等 AE 导出的 `.json` 和分层素材到位后接入具体动画。
+**原样**：
+```json
+// miniprogram/project.config.json
+"nodeModules": false
+```
+**目标**：
+```json
+// miniprogram/project.config.json
+"nodeModules": true
+```
+并在 `miniprogram/package.json` 中加入：
+```json
+"dependencies": {
+  "lottie-miniprogram": "^1.0.12"
+}
+```
+**实现说明**：
+- 已安装 `lottie-miniprogram`，用于小程序 `<canvas type="2d">` 播放 Lottie 动画。
+- 微信开发者工具中还需要执行一次「工具 → 构建 npm」，生成 `miniprogram_npm/` 后才能在小程序运行时引用。
+- Lottie 动画 JSON 推荐由 AE 的 LottieFiles/Bodymovin 导出；小程序端不支持 Lottie expression，AE 制作时需要避免依赖 expression。
+- 当前漫画 JPG 需要先拆成背景、人物、气泡、文字、道具等图层，才能实现“动画片式”的人物/道具独立运动。
+**原型参考**：
+- `D:\DCT_program\.codex-analysis\slide3\story_animation_demo.html`：8 幕基础故事版
+- `D:\DCT_program\.codex-analysis\slide3\story_animation_cinematic.html`：连续镜头电影版
+
+**给 Claude Code 的粘贴说明**：
+> 按 DESIGN-CHANGES.md 的 CHG-20260428-01 接入 Lottie 分层动画能力。先保留现有 landing 页面，不直接替换上线入口；等 AE/Lottie JSON 素材确认后，再新增播放组件并接入。
+
 <!-- （示例 · 你可以参考这个格式。实际改动来时 Claude 会追加新条目） -->
 
 ---

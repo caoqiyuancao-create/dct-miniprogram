@@ -1,10 +1,19 @@
 <view class="page">
 
+  <!-- U1 · 顶部金色滚动进度条（CHG-20260428-02 U1） -->
+  <view class="scroll-progress" aria-hidden="true">
+    <view class="scroll-progress__fill" style="width: {{progress}}%"></view>
+  </view>
+
   <!-- HERO -->
   <poster-sky tone="light" min-height="880rpx">
     <view class="hero">
       <view class="hero-left">
-        <view class="mono eyebrow">DCT · VOL.02 · 2026.04.25</view>
+        <view class="hero-meta-row">
+          <view class="mono eyebrow">DCT · VOL.02 · 2026.04.25</view>
+          <!-- F5 · 倒计时 chip（CHG-20260428-03 F5） -->
+          <view wx:if="{{daysLeftLabel}}" class="mono countdown-chip">{{daysLeftLabel}}</view>
+        </view>
         <view class="serif title">
           <view>六星</view>
           <view>之路</view>
@@ -16,16 +25,30 @@
         <view class="subline-dash">——写给学术追梦人的漫谈</view>
       </view>
       <view class="hero-portrait-wrap">
-        <image class="hero-portrait" src="/assets/gao-portrait.jpg" mode="aspectFill" />
+        <image class="hero-portrait"
+               src="/assets/gao-portrait.jpg"
+               mode="aspectFill"
+               lazy-load="true"
+               binderror="onImgError" />
         <view class="hero-portrait-fade"></view>
       </view>
+    </view>
+
+    <!-- F1 · 报名状态横幅（CHG-20260428-03 F1） -->
+    <view wx:if="{{regStatus}}" class="reg-banner reg-banner--{{regStatus}}" catchtap="goForm">
+      <view class="reg-banner__dot"></view>
+      <view class="reg-banner__text">{{regBannerText}}</view>
     </view>
 
     <!-- speaker card -->
     <view class="speaker-wrap">
       <view class="speaker-card">
         <view class="speaker-avatar">
-          <image src="/assets/gao-avatar-poster.png" mode="aspectFill" class="speaker-avatar-img" />
+          <image src="/assets/gao-avatar-poster.png"
+                 mode="aspectFill"
+                 class="speaker-avatar-img"
+                 lazy-load="true"
+                 binderror="onImgError" />
         </view>
         <view class="speaker-info">
           <view class="speaker-name">
@@ -54,15 +77,37 @@
     </view>
   </view>
 
-  <!-- THREE POINTS -->
+  <!-- THREE POINTS · CHG-02 U4 -->
   <view class="section">
     <view class="mono section-kicker">SHE WILL SHARE</view>
     <view class="serif section-title">从真实经历出发，三个侧面</view>
     <view class="points">
       <view class="point-card" wx:for="{{points}}" wx:key="num">
-        <view class="mono point-num">{{item.num}}</view>
+        <!-- left icon container -->
+        <view class="point-icon">
+          <!-- lanes: 三条横线 + 三个金点 -->
+          <view wx:if="{{item.icon === 'lanes'}}" class="ico ico-lanes">
+            <view class="ico-lane"><view class="ico-dot"></view></view>
+            <view class="ico-lane"><view class="ico-dot"></view></view>
+            <view class="ico-lane"><view class="ico-dot"></view></view>
+          </view>
+          <!-- footprint: 两组脚印 -->
+          <view wx:elif="{{item.icon === 'footprint'}}" class="ico ico-footprint">
+            <view class="ico-foot ico-foot--l1"></view>
+            <view class="ico-foot ico-foot--r1"></view>
+            <view class="ico-foot ico-foot--l2"></view>
+            <view class="ico-foot ico-foot--r2"></view>
+          </view>
+          <!-- compass: 圆 + 内嵌指针 -->
+          <view wx:elif="{{item.icon === 'compass'}}" class="ico ico-compass">
+            <view class="ico-compass-needle"></view>
+          </view>
+        </view>
         <view class="point-body">
-          <view class="serif point-title">{{item.title}}</view>
+          <view class="point-head">
+            <view class="serif point-title">{{item.title}}</view>
+            <view class="mono point-num">{{item.num}}</view>
+          </view>
           <view class="point-sub">{{item.sub}}</view>
           <view class="point-text">{{item.body}}</view>
         </view>
@@ -79,42 +124,31 @@
     </view>
   </view>
 
-  <!-- EVENT INFO -->
+  <!-- EVENT INFO · CHG-02 U7：用 :not(:last-child)::after 替代独立 sep 节点 -->
   <view class="section">
     <view class="mono section-kicker">WHEN · WHERE · HOW</view>
     <view class="info-card">
-      <view class="info-row">
-        <view class="mono info-label">时间</view>
+      <view class="info-row" wx:for="{{infoRows}}" wx:key="label">
+        <view class="mono info-label">{{item.label}}</view>
         <view class="info-col">
-          <view class="info-value">2026 年 4 月 25 日（周六）</view>
-          <view class="info-sub">18:40 入场  ·  19:00 开始</view>
-        </view>
-      </view>
-      <view class="sep"></view>
-      <view class="info-row">
-        <view class="mono info-label">地点</view>
-        <view class="info-col">
-          <view class="info-value">武侯区 玉林 DCT 客厅</view>
-          <view class="info-sub">报名通过后微信通知具体地址</view>
-        </view>
-      </view>
-      <view class="sep"></view>
-      <view class="info-row">
-        <view class="mono info-label">入场</view>
-        <view class="info-col">
-          <view class="info-value">88 元 / 位</view>
-          <view class="info-sub">含一份甜品 + 一杯酒 · 可打包带走</view>
+          <view class="info-value">{{item.value}}</view>
+          <view class="info-sub">{{item.sub}}</view>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- SEASONAL MENU -->
+  <!-- SEASONAL MENU · CHG-02 U5 -->
   <view class="section">
     <view class="mono section-kicker">EARLY SUMMER · LIMITED</view>
     <view class="menu-card">
       <view class="serif menu-title">初夏季节限定</view>
       <view class="menu-sub">Mulberry season, from Panzhihua</view>
+      <!-- U5 · 不含正餐 chip -->
+      <view class="menu-chip">
+        <view class="menu-chip__icon"></view>
+        <text>本期不含正餐 · 建议先吃晚饭再来</text>
+      </view>
       <view class="menu-sep"></view>
       <view class="menu-list">
         <view class="menu-row" wx:for="{{menu}}" wx:key="name">
@@ -124,7 +158,6 @@
         </view>
       </view>
       <view class="menu-foot">
-        <view>本期不提供正餐，建议先吃过晚饭再来～</view>
         <view>担心甜品负担也可以打包带走。</view>
       </view>
     </view>
@@ -133,7 +166,10 @@
   <!-- WHAT IS DCT -->
   <view class="section">
     <view class="dct-head">
-      <image src="/assets/logo.png" class="dct-logo" />
+      <image src="/assets/logo.png"
+             class="dct-logo"
+             lazy-load="true"
+             binderror="onImgError" />
       <view class="dct-head-text">
         <view class="mono section-kicker">WHAT IS DCT ?</view>
         <view class="serif dct-head-title">认真地胡思乱想</view>
@@ -150,7 +186,7 @@
 
   <!-- RULES ENTRY -->
   <view class="section">
-    <view class="rules-entry" bindtap="goDetail" hover-class="tap-hover">
+    <view class="rules-entry" bindtap="goDetail" hover-class="tap-hover" aria-label="查看活动须知与吧规">
       <view class="rules-entry-text">
         <view class="rules-entry-title">活动须知与 DCT · 吧规</view>
         <view class="rules-entry-sub">报名前建议先读一下</view>
@@ -161,13 +197,34 @@
 
   <!-- CTA -->
   <view class="cta-wrap">
-    <button class="cta" bindtap="goForm" hover-class="cta-hover">
+    <button class="cta"
+            bindtap="goForm"
+            hover-class="cta-hover"
+            aria-label="{{ctaAriaLabel}}">
       <view class="star-bullet star-cta"></view>
-      <text class="cta-text">报名参加第二期</text>
+      <text class="cta-text">{{ctaText}}</text>
       <view class="star-bullet star-cta"></view>
     </button>
     <view class="cta-sub">
       我们会根据学科背景与意愿综合筛选，<text class="cta-sub-accent">24 小时内回复</text>
+    </view>
+  </view>
+
+  <!-- U2 · 吸底浮动 CTA（CHG-20260428-02 U2，position: fixed per pasted note） -->
+  <view class="sticky-cta {{stickyVisible ? 'is-visible' : ''}}" catchtap="goForm" aria-hidden="{{!stickyVisible}}">
+    <view class="sticky-cta__inner">
+      <view class="sticky-cta__info">
+        <view class="mono sticky-cta__kicker">VOL.02 · 04.25</view>
+        <view class="sticky-cta__price">
+          <text class="sticky-cta__num">88</text>
+          <text class="sticky-cta__unit">元/位</text>
+          <text class="sticky-cta__hint">含甜品+酒</text>
+        </view>
+      </view>
+      <view class="sticky-cta__btn">
+        <view class="star-bullet star-cta sticky-cta__star"></view>
+        <text>{{ctaTextShort}}</text>
+      </view>
     </view>
   </view>
 

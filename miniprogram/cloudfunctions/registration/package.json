@@ -1,0 +1,9 @@
+{
+  "name": "registration",
+  "version": "1.0.0",
+  "description": "DCT registration status check (read-only) — query signups by openid for landing-page banner. CHG-20260428-03 F1.",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

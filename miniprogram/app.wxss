@@ -1,19 +1,36 @@
-/* Design tokens lifted from DCT第二期报名.html */
+/* Design tokens — aligned with prototype/screen-landing.jsx const C = {...} (CHG-20260428-02 U6) */
 page {
-  --ink:       #0b1f3a;
-  --ink-soft:  #1d3a6b;
+  /* CHG-02 U6 canonical color tokens */
+  --ink:        #0f2855;
+  --navy:       #1a3a78;
+  --navy-soft:  #2c5ca0;
+  --text:       #2a3d5c;
+  --text-soft:  #3d5f94;
+  --muted:      #55709a;
+  --muted-soft: #6b7a91;
+  --divider:    #e3e9f3;
+  --bg:         #f6f8fc;
+  --card:       #fff;
+  --gold:       #c9a24a;
+  --gold-hi:    #e9b949;
+  --warm-bg:    #fbf6ec;
+  --warm-bg-2:  #f5e8d0;
+  --warm-ink:   #6b4c1e;
+  --warm-text:  #8a6a2e;
+
+  /* legacy aliases (kept for non-landing pages until they migrate) */
+  --ink-soft:  var(--navy);
   --sky-1:     #e7f0fa;
   --sky-2:     #c9ddf3;
   --sky-3:     #9dbfe3;
-  --blue:      #2c5ca0;
-  --blue-deep: #1a3a78;
-  --gold:      #e9b949;
-  --gold-deep: #c9a24a;
+  --blue:      var(--navy-soft);
+  --blue-deep: var(--navy);
+  --gold-deep: var(--gold);
   --paper:     #f6f2e8;
-  --mute:      #6b7a91;
+  --mute:      var(--muted);
   --line:      #d5ddea;
 
-  background: #f6f8fc;
+  background: var(--bg);
   color: var(--ink);
   font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   font-size: 28rpx;
@@ -22,14 +39,15 @@ page {
 
 view, text { box-sizing: border-box; }
 
-.serif {
-  font-family: "Songti SC", "STSong", "PingFang SC", serif;
-}
-.mono {
-  font-family: "SF Mono", Menlo, Consolas, monospace;
-  letter-spacing: 2rpx;
-}
+.serif { font-family: "Songti SC", "STSong", "PingFang SC", serif; }
+.mono  { font-family: "SF Mono", Menlo, Consolas, monospace; letter-spacing: 2rpx; }
 
-/* hairline helper — mini program hairlines look chunky otherwise */
+/* hairline helper */
 .hairline-b { border-bottom: 1rpx solid #eef2f8; }
 .hairline-t { border-top: 1rpx solid #eef2f8; }
+
+/* shared keyframes (used across pages — currently for sticky CTA enter animation) */
+@keyframes dct-fade-up {
+  from { opacity: 0; transform: translateY(40rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}

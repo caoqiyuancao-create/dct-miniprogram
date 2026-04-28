@@ -48,8 +48,30 @@
     </view>
   </view>
 
+  <!-- CHG-03 F2 · 加入手机日历 -->
+  <view class="section">
+    <button class="cal-btn" bindtap="addToCalendar" hover-class="cal-btn-hover" aria-label="加入手机日历，DCT 第二期 4 月 25 日">
+      <view class="cal-icon"></view>
+      <text>加入手机日历</text>
+    </button>
+  </view>
+
+  <!-- CHG-03 F4 · 生成邀请券（占位实现，真实运行时绘制） -->
+  <view class="section">
+    <button class="ticket-btn" bindtap="generateTicket" hover-class="ticket-hover" aria-label="生成邀请券海报">
+      <view class="ticket-icon"></view>
+      <text>生成邀请券</text>
+    </button>
+    <view class="ticket-sub">为这一夜留个纪念 · 保存到相册</view>
+  </view>
+
   <view class="cta-wrap">
     <button class="back-btn" bindtap="backToLanding" hover-class="back-hover">回到主题介绍</button>
   </view>
 
+  <!-- F4 · 隐藏 canvas，绘制后转图片再保存 -->
+  <canvas
+    canvas-id="ticketCanvas"
+    class="ticket-canvas"
+    style="width: 750rpx; height: 1334rpx;"></canvas>
 </view>

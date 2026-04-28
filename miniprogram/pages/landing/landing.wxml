@@ -41,7 +41,7 @@
     </view>
 
     <!-- speaker card -->
-    <view class="speaker-wrap">
+    <view class="speaker-wrap {{regStatus ? 'speaker-wrap--with-banner' : ''}}">
       <view class="speaker-card">
         <view class="speaker-avatar">
           <image src="/assets/gao-avatar-poster.png"

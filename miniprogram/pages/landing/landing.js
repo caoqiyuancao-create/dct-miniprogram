@@ -9,9 +9,8 @@ const EVENT_START_TS = Date.parse('2026-04-25 19:00:00') / 1000;
 const STICKY_TRIGGER_RPX = 720;
 
 // rpx → px 换算（onPageScroll 给的 scrollTop 是 px）
-function rpxToPx(rpx) {
-  const sysInfo = wx.getSystemInfoSync();
-  return (rpx / 750) * sysInfo.windowWidth;
+function rpxToPx(rpx, winWidth) {
+  return (rpx / 750) * winWidth;
 }
 
 function computeDaysLeftLabel() {
@@ -79,14 +78,19 @@ Page({
     ctaAriaLabel: '报名参加第二期'
   },
 
-  // 节流缓存
+  // 节流缓存（避免 60fps 滚动里反复同步取系统信息）
   _scrollRaf: null,
   _lastProgress: 0,
   _lastSticky: false,
   _stickyTriggerPx: 0,
+  _winHeight: 0,
+  _totalHeight: 0,
+  _heightCheckedAt: 0, // 高度懒重算时间戳
 
   onLoad() {
-    this._stickyTriggerPx = rpxToPx(STICKY_TRIGGER_RPX);
+    const sys = wx.getSystemInfoSync();
+    this._winHeight = sys.windowHeight;
+    this._stickyTriggerPx = rpxToPx(STICKY_TRIGGER_RPX, sys.windowWidth);
     this.setData({ daysLeftLabel: computeDaysLeftLabel() });
     this.checkRegistration();
   },
@@ -134,12 +138,17 @@ Page({
   },
 
   _handleScroll(scrollTop) {
-    const sys = wx.getSystemInfoSync();
-    // U1 进度条：scrollTop / (totalHeight - winHeight)
-    const totalHeight = (this._totalHeight || 0);
+    // 进度计算：用缓存的 winHeight + 懒重算的 totalHeight
+    // （dct-origin-story / lazy-load image 加载完后页面会变高，需重测）
+    const now = Date.now();
+    if (this._totalHeight === 0 || now - this._heightCheckedAt > 1500) {
+      this._heightCheckedAt = now;
+      this._measureTotalHeight();
+    }
+
     let progress = 0;
-    if (totalHeight > sys.windowHeight) {
-      progress = (scrollTop / (totalHeight - sys.windowHeight)) * 100;
+    if (this._totalHeight > this._winHeight) {
+      progress = (scrollTop / (this._totalHeight - this._winHeight)) * 100;
       if (progress < 0) progress = 0;
       if (progress > 100) progress = 100;
     }
@@ -157,13 +166,19 @@ Page({
     if (Object.keys(patch).length > 0) this.setData(patch);
   },
 
+  _measureTotalHeight() {
+    wx.createSelectorQuery()
+      .in(this)
+      .select('.page')
+      .boundingClientRect((res) => {
+        if (res && res.height) this._totalHeight = res.height;
+      })
+      .exec();
+  },
+
   onReady() {
-    // 取整页高度供 progress 计算
-    const query = wx.createSelectorQuery().in(this);
-    query.select('.page').boundingClientRect();
-    query.exec((res) => {
-      if (res && res[0]) this._totalHeight = res[0].height;
-    });
+    // 首次测一下，之后由 _handleScroll 1.5s 节流懒重测
+    this._measureTotalHeight();
   },
 
   // ---- 跳转 ----

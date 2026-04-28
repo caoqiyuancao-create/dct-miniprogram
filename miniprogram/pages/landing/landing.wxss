@@ -136,7 +136,9 @@
 }
 
 /* ================ SPEAKER CARD ================ */
-.speaker-wrap { padding: 64rpx 36rpx 0; }
+/* 无 reg-banner 时与原型一致 80rpx；有 banner 时收紧到 48rpx 给 banner 留位 */
+.speaker-wrap { padding: 80rpx 36rpx 0; }
+.speaker-wrap--with-banner { padding-top: 48rpx; }
 .speaker-card {
   background: rgba(255,255,255,0.78);
   backdrop-filter: blur(18rpx) saturate(160%);

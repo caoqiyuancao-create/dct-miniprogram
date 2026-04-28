@@ -12,7 +12,7 @@
     "minified": true,
     "newFeature": true,
     "coverView": true,
-    "nodeModules": true,
+    "nodeModules": false,
     "autoAudits": false,
     "showShadowRootInWxmlPanel": true,
     "scopeDataCheck": false,
@@ -45,7 +45,24 @@
   "libVersion": "3.15.2",
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "folder",
+        "value": "cloudfunctions/submitSignup/node_modules"
+      },
+      {
+        "type": "folder",
+        "value": "cloudfunctions/submitSignup/miniprogram_npm"
+      },
+      {
+        "type": "folder",
+        "value": "cloudfunctions/submitFeedback/node_modules"
+      }
+    ],
     "include": []
   },
   "editorSetting": {}

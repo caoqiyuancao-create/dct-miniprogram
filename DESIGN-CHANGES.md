@@ -88,6 +88,39 @@
 
 ---
 
+### CHG-20260428-03 · 小程序启动分析性能修正
+
+**页面**：`project`
+**区块**：`miniprogram/project.config.json`
+**设计意图**：当前故事动画没有运行时死循环，但开发者工具在 `analyzing codes` 阶段会扫描工程依赖。由于项目根目录同时包含根 `node_modules` 与云函数 `node_modules`，需要先把这些目录从小程序代码分析/打包范围里排除，避免模拟器启动前无响应。
+**原样**：
+```json
+"nodeModules": true,
+"packOptions": {
+  "ignore": []
+}
+```
+**目标**：
+```json
+"nodeModules": false,
+"packOptions": {
+  "ignore": [
+    { "type": "folder", "value": "node_modules" },
+    { "type": "folder", "value": "cloudfunctions/submitSignup/node_modules" },
+    { "type": "folder", "value": "cloudfunctions/submitSignup/miniprogram_npm" },
+    { "type": "folder", "value": "cloudfunctions/submitFeedback/node_modules" }
+  ]
+}
+```
+**实现说明**：
+- 先关闭开发者工具的小程序 npm 扫描开关；当前落地的故事动画是原生 WXML/WXSS/JS 组件，不依赖 `lottie-miniprogram` 运行。
+- 保留 `package.json` 里的 `lottie-miniprogram` 依赖，后续真正接入 AE/Lottie JSON 时再打开 npm 构建。
+- 在 `packOptions.ignore` 排除根依赖与云函数依赖，降低开发者工具分析代码时的目录规模。
+**给 Claude Code 的粘贴说明**：
+> 按 DESIGN-CHANGES.md 的 CHG-20260428-03 处理小程序启动卡在 analyzing codes 的问题。优先保证开发者工具不要扫描根 node_modules 和云函数 node_modules；Lottie 依赖先保留但暂不启用 npm 扫描。
+
+---
+
 ### CHG-20260428-02 · landing 接入 DCT 起源故事动画
 
 **页面**：`landing`

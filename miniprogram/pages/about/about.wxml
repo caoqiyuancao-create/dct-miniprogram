@@ -1,0 +1,153 @@
+<view class="page">
+  <view class="story-stage">
+    <view class="stage-rays"></view>
+
+    <view class="about-scene scene-sky {{scene === 0 ? 'is-active' : ''}}">
+      <view class="cloud cloud-a"></view>
+      <view class="cloud cloud-b"></view>
+      <view class="cloud cloud-c"></view>
+    </view>
+
+    <view class="about-scene scene-three {{scene === 1 ? 'is-active' : ''}}">
+      <view class="role-orb role-d">D<text>Dog</text></view>
+      <view class="role-orb role-c">C<text>Chef</text></view>
+      <view class="role-orb role-t">T<text>Therapist</text></view>
+    </view>
+
+    <view class="about-scene scene-seedling {{scene === 2 ? 'is-active' : ''}}">
+      <view class="field-grid">
+        <view wx:for="{{fieldTiles}}" wx:key="*this" class="field-tile"></view>
+      </view>
+      <view class="sprout">
+        <view class="sprout-stem"></view>
+        <view class="sprout-leaf sprout-left"></view>
+        <view class="sprout-leaf sprout-right"></view>
+      </view>
+    </view>
+
+    <view class="about-scene scene-brand {{scene === 3 ? 'is-active' : ''}}">
+      <view class="serif big-brand">DCT</view>
+      <view class="mono brand-sub">DOCTORS' CRAZY THINKING</view>
+    </view>
+
+    <view class="about-scene scene-living {{scene === 4 ? 'is-active' : ''}}">
+      <view class="lamp"></view>
+      <view class="sofa">
+        <view class="sofa-back"></view>
+        <view class="sofa-seat"></view>
+        <view class="pillow pillow-a"></view>
+        <view class="pillow pillow-b"></view>
+      </view>
+    </view>
+
+    <view class="about-scene scene-invite {{scene === 5 ? 'is-active' : ''}}">
+      <view class="invite-stars">
+        <view wx:for="{{inviteStars}}" wx:key="*this" class="gold-star star-{{item}}"></view>
+      </view>
+      <view class="serif invite-dct">DCT</view>
+    </view>
+
+    <view class="scene-caption">
+      <view class="serif scene-title">{{scenes[scene].caption}}</view>
+      <view class="scene-sub">{{scenes[scene].sub}}</view>
+    </view>
+
+    <view class="dots">
+      <view
+        wx:for="{{scenes}}"
+        wx:key="variant"
+        data-index="{{index}}"
+        bindtap="chooseScene"
+        class="dot {{index === scene ? 'is-active' : ''}}"
+      ></view>
+    </view>
+
+    <view wx:if="{{!playing}}" class="mono replay" bindtap="replay">↻ REPLAY</view>
+  </view>
+
+  <view class="about-section">
+    <view class="mono section-kicker">WHY</view>
+    <view class="serif section-title">DCT 从何而来</view>
+    <view class="body-copy">
+      <view>2026 年的春天，三个非典型的精神科 PhD 坐在同一个客厅里——发现彼此都在等待一种久违的状态：愿意慢下来，认真聊一些“不那么有用但很重要”的事。</view>
+      <view>我们把这种状态称作天时地利人和——天时是这一年都在心里酝酿的某种倦怠与好奇，地利是恰好可以容纳几个人坐下来的客厅，人和是这群愿意暴露自己、也愿意倾听别人的朋友。</view>
+    </view>
+    <view class="serif quote">「天时地利人和——对知识和真诚深入交流的期待。」</view>
+  </view>
+
+  <view class="about-section">
+    <view class="mono section-kicker">WHO</view>
+    <view class="serif section-title">三位主创 · D · C · T</view>
+    <view class="body-copy">
+      <view>沙龙的发起人是三个共同读博、各自带着第二、第三身份的精神科医生：</view>
+    </view>
+    <view class="creator-card" wx:for="{{creators}}" wx:key="letter">
+      <view class="portrait-slot">
+        <view class="serif portrait-letter">{{item.letter}}</view>
+        <view class="mono portrait-tag">PORTRAIT</view>
+      </view>
+      <view class="creator-body">
+        <view class="creator-head">
+          <view class="serif creator-name">{{item.name}}</view>
+          <view class="mono creator-word">{{item.word}}</view>
+        </view>
+        <view class="creator-role">{{item.role}}</view>
+        <view class="creator-desc">{{item.desc}}</view>
+      </view>
+    </view>
+    <view class="creator-note">※ 主创真实形象 / 漫画头像将于后续插入此处。</view>
+  </view>
+
+  <view class="about-section">
+    <view class="mono section-kicker">WHAT</view>
+    <view class="serif section-title">DCT 的三层意思</view>
+    <view class="meaning-row {{item.highlight ? 'meaning-row--highlight' : ''}}" wx:for="{{meanings}}" wx:key="num">
+      <view class="mono meaning-num">{{item.num}}</view>
+      <view class="meaning-body">
+        <view class="serif meaning-en">{{item.en}}</view>
+        <view class="meaning-zh">{{item.zh}}</view>
+      </view>
+    </view>
+    <view class="body-copy after-rows">
+      <view>它既是个名字，也是种态度——不必非得“有用”才值得讨论，但讨论时要保留科学训练给我们的那份认真。</view>
+    </view>
+  </view>
+
+  <view class="about-section">
+    <view class="mono section-kicker">HOW</view>
+    <view class="serif section-title">为什么是「客厅里」</view>
+    <view class="body-copy">
+      <view>我们刻意没有选讲堂、咖啡馆、共享空间——而是客厅。它在物理上离生活最近，也在心理上离表演最远。</view>
+      <view>没有 PPT 也行、不正襟危坐也行、说错话也行。我们希望氛围像朋友间的夜谈：有人讲，有人听，有人随时插话，有人沉默地吃一块甜品。</view>
+      <view>每期一位主讲人 · 一个 TA 真心热爱或长期琢磨的话题 · 40 分钟左右分享 · 之后是自由讨论。欢迎打断、追问、不同意——只要友善。</view>
+    </view>
+  </view>
+
+  <view class="about-section">
+    <view class="mono section-kicker">WHO MAY JOIN</view>
+    <view class="serif section-title">什么样的人会来？</view>
+    <view class="body-copy">
+      <view>没有学科限制 · 没有职称门槛 · 不查论文影响因子。</view>
+      <view>我们筛选的标准只有两条：</view>
+    </view>
+    <view class="criteria">
+      <view>真的对当期话题感兴趣——而不是来凑场。</view>
+      <view>愿意友善地交换观点——能讲，也能听；能质疑，也能被质疑。</view>
+    </view>
+    <view class="body-copy">
+      <view>每期 10–15 人，多学科背景优先，尽量不要让客厅变成同一个领域的回音室。</view>
+    </view>
+  </view>
+
+  <view class="closing-card">
+    <view class="serif closing-title">
+      <view>期待和你一起，</view>
+      <view>建设这块精神自留地。</view>
+    </view>
+    <view class="mono closing-meta">DCT · EST. 2026 · CHENGDU</view>
+    <view class="closing-actions">
+      <button class="ghost-btn" bindtap="goHome">返回首页</button>
+      <button class="solid-btn" bindtap="goLanding">看看本期</button>
+    </view>
+  </view>
+</view>

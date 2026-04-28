@@ -1,0 +1,45 @@
+<view class="page">
+  <view class="review-head">
+    <view class="mono review-kicker">DCT · ARCHIVE</view>
+    <view class="serif review-title">一期一会</view>
+    <view class="review-sub">每一期沙龙的主题、主讲人与当日留痕。</view>
+  </view>
+
+  <view class="review-list">
+    <view
+      class="review-card"
+      wx:for="{{pastIssues}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="openIssue"
+      hover-class="card-hover"
+    >
+      <view class="cover {{item.poster ? 'cover--image' : 'cover--placeholder'}}">
+        <image wx:if="{{item.poster}}" class="cover-img" src="{{item.poster}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+        <view wx:else class="cover-placeholder">
+          <view class="placeholder-star"></view>
+          <view class="serif placeholder-text">封面整理中</view>
+        </view>
+        <view class="mono vol-badge">VOL.0{{item.number}}</view>
+        <view wx:if="{{item.date}}" class="mono date-badge">{{item.date}}</view>
+      </view>
+
+      <view class="review-body">
+        <view class="serif card-title">{{item.title}}</view>
+        <view wx:if="{{item.subtitle}}" class="card-sub">{{item.subtitle}}</view>
+        <view wx:if="{{item.speaker.name}}" class="mono card-speaker">主创 / {{item.speaker.name}}</view>
+        <view wx:if="{{item.summary}}" class="card-summary">{{item.summary}}</view>
+        <view class="card-foot">
+          <view class="mono read-more">{{item.status === 'finished' ? 'READ MORE' : 'PREVIEW'}}</view>
+          <view class="chevron"></view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{upcoming}}" class="coming-card">
+      <view class="mono coming-kicker">VOL.0{{upcoming.number}} · UPCOMING</view>
+      <view class="serif coming-title">下一期主题酝酿中</view>
+      <view class="coming-sub">敬请期待 · 或在主页留言推荐话题</view>
+    </view>
+  </view>
+</view>

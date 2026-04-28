@@ -1,10 +1,15 @@
 {
   "pages": [
+    "pages/home/home",
+    "pages/about/about",
+    "pages/review/review",
+    "pages/review-detail/review-detail",
     "pages/landing/landing",
     "pages/detail/detail",
     "pages/form/form",
     "pages/success/success"
   ],
+  "entryPagePath": "pages/home/home",
   "window": {
     "backgroundTextStyle": "light",
     "backgroundColor": "#f6f8fc",

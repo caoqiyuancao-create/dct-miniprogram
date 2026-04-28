@@ -1,0 +1,66 @@
+<view class="page">
+  <poster-sky tone="light" min-height="1040rpx">
+    <view class="home-hero">
+      <view class="logo-shell">
+        <image class="logo-img" src="/assets/logo.png" mode="aspectFit" lazy-load="true" binderror="onImgError" />
+      </view>
+
+      <view class="mono brand-line">DOCTORS' CRAZY THINKING</view>
+      <view class="serif home-title">认真地胡思乱想</view>
+
+      <view class="slogan-box">
+        <view
+          wx:for="{{brand.slogans}}"
+          wx:key="*this"
+          class="slogan-item {{index === sloganIndex ? 'is-active' : ''}}"
+        >
+          <view class="star-bullet"></view>
+          <text>{{item}}</text>
+          <view class="star-bullet"></view>
+        </view>
+      </view>
+
+      <view class="announcement">
+        <view class="mono ann-badge ann-badge--{{activeAnnouncement.type}}">
+          {{activeAnnouncement.type === 'signup' ? 'OPEN' : 'NEWS'}}
+        </view>
+        <view class="ann-copy">
+          <view
+            wx:for="{{brand.announcements}}"
+            wx:key="text"
+            class="ann-item {{index === announcementIndex ? 'is-active' : ''}}"
+          >
+            <text>{{item.text}}</text>
+            <text wx:if="{{item.date}}" class="ann-date">{{item.date}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </poster-sky>
+
+  <view class="entries">
+    <view class="entry-card entry-card--primary" bindtap="goLanding" hover-class="entry-hover">
+      <view class="entry-glow"></view>
+      <view class="mono entry-kicker">VOL.0{{current.number}} · 报名开放中</view>
+      <view class="serif entry-title">本期报名</view>
+      <view class="entry-body">{{current.title}} · {{current.subtitle}}</view>
+      <view class="mono entry-meta">{{current.dateText}}</view>
+      <view class="entry-arrow"></view>
+    </view>
+
+    <view class="entry-row">
+      <view class="entry-card entry-card--secondary" bindtap="goAbout" hover-class="entry-hover">
+        <view class="mono entry-kicker">ABOUT</view>
+        <view class="serif entry-title entry-title--small">关于 DCT</view>
+        <view class="entry-body">创办的故事</view>
+      </view>
+      <view class="entry-card entry-card--secondary" bindtap="goReview" hover-class="entry-hover">
+        <view class="mono entry-kicker">ARCHIVE</view>
+        <view class="serif entry-title entry-title--small">往期回顾</view>
+        <view class="entry-body">已有 {{pastCount}} 期</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="mono home-footer">EST.2026 · CHENGDU · IN A LIVING ROOM</view>
+</view>

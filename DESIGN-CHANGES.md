@@ -88,6 +88,45 @@
 
 ---
 
+### CHG-20260428-04 · 同步 prototype 多期架构到小程序
+
+**页面**：`app.json` / `data/issues.js` / `pages/home` / `pages/about` / `pages/review` / `pages/review-detail`
+**区块**：新版原型 `prototype/` 中尚未落地的小程序主入口、关于页、往期回顾页、单期回顾详情页和期次数据中心。
+**设计意图**：把小程序从“单期报名页”补齐为 DCT 官方小程序的多期结构：先进入品牌主页，再进入本期报名、关于 DCT、往期回顾。后续换期只需要维护 `data/issues.js`。
+**原样**：
+```json
+"pages": [
+  "pages/landing/landing",
+  "pages/detail/detail",
+  "pages/form/form",
+  "pages/success/success"
+]
+```
+**目标**：
+```json
+"pages": [
+  "pages/home/home",
+  "pages/about/about",
+  "pages/review/review",
+  "pages/review-detail/review-detail",
+  "pages/landing/landing",
+  "pages/detail/detail",
+  "pages/form/form",
+  "pages/success/success"
+],
+"entryPagePath": "pages/home/home"
+```
+**实现说明**：
+- 新增 `miniprogram/data/issues.js`，从 `prototype/data/issues.js` 转为小程序 CommonJS 数据中心，包含品牌信息、当前期、未来期、往期期次和选择器。
+- 新增 `pages/home`：大 Logo、slogan 轮播、公告条、本期报名入口、关于 DCT 入口、往期回顾入口。
+- 新增 `pages/about`：6 幕开场动画、DCT 起源长文、三位主创占位卡、DCT 三层含义、客厅理念和底部 CTA。
+- 新增 `pages/review`：往期列表采用杂志封面卡片，支持跳转单期详情。
+- 新增 `pages/review-detail`：单期 cover、speaker、recap、highlights、photos 占位和返回入口。
+**给 Claude Code 的粘贴说明**：
+> 按 DESIGN-CHANGES.md 的 CHG-20260428-04 检查 prototype 多期架构是否已同步到小程序。重点确认 app.json 入口、data/issues.js、home/about/review/review-detail 四个新页面，以及 landing/detail/form/success 是否保持原有行为。
+
+---
+
 ### CHG-20260428-03 · 小程序启动分析性能修正
 
 **页面**：`project`

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "DCT 家庭学术沙龙",
+  "navigationBarBackgroundColor": "#eef4fb",
+  "navigationBarTextStyle": "black",
+  "backgroundColor": "#f6f8fc",
+  "usingComponents": {
+    "poster-sky": "/components/poster-sky/poster-sky"
+  }
+}

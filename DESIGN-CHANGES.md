@@ -104,7 +104,10 @@
 | `--warm-ink` | `#6b4c1e` | 暖深色文字 |
 | `--warm-text` | `#8a6a2e` | 暖辅文 |
 
-> **U6 收尾 TODO**：landing.wxss 已 var() 化；detail/form/success.wxss 还有 45 处硬编码色票待批量替换（值 1:1 对应，零视觉差，等 landing 真机验证后做）。
+> **U6 收尾 TODO**（2026-05-12 复审更新）：
+> - landing.wxss：**核心文本/背景色已 var() 化**；阴影/状态/装饰色仍残留约 29 处硬编码（多为 rgba 装饰色 + 状态色）
+> - detail/form/success.wxss：实测共 **53 处**硬编码色票（detail 15 / form 13 / success 25），其中 44 处可 1:1 映射到现有 16 token，**9 处为孤立色**（hint 灰 / 状态色 / 暖色变体），需要扩 token 后再替换
+> - 详见 CHG-20260512-01（U6 收尾 + token 扩展）
 
 ---
 
@@ -117,12 +120,14 @@
 ### CHG-20260428-09 · about 页 6 幕动画 — AE/Lottie 后期接入
 
 **类型**：⚙️ 功能改动 + 资源依赖
-**页面**：`pages/about` / `components/dct-origin-story`（候选复用）
+**页面**：`pages/about`
 **设计意图**：当前 about 页 6 幕动画是用纯 WXML/WXSS keyframes 实现的占位版本，QY 不满意。**计划**用 AE 制作连续卡通动画 → Bodymovin 导出 Lottie JSON → 小程序用 `lottie-miniprogram` 播放。
 
-**前置依赖（已就绪）：**
-- `lottie-miniprogram@^1.0.12` 已加入 `miniprogram/package.json`（来自旧 root 文档 CHG-20260428-01 "Lottie 分层动画接入准备"）
-- 微信开发者工具中需"工具 → 构建 npm"生成 `miniprogram_npm/`
+**前置依赖（2026-05-12 复审）：**
+- ✓ `lottie-miniprogram@^1.0.12` 已加入 `miniprogram/package.json`
+- ✗ `miniprogram/miniprogram_npm/` 未构建 —— 需在微信开发者工具"工具 → 构建 npm"生成
+- ✗ `miniprogram/assets/animations/` 目录不存在 —— 等素材到位时创建
+- ⚠ **fallback 修正**：之前文档说"保留 dct-origin-story 做 fallback"，复审发现该组件仅在 landing 页引用（`landing.json:8`），**不在 about 页**。真正的 fallback 是 about.wxml 第 5–48 行现有的 6 个 `.about-scene` keyframes 占位
 - AE 制作时**避免依赖 expression**（小程序端 Lottie 不支持）
 
 **待 QY 提供：**
@@ -137,41 +142,6 @@
 
 **给 Claude Code 的粘贴说明：**
 > 按 DESIGN-CHANGES.md 的 CHG-20260428-09 接入 about 页 AE/Lottie 动画。素材路径 `miniprogram/assets/animations/about-story.json`。先在 about 页测试，不要动 landing 上现有 dct-origin-story。
-
----
-
-### CHG-20260428-08 · about 页文案重构（忠实第一期开场 PDF）
-
-**类型**：🎨 纯 UI 改动（文案 + 结构）
-**页面**：`pages/about/about`
-**设计意图**：把现有 about 页改成与第一期开场 PDF 同一套叙事——突出"非典型精神科 PhD 三人组"的身份反差、DCT 的三层含义、客厅作为反讲堂的选择。**漫画 / 真实头像后续会补**，先用 PORTRAIT 占位块。
-
-**改动列表：**
-
-1. **6 幕动画 caption 改写**：
-   - `从一片蓝天开始` → `一切从天时地利人和说起` / sub: `2026 · 一个客厅 · 三个 PhD`
-   - `三个人的夜谈` → `一只狗、一道菜、一次对话` / sub: `Dog · Chef · Therapist`
-   - `一个问题` → `在绩效之外` / sub: `留一块精神自留地`（视觉换成「方块田 + 金色小芽」）
-   - `于是在客厅` → `Doctors' Crazy Thinking` / sub: `认真地胡思乱想`（视觉换成大字品牌锁屏）
-   - `星芒亮起` → `客厅里的家庭学术沙龙`（视觉沿用客厅 SVG）
-   - `等你来` → `欢迎你也来` / sub: `一起建设这块自留地`
-
-2. **下方长图文 5 个 section**（替换原 3 个）：
-   - **WHY · DCT 从何而来**
-   - **WHO · 三位主创 · D · C · T**（3 张主创卡：包文欣/狗子/Dog · 徐佳淇/厨子/Chef · 曹栖源/治疗师/Therapist · 64×64 PORTRAIT 占位 + 卡片下方斜体灰字 `※ 主创真实形象 / 漫画头像将于后续插入此处。`）
-   - **WHAT · DCT 的三层意思**（MeaningRow 三行表，03 行金色高亮）
-   - **HOW · 为什么是「客厅里」**
-   - **WHO MAY JOIN · 什么样的人会来？**
-
-3. **底部 CTA 卡片**：在 `期待和你一起...` 下方新增一行 monospace 字距 1：`DCT · EST. 2026 · CHENGDU`
-
-**小程序实现要点**：
-- `CreatorCard` 在 WXML 写成可复用 `template`，数据走 `data` 数组
-- `MeaningRow` 用 `wx:for`，`highlight` 字段控制高亮样式
-- 头像占位的 PORTRAIT 文字将来换成 `<image src="{{item.avatar}}">`，留好字段
-
-**给 Claude Code 的粘贴说明：**
-> 按 DESIGN-CHANGES.md 的 CHG-20260428-08 重写 about 页文案与结构，主创头像继续用占位（蓝渐变 + 大字 D/C/T），等真实漫画头像补来再换。**注意 6 幕动画后续会被 CHG-20260428-09 用 Lottie 替换**——做文案重构时不要花时间优化动画细节。
 
 ---
 
@@ -206,6 +176,47 @@
 
 > 所有已完成的变更单按时间倒序归档在这里。`commit` 字段为 git 短 hash，方便追溯。
 > 编号保留各自原编号方便历史检索（之前两份文档存在编号冲突，已通过本次合并消除）。
+
+---
+
+### CHG-20260512-01 · U6 收尾 + token 扩展 — 2026-05-12 · `（待提交）`
+
+**完成内容**：
+- 新增 8 个扩展 token 到 [miniprogram/app.wxss](miniprogram/app.wxss)：
+  - `--text-hint: #8496b3` / `--text-hint-soft: #a0acc0` （hint 灰，原孤立色）
+  - `--success: #3d8b5e` / `--danger: #c25450` （状态色，原孤立色）
+  - `--warm-ink-soft: #6b5520` / `--warm-gold-soft: #b8903a` （暖色变体）
+  - `--divider-soft: #eef2f8` （极细分割线，多页共用）
+  - `--chip-border: #c9d4e6` （chip / 次级按钮描边）
+- 批量替换 detail.wxss / form.wxss / success.wxss 的 53 处硬编码色票为 var()
+- landing.wxss 顺手清理可映射的硬编码
+- DESIGN-CHANGES.md 颜色 token 表同步更新 / DESIGN-HANDOFF.md 新建给设计端接手
+
+**说明**：阴影 rgba（如 `rgba(26,58,120,0.3)` CTA 阴影）、装饰渐变透明度变体、Canvas 内绘制色保留硬编码，不强行 token 化（会丢失语义）。
+
+---
+
+### CHG-20260512-00 · DESIGN-HANDOFF.md 新建 + 文档状态对齐 — 2026-05-12 · `（待提交）`
+
+**完成内容**：
+- 新建仓库根 [DESIGN-HANDOFF.md](DESIGN-HANDOFF.md) —— 给 Claude Design 端的"现状恢复包"（之前 Design 端上下文丢失）
+- 修正 DESIGN-CHANGES.md 三处误述：
+  - U6 收尾从"45 处"修正为"53 处（44 可映射 + 9 待扩 token）"
+  - landing.wxss 从"完整 var() 化"修正为"核心文本/背景色 var() 化，装饰色保留 29 处硬编码"
+  - CHG-20260428-09 fallback 修正：不是 dct-origin-story，是 about.wxml 现有 keyframes
+- CHG-20260428-08 从"进行中"移入"已合并"（实际已在 `84164b5` 完成）
+
+---
+
+### CHG-20260428-08 · about 页文案重构（忠实第一期开场 PDF） — 2026-04-28 · `84164b5`
+
+**完成内容**：
+- 6 幕动画 caption 重写为"一切从天时地利人和说起 / 一只狗一道菜一次对话 / 在绩效之外 / Doctors' Crazy Thinking / 客厅里的家庭学术沙龙 / 欢迎你也来"
+- 下方长图文从原 3 个 section 扩为 5 个：WHY / WHO（D·C·T 三主创卡）/ WHAT（三层含义，03 行金色高亮）/ HOW / WHO MAY JOIN
+- 三主创卡用 PORTRAIT 占位（蓝渐变 + 大字 D/C/T），`avatar` 字段已预留
+- 底部 CTA 卡片新增 monospace `DCT · EST. 2026 · CHENGDU`
+
+**注**：当时未及时归档；2026-05-12 复审时发现 `prototype/src/screen-about.jsx` 与 `miniprogram/pages/about/about.{wxml,js}` 文案已完全一致，确认在 `84164b5` 合并，由 CHG-20260512-00 补归档。
 
 ---
 

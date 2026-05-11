@@ -18,6 +18,16 @@ page {
   --warm-ink:   #6b4c1e;
   --warm-text:  #8a6a2e;
 
+  /* CHG-20260512-01 extended tokens (covers former isolated colors) */
+  --text-hint:      #8496b3;
+  --text-hint-soft: #a0acc0;
+  --success:        #3d8b5e;
+  --danger:         #c25450;
+  --warm-ink-soft:  #6b5520;
+  --warm-gold-soft: #b8903a;
+  --divider-soft:   #eef2f8;
+  --chip-border:    #c9d4e6;
+
   /* legacy aliases (kept for non-landing pages until they migrate) */
   --ink-soft:  var(--navy);
   --sky-1:     #e7f0fa;

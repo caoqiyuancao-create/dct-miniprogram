@@ -1,5 +1,5 @@
 .page {
-  background: #f6f8fc;
+  background: var(--bg);
   min-height: 100vh;
   padding-bottom: 60rpx;
 }
@@ -22,13 +22,13 @@
 .hero-title {
   font-size: 60rpx;
   font-weight: 900;
-  color: #0f2855;
+  color: var(--ink);
   letter-spacing: 6rpx;
   margin-top: 16rpx;
 }
 .hero-sub {
   font-size: 26rpx;
-  color: #3d5f94;
+  color: var(--text-soft);
   margin-top: 16rpx;
   text-align: center;
   line-height: 1.7;
@@ -40,9 +40,9 @@
 }
 
 .card {
-  background: #fff;
+  background: var(--card);
   border-radius: 32rpx;
-  border: 1rpx solid #e3e9f3;
+  border: 1rpx solid var(--divider);
 }
 .timeline {
   padding: 12rpx 0;
@@ -65,14 +65,14 @@
   width: 28rpx;
   height: 28rpx;
   border-radius: 14rpx;
-  background: #c9d4e6;
+  background: var(--chip-border);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.dot-done   { background: #2c5ca0; }
+.dot-done   { background: var(--navy-soft); }
 .dot-active {
-  background: #e9b949;
+  background: var(--gold-hi);
   box-shadow: 0 0 0 8rpx rgba(233,185,73,0.22);
 }
 .dot-check {
@@ -86,21 +86,22 @@
 .line {
   width: 2rpx;
   flex: 1;
-  background: #e3e9f3;
+  background: var(--divider);
   margin-top: 8rpx;
   min-height: 24rpx;
 }
 .step-body { flex: 1; padding-bottom: 8rpx; }
-.step-body-done .step-label   { color: #0f2855; font-weight: 600; }
+.step-body-done .step-label   { color: var(--ink); font-weight: 600; }
+/* #8a6715 is a darker warm-gold variant unique to active-step emphasis; kept hardcoded as it has no semantic counterpart in token table */
 .step-body-active .step-label { color: #8a6715; font-weight: 600; }
 .step-label {
   font-size: 28rpx;
   font-weight: 500;
-  color: #6b7a91;
+  color: var(--muted-soft);
 }
 .step-sub {
   font-size: 23rpx;
-  color: #8496b3;
+  color: var(--text-hint);
   margin-top: 4rpx;
 }
 
@@ -119,7 +120,7 @@
   height: 24rpx;
   margin-top: 4rpx;
   flex-shrink: 0;
-  background: #c9a24a;
+  background: var(--gold);
   clip-path: polygon(
     50% 0%, 58% 42%, 100% 50%, 58% 58%,
     50% 100%, 42% 58%, 0% 50%, 42% 42%
@@ -127,7 +128,7 @@
 }
 .notice-text {
   font-size: 25rpx;
-  color: #6b5520;
+  color: var(--warm-ink-soft);
   line-height: 1.65;
   flex: 1;
 }
@@ -220,9 +221,9 @@
   width: 100%;
   height: 96rpx;
   border-radius: 48rpx;
-  background: #fff;
-  color: #1a3a78;
-  border: 1rpx solid #c9d4e6;
+  background: var(--card);
+  color: var(--navy);
+  border: 1rpx solid var(--chip-border);
   font-size: 30rpx;
   font-weight: 500;
   display: flex;

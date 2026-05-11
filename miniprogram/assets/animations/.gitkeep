@@ -1,0 +1,12 @@
+# Lottie animations directory (CHG-20260428-09)
+#
+# Reserved for AE → Bodymovin exports.
+# Expected files (delivered by QY):
+#   - about-story.json     (6-scene about page animation)
+#
+# Once a .json is dropped here, lottie-miniprogram in `usingComponents`
+# of pages/about/about.json can be enabled, and about.wxml's existing
+# .about-scene keyframes block (about.wxml:5-48) becomes the fallback.
+#
+# Prerequisite: run "工具 → 构建 npm" in WeChat DevTools to generate
+# miniprogram_npm/lottie-miniprogram/ (cannot be done by Claude Code).

@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>DCT · 功能优化方向板</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --ink:#0f2855; --navy:#1a3a78; --navy-soft:#2c5ca0;
+    --text:#2a3d5c; --text-soft:#3d5f94; --muted:#55709a; --muted-soft:#6b7a91;
+    --hint:#8496b3; --divider:#e3e9f3; --divider-soft:#eef2f8;
+    --bg:#f6f8fc; --card:#fff; --gold:#c9a24a; --gold-hi:#e9b949; --gold-soft:#b8903a;
+    --warm-bg:#fbf6ec; --warm-bg2:#f5e8d0; --warm-ink:#6b4c1e; --warm-text:#8a6a2e;
+    --serif:"Noto Serif SC","STSong",serif;
+    --sans:"Noto Sans SC",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);font-family:var(--sans);color:var(--text);}
+  .serif{font-family:var(--serif)} .mono{font-family:var(--mono)}
+  ::selection{background:var(--gold-hi);color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const STAGES = {
+  pre:    { label: '报名前',  short: '前',  color: 'var(--navy)' },
+  mid:    { label: '报名中',  short: '中',  color: 'var(--navy-soft)' },
+  live:   { label: '现场',    short: '场',  color: 'var(--gold)' },
+  post:   { label: '会后',    short: '后',  color: 'var(--warm-ink)' },
+  cross:  { label: '跨期',    short: '跨',  color: 'var(--muted)' },
+  admin:  { label: '主创',    short: '管',  color: 'var(--muted-soft)' },
+};
+
+const FEATURES = [
+  // 1 · 让"对的人"找过来
+  { id:'topics',   theme:1, t:'话题征集池',       w:'M', stages:['cross','pre'],
+    pitch:'让用户推荐 + 投票下一期话题。"下一期讲什么"从闭门决策变成半开放。',
+    detail:'review 页底部多一栏「下一期·话题征集」。每人 3 票，可附 50 字说明。主创后台一目了然，最高票若可执行就推动。',
+    deps:'用户身份（已有 openid）· 主创后台轻量列表',
+    risk:'冷启动票数少会显尴尬；先内部播种 5-8 个候选。' },
+  { id:'fitcheck', theme:1, t:'匹配度小问卷',     w:'S', stages:['pre','mid'],
+    pitch:'landing 上 3 道小题，自动给「与本期的契合度 8/10」+ 个性化 CTA 文案。',
+    detail:'例：① 你和「目标管理」有过哪种关系？② 来 DCT 你更想得到什么？③ 你愿意分享什么？根据回答给出契合分；分高直接进 form，分低给一段"也许 vol.03 更适合你"的诚实退场。',
+    deps:'无后端，纯静态题',
+    risk:'要避免做成"测试题"；语气要像朋友建议。' },
+  { id:'speakerpitch', theme:1, t:'主讲反向投递', w:'M', stages:['cross'],
+    pitch:'用户也能投自己想讲的话题，被选中即成为下一期主讲。',
+    detail:'about 页底部"成为主讲人"入口。表单含：你想讲什么 · 为什么是你 · 30 字钩子。主创看到合适的私聊敲定。',
+    deps:'主创后台审核 · 一个新表单页',
+    risk:'若投递多但回复慢，容易冷掉；承诺"两周内必有回应"。' },
+  { id:'alumni',   theme:1, t:'老朋友早鸟池',     w:'S', stages:['pre'],
+    pitch:'上期参与者前 24h 优先报名 + ¥X 老朋友价。',
+    detail:'报名按钮在开放前 24h 对老用户提前激活；首屏 banner 显示"老朋友通道还剩 18h"。',
+    deps:'F1 报名状态记忆已有 → 扩展为"曾经 approved"',
+    risk:'老用户群小，差异化不能太大；象征性优惠即可。' },
+
+  // 2 · 决策门槛
+  { id:'seat',     theme:2, t:'拼桌偏好',         w:'S', stages:['mid'],
+    pitch:'报名时勾「愿意坐谁旁边」（同行 · 跨行 · 随机），主创按偏好安排。',
+    detail:'form 多一栏单选 + 一栏可填"我特别想认识__"。结果只主创看，不公开。',
+    deps:'form 字段',
+    risk:'报名表别太长——这一项要短小、有趣。' },
+  { id:'waitlist', theme:2, t:'候补名单',         w:'M', stages:['mid'],
+    pitch:'满员后排队，前面有人退立刻顶上 + 通知。',
+    detail:'报名按钮变"候补名单 #3"，提交问卷信息但不付费。退/转让发生即推送给最前面的人 30 分钟决定窗口。',
+    deps:'报名状态 + 模板消息',
+    risk:'要明确告知"非保证名额"，避免预期管理失败。' },
+  { id:'refund',   theme:2, t:'退款/转让码',      w:'M', stages:['mid','pre'],
+    pitch:'会前 7 天前可退；可转让给好友，生成一次性"客厅入场码"。',
+    detail:'success 页多一个"我去不了 → 转让/退款"按钮。转让码发给好友，扫码进 form 但不需付费。',
+    deps:'支付状态 + 一次性 token',
+    risk:'退款 7 天硬线易摩擦；首期允许人工议价。' },
+  { id:'plusone',  theme:2, t:'带个朋友 +1',      w:'S', stages:['mid'],
+    pitch:'报名时勾「我带一个朋友」，¥X 优惠，附 +1 名额。',
+    detail:'form 一行 checkbox。+1 信息后续补：可填好友昵称/微信，主创会拉群。',
+    deps:'form 字段 + 名额配额',
+    risk:'防止两人都是"被带来"的；至少一人答主问卷。' },
+
+  // 3 · 现场
+  { id:'checkin',  theme:3, t:'一键签到',         w:'M', stages:['live'],
+    pitch:'到客厅扫桌面二维码签到 → 解锁今晚桌面卡 + 现场问题池。',
+    detail:'门口/茶几立一张二维码。扫码后弹「欢迎，第 N 次来 DCT」+ 解锁今晚专属玩法。',
+    deps:'活动唯一二维码 + 已报名校验',
+    risk:'纯锦上添花；保证不扫也能进。' },
+  { id:'qpool',    theme:3, t:'现场问题池',       w:'L', stages:['live'],
+    pitch:'参会者匿名投问题，互相点赞，主创看屏挑高赞的发问。',
+    detail:'主讲 40 分钟分享期间打开"问题墙"。匿名/实名可选，点赞排序。最受欢迎的会被主创读出来，成为正式提问。',
+    deps:'轻量实时通信（云函数轮询）',
+    risk:'人少时空气尴尬；少于 10 人就关掉，回退到口头自由问。' },
+  { id:'placecard',theme:3, t:'桌面卡',           w:'S', stages:['live'],
+    pitch:'报名时填"今晚我最想聊__"，会前导出桌面纸卡 PDF，主创批量打印。',
+    detail:'form 加一个 30 字 hook 字段。主创在开场前从后台一键导出所有人的桌面卡（A6/A7）。',
+    deps:'form 字段 + PDF 导出',
+    risk:'打印是主创工作量，需提前 24h 截止。' },
+  { id:'record',   theme:3, t:'录音 → 金句草稿',  w:'L', stages:['live','post'],
+    pitch:'现场录音上传 → AI 自动产出金句草稿，主创人工再筛。',
+    detail:'手机 / 一个迷你录音笔即可。录音上传到云端，过转写 + 抽 hook 模型 → 主创看候选 20 句，挑 3-5 上 review 详情页。',
+    deps:'录音上传 + 服务端转写 + LLM',
+    risk:'隐私敏感：必须事先告知参会者并允许说"我说的别录"。' },
+
+  // 4 · 会后沉淀
+  { id:'wall',     theme:4, t:'多人照片墙',       w:'M', stages:['post'],
+    pitch:'参会者上传当晚自拍 → 拼成「当日客厅」墙。',
+    detail:'success 页（或会后 24h 推送）解锁"上传你的客厅一刻"。主创审核（防误传）后入墙。',
+    deps:'图片上传 + 审核',
+    risk:'肖像权：默认只对参会者可见，公开需个人勾选。' },
+  { id:'passport', theme:4, t:'DCT 护照',         w:'M', stages:['post','cross'],
+    pitch:'个人页展示你去过的所有期次 + 八角星徽章，可分享。',
+    detail:'home 多一个"我的"入口。点进去：你的报名记录 timeline + 每期八角星 + 主创"+1"过的彩蛋（出席率 100% 等）。',
+    deps:'报名状态历史聚合 + 一个新页',
+    risk:'第一期老用户没数据；可手动种几条。' },
+  { id:'reviews',  theme:4, t:'听众感言征集',     w:'S', stages:['post'],
+    pitch:'会后 18h 推送：今晚最让你印象深的一句话。写满 50 字解锁下期早鸟。',
+    detail:'模板消息或服务通知触发。回答自动进 review-detail 页"VOICES"板块，主创筛选展示。',
+    deps:'后续推送 + 评论表',
+    risk:'提示语别太正式；像朋友问"今晚怎么样？"' },
+  { id:'transcript', theme:4, t:'文字稿付费解锁', w:'L', stages:['post','cross'],
+    pitch:'现场录音 → 文字稿 → ¥X 解锁。没赶上的人也能看。',
+    detail:'录音转写后由主创 30 分钟略校。¥X（建议 ¥9-¥19）解锁后可下载 PDF / 在小程序内阅读。',
+    deps:'CHG 3-record 录音 + 转写 + 支付',
+    risk:'轻商业化要注意社区调性；定价不能像知识付费。' },
+
+  // 5 · 主创视角
+  { id:'admin',    theme:5, t:'主创后台',         w:'L', stages:['admin'],
+    pitch:'手机端审核报名 / 群发通知 / 看数据。当前用 Excel + 微信，太重。',
+    detail:'独立子页（角色判断）。最小可行：报名列表（pending/approved/rejected） + 群发模板消息 + 单期 stats。',
+    deps:'角色管理 + cloudfunctions',
+    risk:'内部工具优先级低于用户侧；做个最小版就行。' },
+  { id:'stats',    theme:5, t:'数据小看板',       w:'S', stages:['admin'],
+    pitch:'本期申请人结构：学科 / 城市 / 是否老用户 / 拼桌偏好分布。',
+    detail:'主创后台一个 tab。简单饼图 / 柱状图。',
+    deps:'F-admin',
+    risk:'非紧急；当人数 > 50/期再做。' },
+];
+
+const THEMES = {
+  1: { tag: 'I', name: '让对的人找过来',   sub: '报名前 · 让用户从「要不要来」变成「我必须来」' },
+  2: { tag: 'II', name: '降低决策门槛',    sub: '报名中 · 灵活、不焦虑、给社恐台阶' },
+  3: { tag: 'III', name: '现场的客厅工具', sub: '当晚 · 让一次活动产生更多产物' },
+  4: { tag: 'IV', name: '会后沉淀',        sub: '让一次活动卖第二次，并推动下一次' },
+  5: { tag: 'V', name: '主创视角',         sub: '内部工具 · 让运营变可扩展' },
+};
+
+const PRIORITY = { must: '必做', maybe: '可做', skip: '暂搁' };
+const STORAGE_KEY = 'dct_feature_priorities_v1';
+
+function App() {
+  const [priorities, setPriorities] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch { return {}; }
+  });
+  const [openId, setOpenId] = React.useState(null);
+  const [filter, setFilter] = React.useState('all');
+
+  const setP = (id, val) => {
+    const next = { ...priorities, [id]: val };
+    if (!val) delete next[id];
+    setPriorities(next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  };
+  const clearAll = () => { setPriorities({}); localStorage.removeItem(STORAGE_KEY); };
+
+  const counts = { must:0, maybe:0, skip:0 };
+  Object.values(priorities).forEach(v => { if(counts[v]!==undefined) counts[v]++; });
+
+  const filtered = FEATURES.filter(f => {
+    if (filter === 'all') return true;
+    if (filter === 'must' || filter === 'maybe') return priorities[f.id] === filter;
+    if (filter === 'unset') return !priorities[f.id];
+    if (filter === 'S' || filter === 'M' || filter === 'L') return f.w === filter;
+    return true;
+  });
+
+  return (
+    <div>
+      <Header counts={counts} total={FEATURES.length} clear={clearAll} filter={filter} setFilter={setFilter} priorities={priorities} />
+      {[1,2,3,4,5].map(themeId => {
+        const items = filtered.filter(f => f.theme === themeId);
+        if (!items.length) return null;
+        return (
+          <ThemeBlock key={themeId} theme={THEMES[themeId]} items={items}
+            priorities={priorities} setP={setP} openId={openId} setOpenId={setOpenId} />
+        );
+      })}
+      <SummaryFooter priorities={priorities} />
+    </div>
+  );
+}
+
+function Header({ counts, total, clear, filter, setFilter, priorities }) {
+  const setCount = Object.keys(priorities).length;
+  const pct = Math.round(setCount / total * 100);
+  return (
+    <div style={{
+      background: 'linear-gradient(180deg, #fff 0%, var(--bg) 100%)',
+      borderBottom: '0.5px solid var(--divider)', position: 'sticky', top: 0, zIndex: 10,
+      backdropFilter: 'blur(20px)',
+    }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 36px 20px' }}>
+        <div className="mono" style={{ fontSize: 11, color: 'var(--muted)', letterSpacing: 4 }}>
+          DCT · PRODUCT DIRECTION BOARD
+        </div>
+        <div className="serif" style={{
+          fontSize: 36, fontWeight: 900, color: 'var(--ink)', letterSpacing: 1, marginTop: 6, lineHeight: 1.25,
+        }}>
+          功能优化方向 · 18 张候选卡
+        </div>
+        <div style={{ fontSize: 14, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7, maxWidth: 760 }}>
+          按"用户从想来到来过"的旅程拆成 5 个主题。每张卡有 <strong>一句话价值 · 工作量 · 影响阶段</strong>。
+          点卡片展开细节。给每张选 <span style={{color:'#3d8b5e',fontWeight:600}}>必做</span> / <span style={{color:'var(--warm-ink)',fontWeight:600}}>可做</span> / <span style={{color:'var(--hint)',fontWeight:600}}>暂搁</span>，
+          底部会把你的"必做"列表汇总成给 Claude Code 的工单草稿。
+        </div>
+
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 24, marginTop: 22,
+          fontSize: 12.5, color: 'var(--muted-soft)', flexWrap: 'wrap',
+        }}>
+          <div style={{ display: 'flex', gap: 12 }}>
+            <Chip label={`必做 ${counts.must}`} color="#3d8b5e" active={filter==='must'} on={()=>setFilter(filter==='must'?'all':'must')} />
+            <Chip label={`可做 ${counts.maybe}`} color="var(--warm-ink)" active={filter==='maybe'} on={()=>setFilter(filter==='maybe'?'all':'maybe')} />
+            <Chip label={`未选 ${total-Object.keys(priorities).length}`} color="var(--hint)" active={filter==='unset'} on={()=>setFilter(filter==='unset'?'all':'unset')} />
+          </div>
+          <div style={{ width: 1, height: 18, background: 'var(--divider)' }}/>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Chip label="工作量 S" color="var(--navy)" tiny active={filter==='S'} on={()=>setFilter(filter==='S'?'all':'S')} />
+            <Chip label="M" color="var(--navy)" tiny active={filter==='M'} on={()=>setFilter(filter==='M'?'all':'M')} />
+            <Chip label="L" color="var(--navy)" tiny active={filter==='L'} on={()=>setFilter(filter==='L'?'all':'L')} />
+          </div>
+          <div style={{ flex: 1 }}/>
+          <button onClick={clear} style={{
+            background:'transparent', border:'0.5px solid var(--divider)', borderRadius:14,
+            padding:'5px 12px', fontFamily:'var(--mono)', fontSize:11, color:'var(--muted)',
+            letterSpacing:1, cursor:'pointer',
+          }}>清空标记</button>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: 1.5 }}>
+            进度 {setCount}/{total} · {pct}%
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Chip({ label, color, active, on, tiny }) {
+  return (
+    <span onClick={on} style={{
+      display:'inline-flex', alignItems:'center', gap:6,
+      padding: tiny ? '4px 10px' : '5px 12px',
+      border:`0.5px solid ${active?color:'var(--divider)'}`,
+      borderRadius:14, fontSize: tiny?11:12, color: active?'#fff':color,
+      background: active?color:'transparent',
+      fontFamily:'var(--mono)', letterSpacing:1, cursor:'pointer',
+      transition:'all .15s',
+    }}>{label}</span>
+  );
+}
+
+function ThemeBlock({ theme, items, priorities, setP, openId, setOpenId }) {
+  return (
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '36px 36px 6px' }}>
+      <div style={{ display:'flex', alignItems:'baseline', gap:14, marginBottom: 18 }}>
+        <div className="serif" style={{
+          fontSize: 48, fontWeight: 900, color: 'var(--gold)', lineHeight: 0.9, letterSpacing:-1,
+        }}>{theme.tag}</div>
+        <div>
+          <div className="serif" style={{ fontSize: 22, fontWeight: 900, color: 'var(--ink)', letterSpacing: 0.5 }}>
+            {theme.name}
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 3 }}>{theme.sub}</div>
+        </div>
+      </div>
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: 16,
+      }}>
+        {items.map(f => (
+          <Card key={f.id} f={f} priority={priorities[f.id]}
+            setP={v => setP(f.id, v)}
+            open={openId === f.id} setOpen={v => setOpenId(v ? f.id : null)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Card({ f, priority, setP, open, setOpen }) {
+  const borderColor =
+    priority === 'must'  ? '#3d8b5e' :
+    priority === 'maybe' ? 'var(--gold)' :
+    priority === 'skip'  ? 'var(--divider)' :
+    'var(--divider)';
+  const bgHi =
+    priority === 'must'  ? 'linear-gradient(180deg, rgba(61,139,94,0.06), rgba(61,139,94,0) 40%)' :
+    priority === 'maybe' ? 'linear-gradient(180deg, rgba(233,185,73,0.10), rgba(233,185,73,0) 40%)' :
+    'transparent';
+
+  return (
+    <div style={{
+      background: `var(--card) ${bgHi !== 'transparent' ? ', '+bgHi : ''}`,
+      backgroundImage: bgHi,
+      borderRadius: 14, padding: 18,
+      border: `1px solid ${borderColor}`,
+      transition: 'all .2s',
+      opacity: priority === 'skip' ? 0.55 : 1,
+      display:'flex', flexDirection:'column', gap: 10,
+    }}>
+      {/* row 1: weight + stages */}
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+        <div style={{
+          fontFamily:'var(--mono)', fontSize: 11, color: 'var(--ink)',
+          background: 'var(--divider-soft)', padding: '3px 8px', borderRadius: 4,
+          letterSpacing: 1.5, fontWeight: 600,
+        }}>{f.w}</div>
+        <div style={{ display:'flex', gap: 5 }}>
+          {f.stages.map(s => (
+            <div key={s} title={STAGES[s].label} style={{
+              fontFamily:'var(--mono)', fontSize: 10, letterSpacing: 0.5,
+              padding: '2px 7px', borderRadius: 8,
+              background: STAGES[s].color, color: '#fff',
+            }}>{STAGES[s].short}</div>
+          ))}
+        </div>
+      </div>
+
+      {/* title */}
+      <div onClick={() => setOpen(!open)} style={{ cursor:'pointer' }}>
+        <div className="serif" style={{
+          fontSize: 18, fontWeight: 800, color: 'var(--ink)', letterSpacing: 0.5, lineHeight: 1.3,
+        }}>
+          {f.t}
+        </div>
+        <div style={{
+          fontSize: 13, color: 'var(--text-soft)', marginTop: 6, lineHeight: 1.65, textWrap:'pretty',
+        }}>{f.pitch}</div>
+      </div>
+
+      {/* details (collapsible) */}
+      {open && (
+        <div style={{
+          background:'var(--divider-soft)', borderRadius: 10, padding: 12,
+          fontSize: 12.5, color:'var(--text)', lineHeight: 1.7,
+          display:'flex', flexDirection:'column', gap: 8,
+        }}>
+          <div><span className="mono" style={{ color:'var(--gold-soft)', fontSize:10, letterSpacing:2 }}>HOW</span><br/>{f.detail}</div>
+          <div><span className="mono" style={{ color:'var(--gold-soft)', fontSize:10, letterSpacing:2 }}>DEPS</span><br/>{f.deps}</div>
+          <div><span className="mono" style={{ color:'var(--gold-soft)', fontSize:10, letterSpacing:2 }}>RISK</span><br/>{f.risk}</div>
+        </div>
+      )}
+
+      <div style={{ flex:1 }}/>
+
+      {/* priority bar */}
+      <div style={{
+        display:'flex', gap: 4, marginTop: 2, borderTop: '0.5px solid var(--divider)', paddingTop: 12,
+      }}>
+        <PChip label="必做"  v="must"  color="#3d8b5e"        cur={priority} on={setP}/>
+        <PChip label="可做"  v="maybe" color="var(--warm-ink)" cur={priority} on={setP}/>
+        <PChip label="暂搁"  v="skip"  color="var(--hint)"     cur={priority} on={setP}/>
+        <div style={{ flex:1 }}/>
+        <button onClick={()=>setOpen(!open)} style={{
+          background:'transparent', border:'none', cursor:'pointer',
+          fontFamily:'var(--mono)', fontSize: 11, color:'var(--muted)', letterSpacing: 1.5,
+        }}>{open ? '收起 ↑' : '展开 ↓'}</button>
+      </div>
+    </div>
+  );
+}
+
+function PChip({ label, v, color, cur, on }) {
+  const active = cur === v;
+  return (
+    <button onClick={()=>on(active ? null : v)} style={{
+      background: active ? color : 'transparent',
+      color: active ? '#fff' : color,
+      border: `1px solid ${active ? color : 'var(--divider)'}`,
+      borderRadius: 12, padding: '4px 10px',
+      fontFamily:'var(--sans)', fontSize: 11.5, letterSpacing: 1, fontWeight: 600, cursor:'pointer',
+      transition: 'all .15s',
+    }}>{label}</button>
+  );
+}
+
+function SummaryFooter({ priorities }) {
+  const must = FEATURES.filter(f => priorities[f.id] === 'must');
+  const maybe = FEATURES.filter(f => priorities[f.id] === 'maybe');
+  const copy = () => {
+    const block = [
+      '# DCT 功能优化 · 候选清单（来自方向板）',
+      '',
+      '## 必做',
+      ...(must.length ? must.map(f => `- [${f.w}] ${f.t} · ${f.pitch}`) : ['（暂无）']),
+      '',
+      '## 可做',
+      ...(maybe.length ? maybe.map(f => `- [${f.w}] ${f.t} · ${f.pitch}`) : ['（暂无）']),
+    ].join('\n');
+    navigator.clipboard.writeText(block);
+    alert('已复制到剪贴板。可贴给 Claude / Claude Code 启动工单。');
+  };
+  return (
+    <div style={{ maxWidth: 1280, margin: '0 auto', padding: '40px 36px 80px' }}>
+      <div style={{
+        background:'linear-gradient(135deg, var(--warm-bg), var(--warm-bg2))',
+        borderRadius: 18, padding: '28px 32px',
+        border: '0.5px solid #e8dcc0',
+      }}>
+        <div className="mono" style={{ fontSize: 11, color:'var(--warm-text)', letterSpacing: 4 }}>YOUR SHORTLIST</div>
+        <div className="serif" style={{ fontSize: 24, fontWeight: 900, color: 'var(--warm-ink)', marginTop: 6 }}>
+          你的「必做 · 可做」清单
+        </div>
+
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 28, marginTop: 18 }}>
+          <Col title="必做" color="#3d8b5e" items={must} />
+          <Col title="可做" color="var(--warm-ink)" items={maybe} />
+        </div>
+
+        <div style={{ display:'flex', gap: 12, marginTop: 24, flexWrap:'wrap' }}>
+          <button onClick={copy} style={{
+            background:'var(--warm-ink)', color:'#fff', border:'none', borderRadius:22,
+            padding:'10px 22px', fontFamily:'var(--sans)', fontSize:13, fontWeight:600,
+            letterSpacing:1, cursor:'pointer',
+          }}>复制为工单 → 给 Claude Code</button>
+          <div style={{ fontSize: 12, color:'var(--warm-text)', lineHeight: 1.7, flex:1, minWidth:240 }}>
+            提示：把这份清单发给我，我会按你的优先级排执行顺序，并标出哪几条需要先做设计稿，哪几条直接 push 给 Claude Code 走代码。
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Col({ title, color, items }) {
+  return (
+    <div>
+      <div style={{ display:'flex', alignItems:'baseline', gap: 8, marginBottom: 10 }}>
+        <div className="mono" style={{ fontSize: 10, color, letterSpacing: 2.5, fontWeight: 600 }}>{title.toUpperCase()}</div>
+        <div className="serif" style={{ fontSize: 15, fontWeight: 800, color }}>{title} · {items.length}</div>
+      </div>
+      {items.length ? (
+        <div style={{ display:'flex', flexDirection:'column', gap: 6 }}>
+          {items.map(f => (
+            <div key={f.id} style={{
+              display:'flex', gap: 10, fontSize: 12.5, lineHeight: 1.6, color:'var(--warm-ink)',
+            }}>
+              <div className="mono" style={{ width: 18, color, letterSpacing: 1, fontWeight: 600 }}>[{f.w}]</div>
+              <div style={{ flex: 1 }}>
+                <strong>{f.t}</strong>
+                <span style={{ color:'var(--warm-text)', marginLeft: 6 }}>· {f.pitch}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style={{ fontSize: 12, color:'var(--warm-text)', fontStyle:'italic' }}>暂无</div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

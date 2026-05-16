@@ -1,14 +1,6 @@
-// Screen 1 — Landing / theme intro
-// Hero: poster-derived sky with 六星之路 title, then speaker card, opening pitch,
-// three key talking points, event info, seasonal menu, DCT intro, rules link, CTA.
-//
-// CHG-20260428-02:
-//   · 滚动进度条（顶部 1.5px 金色 progress）
-//   · 吸底浮动 CTA（hero 滚出后出现）
-//   · Hero 肖像缩到 120px、标题独享呼吸
-//   · 三个 points 加 SVG 单色 stroke 图标
-//   · 季节限定 chip（不含正餐）
-//   · 主页颜色 token 化（C 对象）
+// Screen 1 — Landing / theme intro · v3
+// 设计理念沿用第二期；内容从 DCT_DATA.getCurrent() 读取。
+//   v3 新增：在 hero 下加入「四个抛给讲者的问题」区块（来自海报）
 
 const C = {
   ink: '#0f2855',
@@ -29,31 +21,35 @@ const C = {
   warmText: '#8a6a2e',
 };
 
-const POINTS = [
-  {
-    num: '01',
-    title: '人生不是单一赛道',
-    sub: '多重身份的平衡与深耕',
-    body: '学者的严谨、管理者的务实、公益者的温度、跑者的坚韧——如何在其中探索更完整的自我。',
-    icon: 'lanes',
-  },
-  {
-    num: '02',
-    title: '用脚步丈量世界',
-    sub: '坚持的力量',
-    body: '从日复一日的训练，到走上世界马拉松大满贯「六星跑者」之路——10000 公里，究竟意味着什么？',
-    icon: 'footprint',
-  },
-  {
-    num: '03',
-    title: '笃定前行',
-    sub: '目标与生活的无限可能',
-    body: '关于个人年度目标管理，如何让期待落地、让计划发生——她的实践哲学。',
-    icon: 'compass',
-  },
-];
-
+// 三/四个分享侧面用到的图标
 function PointIcon({ kind, color = C.gold, size = 22 }) {
+  if (kind === 'syringe') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 4l6 6" /><path d="M16.5 6.5l1-1" />
+      <path d="M9 11l4 4-5 5-3-1-1-3 5-5z" /><path d="M11 13l4-4" />
+    </svg>
+  );
+  if (kind === 'skinheart') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z" />
+      <path d="M9 12c1 1 2 1 3 0s2-1 3 0" />
+    </svg>
+  );
+  if (kind === 'tangle') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round">
+      <path d="M4 12c2-4 5-4 6 0s4 4 6 0 4-4 4 0" />
+      <path d="M4 16c2-3 4-3 6 0s4 3 6 0 4-3 4 0" />
+      <path d="M5 8c1.5-3 4-2 5 0s3 3 5 0" />
+    </svg>
+  );
+  if (kind === 'self') return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M16 21V12a4 4 0 0 0-8 0v9" />
+      <circle cx="12" cy="7" r="3" />
+      <path d="M19 14h2M3 14h2" />
+    </svg>
+  );
+  // legacy v2 icons
   if (kind === 'lanes') return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round">
       <path d="M4 6h16 M4 12h16 M4 18h16" />
@@ -82,8 +78,20 @@ function PointIcon({ kind, color = C.gold, size = 22 }) {
   return null;
 }
 
+// 每期主题 → icon 列表（按 points 顺序）
+const POINT_ICONS = {
+  vol02: ['lanes', 'footprint', 'compass'],
+  vol03: ['syringe', 'skinheart', 'tangle', 'self'],
+};
+
 function ScreenLanding({ go }) {
-  // ① 滚动进度（占当前 viewport 内可见范围 0-1）
+  const D = window.DCT_DATA;
+  const cur = D.getCurrent();
+  const issueKey = cur.id;
+  const isV3 = issueKey === 'vol03';
+  const icons = POINT_ICONS[issueKey] || [];
+
+  // 滚动进度
   const scrollerRef = React.useRef(null);
   const [progress, setProgress] = React.useState(0);
   const [stickyVisible, setStickyVisible] = React.useState(false);
@@ -94,139 +102,203 @@ function ScreenLanding({ go }) {
       const max = el.scrollHeight - el.clientHeight;
       const t = max > 0 ? el.scrollTop / max : 0;
       setProgress(Math.max(0, Math.min(1, t)));
-      // 滚出 hero（≈440px）后出现吸底 CTA
       setStickyVisible(el.scrollTop > 360);
     };
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => el.removeEventListener('scroll', onScroll);
   }, []);
-  const points = POINTS;
 
   return (
     <div ref={scrollerRef} style={{ background: C.bg, minHeight: '100%', height: '100%', overflowY: 'auto', position: 'relative' }}>
-      {/* ① 顶部金色滚动进度条 */}
-      <div style={{
-        position: 'sticky', top: 0, left: 0, right: 0, height: 1.5, zIndex: 100,
-        background: 'transparent', pointerEvents: 'none',
-      }}>
+      {/* 顶部金色滚动进度条 */}
+      <div style={{ position: 'sticky', top: 0, left: 0, right: 0, height: 1.5, zIndex: 100, background: 'transparent', pointerEvents: 'none' }}>
         <div style={{
           width: `${progress * 100}%`, height: '100%',
           background: `linear-gradient(90deg, ${C.gold} 0%, ${C.goldHi} 100%)`,
-          boxShadow: `0 0 6px ${C.goldHi}`,
-          transition: 'width 0.05s linear',
+          boxShadow: `0 0 6px ${C.goldHi}`, transition: 'width 0.05s linear',
         }} />
       </div>
 
-      {/* HERO */}
-      <PosterSky tone="light" style={{ minHeight: 440, paddingBottom: 28 }}>
-        <WxHeader title="DCT 学术沙龙" transparent />
+      {/* HERO · v3 用海报作题图；v2 用原本的标题块 */}
+      {isV3 ? (
+        <V3PosterHero cur={cur} />
+      ) : (
+        <PosterSky tone="light" style={{ minHeight: 460, paddingBottom: 28 }}>
+          <WxHeader title="DCT 学术沙龙" transparent />
 
-        <div style={{ padding: '14px 22px 0', position: 'relative', display: 'flex', gap: 8 }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
+          <div style={{ padding: '14px 22px 0', position: 'relative' }}>
+            <div className="mono" style={{
               fontSize: 11, letterSpacing: 4, color: '#1a3a78',
-              fontFamily: '"JetBrains Mono", monospace', opacity: 0.85, marginBottom: 10,
-            }}>DCT · VOL.02 · 2026.04.25</div>
+              opacity: 0.85, marginBottom: 12,
+            }}>DCT · VOL.0{cur.number} · {cur.date}</div>
 
             <div className="serif" style={{
               fontSize: 52, fontWeight: 900, lineHeight: 1.02, color: '#0f2855',
               letterSpacing: 2, textShadow: '0 1px 0 rgba(255,255,255,0.6)',
-            }}>
-              六星<br />之路
-            </div>
+            }}>{cur.title}</div>
 
             <div style={{
-              marginTop: 14, display: 'flex', alignItems: 'center', gap: 8,
+              marginTop: 16, display: 'flex', alignItems: 'flex-start', gap: 8,
               color: '#1a3a78', fontSize: 13, fontWeight: 500,
             }}>
-              <StarBullet size={10} color="#c9a24a" />
-              <span>目标管理与坚持哲学</span>
+              <div style={{ paddingTop: 4, flexShrink: 0 }}>
+                <StarBullet size={10} color="#c9a24a" />
+              </div>
+              <div style={{ lineHeight: 1.55, textWrap: 'pretty' }}>{cur.subtitle}</div>
             </div>
-            <div style={{
-              marginTop: 6, color: '#3d5f94', fontSize: 11.5, letterSpacing: 0.3,
-            }}>——写给学术追梦人的漫谈</div>
+            {cur.subtitle2 && cur.subtitle2 !== cur.subtitle && (
+              <div style={{
+                marginTop: 8, color: '#3d5f94', fontSize: 12.5, lineHeight: 1.55,
+                paddingLeft: 18, textWrap: 'pretty',
+              }}>
+                {cur.subtitle2}
+              </div>
+            )}
           </div>
 
-          <div style={{ width: 138, flexShrink: 0, marginTop: -4, marginRight: -10 }}>
+          {/* v2 speaker card inside hero */}
+          <div style={{ padding: '32px 18px 0' }}>
             <div style={{
-              position: 'relative', borderRadius: 18, overflow: 'hidden',
-              boxShadow: '0 10px 24px rgba(15,40,85,0.22), 0 0 0 3px rgba(255,255,255,0.9)',
-              aspectRatio: '7 / 10',
+              background: 'rgba(255,255,255,0.78)',
+              backdropFilter: 'blur(18px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+              border: '0.5px solid rgba(15,40,85,0.12)',
+              borderRadius: 18, padding: '14px 16px',
+              display: 'flex', alignItems: 'center', gap: 14,
+              boxShadow: '0 8px 24px rgba(20,50,100,0.1)',
             }}>
-              <img src="assets/gao-portrait.jpg" alt="高晓蓉教授" style={{
-                width: '100%', height: '100%', display: 'block', objectFit: 'cover',
-                objectPosition: '50% 20%',
-              }} />
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(180deg, rgba(231,240,250,0) 55%, rgba(15,40,85,0.18) 100%)',
-                pointerEvents: 'none',
-              }} />
+              <SpeakerAvatar speaker={cur.speaker} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 11, color: C.muted, marginBottom: 2 }}>主讲人</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: '#0f2855' }}>
+                  {cur.speaker.name}
+                  {cur.speaker.title && (
+                    <span style={{ fontSize: 12, fontWeight: 400, color: '#55709a', marginLeft: 6 }}>
+                      {cur.speaker.title}
+                    </span>
+                  )}
+                </div>
+                <div style={{ fontSize: 11.5, color: '#55709a', marginTop: 4, lineHeight: 1.5 }}>
+                  {cur.speaker.bio}{cur.speaker.org && cur.speaker.bio ? ' · ' : ''}{cur.speaker.org}
+                </div>
+              </div>
+            </div>
+          </div>
+        </PosterSky>
+      )}
+
+      {/* v3 专属 · 主讲人半身像卡（移出 hero） */}
+      {isV3 && cur.speaker.photo && (
+        <div style={{ padding: '20px 18px 0' }}>
+          <SpeakerHero speaker={cur.speaker} />
+        </div>
+      )}
+
+      {/* v3 副标题诗化两行（搬到海报下、主讲人卡上） */}
+      {isV3 && (
+        <div style={{ padding: '22px 22px 0' }}>
+          <div style={{
+            display: 'flex', alignItems: 'flex-start', gap: 10,
+            color: '#1a3a78',
+          }}>
+            <div style={{ paddingTop: 5, flexShrink: 0 }}>
+              <StarBullet size={11} color="#c9a24a" />
+            </div>
+            <div className="serif" style={{
+              fontSize: 16, fontWeight: 600, lineHeight: 1.55,
+              color: '#0f2855', textWrap: 'pretty',
+            }}>
+              {cur.subtitle}
+              {cur.subtitle2 && cur.subtitle2 !== cur.subtitle && (
+                <>
+                  <br/>
+                  <span style={{ color: '#3d5f94', fontWeight: 500 }}>{cur.subtitle2}</span>
+                </>
+              )}
             </div>
           </div>
         </div>
+      )}
 
-        {/* speaker card floating at bottom of hero */}
-        <div style={{ padding: '40px 18px 0' }}>
+      {/* v3: 四个抛给讲者的问题 — hero 之后立刻给冲击 */}
+      {isV3 && cur.teaserQuestions && (
+        <div style={{ padding: '26px 22px 0' }}>
           <div style={{
-            background: 'rgba(255,255,255,0.72)',
-            backdropFilter: 'blur(18px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(18px) saturate(160%)',
-            border: '0.5px solid rgba(15,40,85,0.12)',
-            borderRadius: 18, padding: '14px 16px',
-            display: 'flex', alignItems: 'center', gap: 14,
-            boxShadow: '0 8px 24px rgba(20,50,100,0.1)',
+            background: 'linear-gradient(180deg, #0f2855 0%, #1a3a78 100%)',
+            borderRadius: 18, padding: '18px 18px 22px', position: 'relative', overflow: 'hidden',
           }}>
             <div style={{
-              width: 54, height: 54, borderRadius: 27, flexShrink: 0,
-              overflow: 'hidden', background: '#e4edf7',
-              border: '1.5px solid rgba(255,255,255,0.9)',
-              boxShadow: '0 2px 8px rgba(15,40,85,0.15)',
-            }}>
-              <img src="assets/gao-avatar-poster.png" alt="高晓蓉教授" style={{
-                width: '100%', height: '100%', objectFit: 'cover',
-                objectPosition: '60% 40%', display: 'block',
-              }} />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 15, fontWeight: 600, color: '#0f2855' }}>
-                高晓蓉 <span style={{ fontSize: 12, fontWeight: 400, color: '#55709a' }}>教授</span>
-              </div>
-              <div style={{ fontSize: 11.5, color: '#55709a', marginTop: 3, lineHeight: 1.45 }}>
-                西南交通大学光电工程研究所<br />
-                马拉松六星跑者 “Six Star Finisher”
-              </div>
+              position: 'absolute', right: -16, top: -16, width: 110, height: 110,
+              borderRadius: 55, background: 'radial-gradient(circle, rgba(233,185,73,0.22) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+            <div className="mono" style={{
+              fontSize: 10, letterSpacing: 3, color: '#e9b949', marginBottom: 8,
+            }}>FOUR QUESTIONS · 当晚我们会聊</div>
+            <div className="serif" style={{
+              fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 14, lineHeight: 1.35,
+            }}>当我们谈论变美时，<br />我们在谈论什么？</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {cur.teaserQuestions.map((q, i) => (
+                <div key={i} style={{
+                  display: 'flex', gap: 12, alignItems: 'flex-start',
+                  padding: '10px 0',
+                  borderTop: i === 0 ? '0.5px solid rgba(255,255,255,0.16)' : 'none',
+                  borderBottom: '0.5px solid rgba(255,255,255,0.16)',
+                }}>
+                  <div className="mono" style={{
+                    fontSize: 10, color: '#e9b949', fontWeight: 600, letterSpacing: 1, paddingTop: 3,
+                  }}>Q.0{i + 1}</div>
+                  <div style={{
+                    flex: 1, fontSize: 13.5, color: '#f1f5fb', lineHeight: 1.55,
+                  }}>{q}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </PosterSky>
+      )}
 
-      {/* OPENING PITCH — poetic intro */}
+      {/* OPENING PITCH */}
       <div style={{ padding: '26px 22px 0' }}>
         <div className="serif" style={{
           fontSize: 19, fontWeight: 500, color: '#0f2855', lineHeight: 1.65, letterSpacing: 0.5,
         }}>
-          在学术里保持严谨，<br />
-          在生活中追求热爱。
+          {isV3 ? (
+            <>在“变得更好”这件热事上，<br />我们想保留一点“冷思考”。</>
+          ) : (
+            <>在学术里保持严谨，<br />在生活中追求热爱。</>
+          )}
         </div>
         <div style={{
           fontSize: 13, color: '#3d5f94', marginTop: 14, lineHeight: 1.8, textWrap: 'pretty',
         }}>
-          DCT 第二期，我们很荣幸邀请到高晓蓉教授来到客厅，与我们分享她关于<span style={{ color: '#0f2855', fontWeight: 500 }}>目标、坚持与多重人生角色</span>的思考。
+          {isV3 ? (
+            <>
+              DCT 第三期，我们邀请到 <span style={{ color: '#0f2855', fontWeight: 500 }}>{cur.speaker.name}</span>——一位在华西临床与实验室之间往返的皮肤科医生，和我们一起重新理解“医美热”。
+              <br /><br />
+              医美当然关乎技术：光、电、注射......每一种手段背后都有真实的医学逻辑、适应证与风险边界。
+              <br /><br />
+              但医美也不只是技术。它同时牵动着审美标准、身体感受、情绪压力、消费选择，以及一个更隐秘的问题：<span style={{ color: '#0f2855', fontWeight: 500 }}>当我们想要改变自己的脸和身体时，我们真正想改变的是什么？</span>
+              <br /><br />
+              这一次，我们不急着赞成，也不急着反对。我们想把“变美”这件事放回更大的语境里：医学如何参与审美，技术如何改变身体经验，而“变得更好”又是如何被想象、被定义、被追求的。
+            </>
+          ) : (
+            <>DCT 第二期，我们很荣幸邀请到{cur.speaker.name}教授来到客厅，与我们分享她关于<span style={{ color: '#0f2855', fontWeight: 500 }}>目标、坚持与多重人生角色</span>的思考。</>
+          )}
         </div>
       </div>
 
-      {/* THREE POINTS — what she will share */}
+      {/* SHE/HE WILL SHARE */}
       <div style={{ padding: '26px 22px 0' }}>
-        <div style={{
-          fontSize: 11, color: '#55709a', letterSpacing: 3,
-          fontFamily: '"JetBrains Mono", monospace', marginBottom: 4,
-        }}>SHE WILL SHARE</div>
+        <div className="mono" style={{
+          fontSize: 11, color: '#55709a', letterSpacing: 3, marginBottom: 4,
+        }}>HE WILL SHARE</div>
         <div className="serif" style={{ fontSize: 18, color: '#0f2855', fontWeight: 700, marginBottom: 14 }}>
-          从真实经历出发，三个侧面
+          {isV3 ? '“医美热”的“冷思考”' : '从真实经历出发，三个侧面'}
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {points.map(p => (
+          {cur.points.map((p, i) => (
             <div key={p.num} style={{
               background: C.card, borderRadius: 14, padding: '14px 16px',
               border: `0.5px solid ${C.divider}`,
@@ -237,12 +309,10 @@ function ScreenLanding({ go }) {
                 background: 'rgba(201,162,74,0.10)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <PointIcon kind={p.icon} color={C.gold} size={20} />
+                <PointIcon kind={icons[i]} color={C.gold} size={20} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
-                  display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 2,
-                }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 2 }}>
                   <div className="serif" style={{ fontSize: 15, fontWeight: 700, color: C.ink, lineHeight: 1.3 }}>
                     {p.title}
                   </div>
@@ -250,8 +320,8 @@ function ScreenLanding({ go }) {
                     fontSize: 10, color: C.gold, fontWeight: 600, letterSpacing: 1,
                   }}>{p.num}</div>
                 </div>
-                <div style={{ fontSize: 12, color: C.muted }}>{p.sub}</div>
-                <div style={{ fontSize: 12.5, color: C.textSoft, marginTop: 8, lineHeight: 1.65 }}>
+                {p.sub && <div style={{ fontSize: 12, color: C.muted }}>{p.sub}</div>}
+                <div style={{ fontSize: 12.5, color: C.textSoft, marginTop: 8, lineHeight: 1.65, whiteSpace: 'pre-line' }}>
                   {p.body}
                 </div>
               </div>
@@ -260,53 +330,75 @@ function ScreenLanding({ go }) {
         </div>
       </div>
 
-      {/* CLOSING LINE */}
-      <div style={{ padding: '22px 22px 0' }}>
-        <div style={{
-          background: 'linear-gradient(180deg, rgba(233,185,73,0.08) 0%, rgba(233,185,73,0.02) 100%)',
-          borderLeft: '2px solid #c9a24a',
-          padding: '14px 16px', borderRadius: '0 12px 12px 0',
-        }}>
-          <div style={{ fontSize: 13, color: '#2a3d5c', lineHeight: 1.75, textWrap: 'pretty' }}>
-            这不仅是一场成功经验分享，更是<span className="serif" style={{ color: '#0f2855', fontWeight: 600 }}>一封写给所有学术追梦人的信</span>——关于如何在生活里，持续相信、持续行动，持续成为自己想成为的人。
+      {/* v3: 留言墙预告 */}
+      {isV3 && (
+        <div style={{ padding: '24px 22px 0' }}>
+          <div
+            onClick={() => go('wall')}
+            style={{
+              background: '#fff', borderRadius: 16, padding: '14px 16px',
+              border: '0.5px solid #e3e9f3', display: 'flex', gap: 14, alignItems: 'center',
+              cursor: 'pointer',
+            }}>
+            <div style={{
+              width: 56, height: 42, borderRadius: 6, flexShrink: 0,
+              background: 'linear-gradient(135deg, #0f2855 0%, #1a3a78 100%)',
+              padding: 4, position: 'relative', overflow: 'hidden',
+            }}>
+              <div style={{ height: 3, background: '#fff', borderRadius: 2, marginBottom: 3, opacity: 0.8 }} />
+              <div style={{ height: 3, background: '#e9b949', borderRadius: 2, marginBottom: 3 }} />
+              <div style={{ height: 3, background: '#fff', borderRadius: 2, marginBottom: 3, opacity: 0.6 }} />
+              <div style={{ height: 3, background: '#e9b949', borderRadius: 2, opacity: 0.8 }} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: C.ink, display: 'flex', alignItems: 'center', gap: 8 }}>
+                现场电子留言墙 <span style={{
+                  fontSize: 9, padding: '1px 6px', borderRadius: 4,
+                  background: '#e9b949', color: '#3d2a08', letterSpacing: 1,
+                  fontFamily: '"JetBrains Mono", monospace',
+                }}>NEW</span>
+              </div>
+              <div style={{ fontSize: 11.5, color: C.mutedSoft, marginTop: 3, lineHeight: 1.5 }}>
+                咖啡厅 TV 将滚动播放每位到场者的一句话身份与想问的问题
+              </div>
+            </div>
+            <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1l6 6-6 6" stroke="#a0acc0" strokeWidth="2" fill="none" strokeLinecap="round"/></svg>
           </div>
         </div>
-      </div>
+      )}
 
       {/* EVENT INFO */}
       <div style={{ padding: '22px 22px 0' }}>
-        <div style={{
-          fontSize: 11, color: '#55709a', letterSpacing: 3,
-          fontFamily: '"JetBrains Mono", monospace', marginBottom: 10,
+        <div className="mono" style={{
+          fontSize: 11, color: '#55709a', letterSpacing: 3, marginBottom: 10,
         }}>WHEN · WHERE · HOW</div>
         <div style={{
           background: '#fff', borderRadius: 16, padding: '16px 18px',
           border: '0.5px solid #e3e9f3',
         }}>
-          <InfoRow label="时间" value="2026 年 4 月 25 日（周六）" sub="18:40 入场  ·  19:00 开始" />
+          <InfoRow label="时间" value={cur.dateText} sub={cur.timeDetail} />
           <Sep />
-          <InfoRow label="地点" value="武侯区 玉林 DCT 客厅" sub="报名通过后微信通知具体地址" />
+          <InfoRow label="地点" value={cur.location} sub={cur.locationNote} />
           <Sep />
-          <InfoRow label="入场" value="88 元 / 位" sub="含一份甜品 + 一杯酒 · 可打包带走" />
+          <InfoRow label="入场" value={cur.price} sub={cur.priceNote} />
         </div>
       </div>
 
       {/* SEASONAL MENU */}
       <div style={{ padding: '22px 22px 0' }}>
-        <div style={{
-          fontSize: 11, color: '#55709a', letterSpacing: 3,
-          fontFamily: '"JetBrains Mono", monospace', marginBottom: 10,
-        }}>EARLY SUMMER · LIMITED</div>
+        <div className="mono" style={{
+          fontSize: 11, color: '#55709a', letterSpacing: 3, marginBottom: 10,
+        }}>{isV3 ? 'DCT MENU · FOR SALON #3' : 'EARLY SUMMER · LIMITED'}</div>
         <div style={{
           background: 'linear-gradient(135deg, #fbf6ec 0%, #f5e8d0 100%)',
           borderRadius: 16, padding: '16px 18px',
           border: '0.5px solid #e8dcc0',
         }}>
           <div className="serif" style={{ fontSize: 17, fontWeight: 700, color: C.warmInk, lineHeight: 1.35 }}>
-            初夏季节限定
+            {isV3 ? '陌生的朋友 · 联名菜单' : '初夏季节限定'}
           </div>
           <div style={{ fontSize: 12, color: C.warmText, marginTop: 4, fontStyle: 'italic' }}>
-            Mulberry season, from Panzhihua
+            {isV3 ? 'Curated for salon #3, by Strangers' : 'Mulberry season, from Panzhihua'}
           </div>
           <div style={{
             marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 6,
@@ -321,15 +413,39 @@ function ScreenLanding({ go }) {
           </div>
           <div style={{ height: 0.5, background: '#e0d2b0', margin: '14px 0 12px' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <MenuRow name="桑葚巴斯克" tag="攀枝花桑葚季" />
-            <MenuRow name="桑葚酸奶杯" tag="攀枝花桑葚季" />
-            <MenuRow name="红酒 · 有醇 / 无醇" tag="自选" />
+            {cur.menu.map(m => <MenuRow key={m.name} name={m.name} tag={m.tag} />)}
           </div>
-          <div style={{
-            fontSize: 11.5, color: C.warmText, marginTop: 12, lineHeight: 1.55, fontStyle: 'italic',
-          }}>
-            担心甜品负担也可以打包带走。
-          </div>
+          {cur.menuFootnote && (
+            <div style={{
+              fontSize: 11.5, color: C.warmText, marginTop: 12, lineHeight: 1.55, fontStyle: 'italic',
+            }}>{cur.menuFootnote}</div>
+          )}
+
+          {/* v3: Gia 制作 + 主题饮品预告 */}
+          {isV3 && (
+            <div style={{
+              marginTop: 14, padding: '12px 14px',
+              borderRadius: 12,
+              background: 'rgba(107,76,30,0.06)',
+              border: '0.5px dashed rgba(107,76,30,0.28)',
+              display: 'flex', gap: 12, alignItems: 'flex-start',
+            }}>
+              <div style={{
+                width: 26, height: 26, borderRadius: 13, flexShrink: 0,
+                background: 'linear-gradient(135deg, #c9a24a 0%, #e9b949 100%)',
+                color: '#fff', fontSize: 12, fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontFamily: '"Noto Serif SC", serif',
+                boxShadow: '0 2px 6px rgba(107,76,30,0.25)',
+              }}>G</div>
+              <div style={{ flex: 1, fontSize: 12, color: C.warmInk, lineHeight: 1.65 }}>
+                <div style={{ fontWeight: 600 }}>甜品仍由 Gia 制作 ✦</div>
+                <div style={{ color: C.warmText, marginTop: 2 }}>
+                  更多<b style={{ color: C.warmInk }}>主题饮品</b>正在打样中 · 敬请期待
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -338,10 +454,9 @@ function ScreenLanding({ go }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
           <img src="assets/logo.png" alt="DCT" style={{ width: 48, height: 48, borderRadius: 24, flexShrink: 0 }} />
           <div>
-            <div style={{
-              fontSize: 10.5, color: '#55709a', letterSpacing: 3,
-              fontFamily: '"JetBrains Mono", monospace',
-            }}>WHAT IS DCT ?</div>
+            <div className="mono" style={{ fontSize: 10.5, color: '#55709a', letterSpacing: 3 }}>
+              WHAT IS DCT ?
+            </div>
             <div className="serif" style={{ fontSize: 19, fontWeight: 700, color: '#0f2855', lineHeight: 1.25, marginTop: 2 }}>
               认真地胡思乱想
             </div>
@@ -356,8 +471,11 @@ function ScreenLanding({ go }) {
         <div style={{
           fontSize: 13, color: '#2a3d5c', marginTop: 14, lineHeight: 1.75, textWrap: 'pretty',
         }}>
-          一个家庭学术沙龙。在绩效逻辑之外，留一块真诚分享、自由交流、严肃思考的精神自留地。<br />
-          在客厅里聊学术，也聊生活；聊目标，也聊热爱。
+          {isV3 ? (
+            <>本期我们走出客厅，去到「陌生的朋友」咖啡厅。医美看似是一个关于脸和皮肤的话题，但它背后连接着<span style={{ color: '#0f2855', fontWeight: 500 }}>医学技术、消费社会、审美秩序和每个人与自己的关系</span>。DCT 想做的，正是在这些看似日常的问题里，保留一点认真追问的空间。</>
+          ) : (
+            <>一个家庭学术沙龙。在绩效逻辑之外，留一块真诚分享、自由交流、严肃思考的精神自留地。<br />在客厅里聊学术，也聊生活；聊目标，也聊热爱。</>
+          )}
         </div>
         <div className="serif" style={{
           fontSize: 14, color: '#1a3a78', marginTop: 14, fontWeight: 600, letterSpacing: 0.5,
@@ -397,7 +515,7 @@ function ScreenLanding({ go }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
           }}>
           <StarBullet size={12} color={C.goldHi} />
-          报名参加第二期
+          报名参加第{cur.number === 3 ? '三' : '二'}期
           <StarBullet size={12} color={C.goldHi} />
         </button>
         <div style={{
@@ -405,11 +523,10 @@ function ScreenLanding({ go }) {
         }}>我们会根据学科背景与意愿综合筛选，<span style={{ color: C.navySoft }}>24 小时内回复</span></div>
       </div>
 
-      {/* ② 吸底浮动 CTA — 滚出 hero 后出现 */}
+      {/* 吸底浮动 CTA */}
       <div style={{
         position: 'sticky', bottom: 0, left: 0, right: 0,
-        marginTop: -76,
-        pointerEvents: 'none', zIndex: 80,
+        marginTop: -76, pointerEvents: 'none', zIndex: 80,
       }}>
         <div style={{
           padding: '10px 16px 18px',
@@ -429,10 +546,12 @@ function ScreenLanding({ go }) {
             boxShadow: '0 12px 30px rgba(15,40,85,0.18)',
           }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.2, letterSpacing: 1 }}>VOL.02 · 04.25</div>
+              <div className="mono" style={{ fontSize: 11, color: C.muted, lineHeight: 1.2, letterSpacing: 1 }}>
+                VOL.0{cur.number} · {cur.date.replace('2026.', '')}
+              </div>
               <div className="serif" style={{ fontSize: 15, color: C.ink, fontWeight: 700, lineHeight: 1.2, marginTop: 2 }}>
-                88 <span style={{ fontSize: 11, fontWeight: 500, color: C.muted }}>元/位</span>
-                <span style={{ fontSize: 11, fontWeight: 400, color: C.muted, marginLeft: 6 }}>含甜品+酒</span>
+                {cur.price.replace(' ', '')}
+                <span style={{ fontSize: 11, fontWeight: 400, color: C.muted, marginLeft: 6 }}>含甜品+饮品</span>
               </div>
             </div>
             <button
@@ -455,15 +574,179 @@ function ScreenLanding({ go }) {
   );
 }
 
+function V3PosterHero({ cur }) {
+  // 海报作为最顶部题图：full-bleed poster + 顶部 WxHeader 浮于其上 + 底部柔和过渡
+  return (
+    <div style={{
+      position: 'relative',
+      background: '#0c1f3d',
+      overflow: 'hidden',
+    }}>
+      {/* 顶部小程序导航条 · 透明 + 深色配色 */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 30 }}>
+        <WxHeader title="DCT 学术沙龙" transparent dark logo={false} />
+      </div>
+
+      {/* 海报本体 */}
+      <div style={{
+        position: 'relative',
+        aspectRatio: '1086 / 1448',
+        background: '#0c1f3d',
+      }}>
+        <img
+          src={cur.poster}
+          alt={`第${cur.number}期海报 · ${cur.title}`}
+          style={{
+            width: '100%', height: '100%', display: 'block', objectFit: 'cover',
+          }}
+        />
+        {/* 底部柔和渐隐 · 让下一区块顺接 */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 80,
+          background: 'linear-gradient(180deg, transparent 0%, #f6f8fc 100%)',
+          pointerEvents: 'none',
+        }} />
+      </div>
+
+      {/* 海报底脚小字 · 长按保存提示 */}
+      <div style={{
+        padding: '10px 22px 14px',
+        background: '#f6f8fc',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        gap: 12,
+      }}>
+        <div className="mono" style={{
+          fontSize: 10.5, color: '#55709a', letterSpacing: 3,
+        }}>DCT · VOL.0{cur.number} · {cur.date}</div>
+        <div style={{
+          fontSize: 11, color: '#8496b3', letterSpacing: 0.3,
+        }}>
+          长按海报可保存 / 转发
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SpeakerHero({ speaker }) {
+  return (
+    <div style={{
+      position: 'relative',
+      borderRadius: 18, overflow: 'hidden',
+      background: 'linear-gradient(135deg, #0c1f3d 0%, #14305a 55%, #1a3a78 100%)',
+      boxShadow: '0 20px 40px rgba(10,25,55,0.32), 0 0 0 0.5px rgba(255,255,255,0.08) inset',
+      minHeight: 240,
+      display: 'flex',
+      isolation: 'isolate',
+    }}>
+      {/* 装饰 — 漂浮金色星点 */}
+      <Star4 x={12} y={14} s={10} o={0.6} />
+      <Star4 x={26} y={84} s={7} o={0.4} />
+
+      {/* 左：文字 */}
+      <div style={{
+        flex: 1, minWidth: 0, padding: '20px 4px 20px 22px',
+        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+        position: 'relative', zIndex: 2,
+      }}>
+        <div className="mono" style={{
+          fontSize: 10, letterSpacing: 3, color: '#e9b949', marginBottom: 8, fontWeight: 500,
+        }}>SPEAKER · 主讲人</div>
+
+        <div className="serif" style={{
+          fontSize: 28, fontWeight: 800, color: '#fff', letterSpacing: 2, lineHeight: 1.1,
+        }}>{speaker.name}</div>
+        {speaker.title && (
+          <div className="mono" style={{
+            fontSize: 11, color: 'rgba(255,255,255,0.55)', marginTop: 4, letterSpacing: 2,
+          }}>{speaker.title}</div>
+        )}
+
+        <div style={{
+          marginTop: 16, padding: '10px 12px 10px 14px',
+          borderLeft: '2px solid #e9b949',
+          background: 'linear-gradient(90deg, rgba(233,185,73,0.10) 0%, rgba(233,185,73,0) 100%)',
+        }}>
+          <div className="serif" style={{
+            fontSize: 13.5, color: '#fff', fontWeight: 500, lineHeight: 1.45,
+          }}>{speaker.bio}</div>
+          {speaker.org && (
+            <div style={{
+              fontSize: 11, color: 'rgba(255,255,255,0.62)', marginTop: 4, lineHeight: 1.5,
+            }}>{speaker.org}</div>
+          )}
+        </div>
+      </div>
+
+      {/* 右：半身像 */}
+      <div style={{
+        width: 168, flexShrink: 0,
+        position: 'relative', alignSelf: 'stretch',
+      }}>
+        {/* 左侧渐隐：让人像融进深蓝背景 */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 2,
+          background: 'linear-gradient(90deg, rgba(12,31,61,0.92) 0%, rgba(12,31,61,0.35) 22%, rgba(12,31,61,0) 50%)',
+          pointerEvents: 'none',
+        }} />
+        <img
+          src={speaker.photo}
+          alt={speaker.name}
+          style={{
+            width: '100%', height: '100%', display: 'block', objectFit: 'cover',
+            objectPosition: '54% 8%',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function SpeakerAvatar({ speaker }) {
+  // 没有真实头像时用占位 monogram
+  if (speaker.avatar) {
+    return (
+      <div style={{
+        width: 56, height: 56, borderRadius: 28, flexShrink: 0,
+        overflow: 'hidden', background: '#e4edf7',
+        border: '1.5px solid rgba(255,255,255,0.9)',
+        boxShadow: '0 2px 8px rgba(15,40,85,0.15)',
+      }}>
+        <img src={speaker.avatar} alt={speaker.name} style={{
+          width: '100%', height: '100%', objectFit: 'cover', objectPosition: '60% 40%', display: 'block',
+        }} />
+      </div>
+    );
+  }
+  // 占位：渐变 + 大字
+  return (
+    <div style={{
+      width: 56, height: 56, borderRadius: 28, flexShrink: 0,
+      background: 'linear-gradient(135deg, #0f2855 0%, #2c5ca0 100%)',
+      border: '1.5px solid rgba(255,255,255,0.9)',
+      boxShadow: '0 2px 8px rgba(15,40,85,0.15)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      position: 'relative', overflow: 'hidden',
+    }}>
+      <div className="serif" style={{
+        fontSize: 22, fontWeight: 700, color: '#fff', opacity: 0.92,
+      }}>{speaker.name?.[0] || '?'}</div>
+      <div style={{
+        position: 'absolute', bottom: -1, right: -1,
+        background: '#e9b949', color: '#3d2a08',
+        padding: '0 4px', fontSize: 8, letterSpacing: 0.5,
+        borderTopLeftRadius: 4, fontFamily: '"JetBrains Mono", monospace',
+      }}>头像后补</div>
+    </div>
+  );
+}
+
 function MenuRow({ name, tag }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
       <StarBullet size={9} color="#b8903a" />
-      <div className="serif" style={{ fontSize: 14.5, color: '#5a3f14', fontWeight: 600, flex: 1 }}>{name}</div>
-      <div style={{
-        fontSize: 10.5, color: '#8a6a2e', letterSpacing: 1,
-        fontFamily: '"JetBrains Mono", monospace',
-      }}>{tag}</div>
+      <div className="serif" style={{ fontSize: 14, color: '#5a3f14', fontWeight: 600, flex: 1 }}>{name}</div>
+      <div className="mono" style={{ fontSize: 10.5, color: '#8a6a2e', letterSpacing: 1 }}>{tag}</div>
     </div>
   );
 }
@@ -471,10 +754,7 @@ function MenuRow({ name, tag }) {
 function InfoRow({ label, value, sub }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, padding: '4px 0' }}>
-      <div style={{
-        fontSize: 11, color: '#8496b3', letterSpacing: 2,
-        fontFamily: '"JetBrains Mono", monospace', width: 34, paddingTop: 3,
-      }}>{label}</div>
+      <div className="mono" style={{ fontSize: 11, color: '#8496b3', letterSpacing: 2, width: 34, paddingTop: 3 }}>{label}</div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 14.5, color: '#0f2855', fontWeight: 500 }}>{value}</div>
         {sub && <div style={{ fontSize: 11.5, color: '#6b7a91', marginTop: 2 }}>{sub}</div>}

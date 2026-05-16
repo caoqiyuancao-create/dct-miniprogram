@@ -1,0 +1,77 @@
+<view class="wall">
+
+  <!-- 大字水印 -->
+  <view class="watermark serif">冷思考</view>
+
+  <!-- 装饰星 -->
+  <view class="star-deco star-deco--1"></view>
+  <view class="star-deco star-deco--2"></view>
+  <view class="star-deco star-deco--3"></view>
+  <view class="star-deco star-deco--4"></view>
+
+  <!-- HEADER -->
+  <view class="header">
+    <image class="header__logo" src="/assets/logo.png" mode="aspectFill" />
+    <view class="header__center">
+      <view class="mono header__kicker">DCT · ACADEMIC SALON · VOL.03</view>
+      <view class="serif header__title">
+        医美热时代的<text class="header__title-gold">冷</text>思考
+      </view>
+    </view>
+    <view class="header__right">
+      <view class="mono header__clock">
+        <text>{{hh}}</text>:<text>{{mm}}</text><text class="header__clock-gold">:{{ss}}</text>
+      </view>
+      <view class="mono header__date">{{dateLabel}}</view>
+    </view>
+  </view>
+
+  <!-- TWO COLUMNS -->
+  <view class="cols">
+    <!-- LEFT -->
+    <view class="col col-left">
+      <view class="mono col__kicker col__kicker--blue">WHO IS HERE TONIGHT</view>
+      <view class="serif col__title">今晚，谁来到了 DCT？</view>
+      <view class="col__sub">30 个身份 · 来自不同学科、不同视角</view>
+      <view class="intros">
+        <view class="intro-card"
+              wx:for="{{introsToShow}}" wx:key="who"
+              style="opacity: {{item.opacity}}">
+          <view class="intro-card__avatar">{{item.initial}}</view>
+          <view class="intro-card__body">
+            <view class="mono intro-card__who">{{item.who}}</view>
+            <view class="intro-card__line">"{{item.line}}"</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="cols__divider"></view>
+
+    <!-- RIGHT -->
+    <view class="col col-right">
+      <view class="mono col__kicker col__kicker--gold">WHAT WE'RE ASKING TONIGHT</view>
+      <view class="serif col__title">大家想问 {{speakerName}} 什么？</view>
+      <view class="col__sub">今晚我们真正关心的问题</view>
+      <view class="questions">
+        <view class="q-card"
+              wx:for="{{qsToShow}}" wx:key="num"
+              style="opacity: {{item.opacity}}">
+          <view class="serif q-card__quote">"</view>
+          <view class="mono q-card__num">{{item.num}}</view>
+          <view class="serif q-card__text">{{item.text}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- FOOTER -->
+  <view class="footer">
+    <view class="mono footer__brand">DCT · DOG, CHEF &amp; THERAPIST · EST.2026 · CHENGDU</view>
+    <view class="footer__live">
+      <view class="footer__live-dot"></view>
+      <text>留言墙实时更新 · 仍可在小程序内继续提交</text>
+    </view>
+  </view>
+
+</view>

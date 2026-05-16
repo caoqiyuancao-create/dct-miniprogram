@@ -16,25 +16,11 @@
     <view class="group-card">
       <view class="field">
         <view class="field-label">姓名</view>
-        <input
-          class="field-input"
-          value="{{form.name}}"
-          data-key="name"
-          bindinput="onInput"
-          placeholder="真实姓名"
-          placeholder-class="ph"
-        />
+        <input class="field-input" value="{{form.name}}" data-key="name" bindinput="onInput" placeholder="真实姓名" placeholder-class="ph" />
       </view>
       <view class="field field-last">
         <view class="field-label">微信号</view>
-        <input
-          class="field-input mono"
-          value="{{form.wechat}}"
-          data-key="wechat"
-          bindinput="onInput"
-          placeholder="用于通知结果与入群"
-          placeholder-class="ph"
-        />
+        <input class="field-input mono" value="{{form.wechat}}" data-key="wechat" bindinput="onInput" placeholder="用于通知结果与入群" placeholder-class="ph" />
       </view>
     </view>
 
@@ -43,15 +29,7 @@
     <view class="group-card">
       <view class="field field-last">
         <view class="field-label">手机号</view>
-        <input
-          class="field-input mono"
-          type="number"
-          value="{{form.phone}}"
-          data-key="phone"
-          bindinput="onInput"
-          placeholder="+86"
-          placeholder-class="ph"
-        />
+        <input class="field-input mono" type="number" value="{{form.phone}}" data-key="phone" bindinput="onInput" placeholder="+86" placeholder-class="ph" />
       </view>
     </view>
 
@@ -60,50 +38,105 @@
     <view class="group-card">
       <view class="field">
         <view class="field-label">单位 / 院校</view>
-        <input
-          class="field-input"
-          value="{{form.org}}"
-          data-key="org"
-          bindinput="onInput"
-          placeholder="如：华西医院 / 西南交大"
-          placeholder-class="ph"
-        />
+        <input class="field-input" value="{{form.org}}" data-key="org" bindinput="onInput" placeholder="如：华西医院 / 西南交大" placeholder-class="ph" />
       </view>
       <view class="field field-last">
         <view class="field-label">专业 / 方向</view>
-        <input
-          class="field-input"
-          value="{{form.field}}"
-          data-key="field"
-          bindinput="onInput"
-          placeholder="如：神经内科、光电工程"
-          placeholder-class="ph"
-        />
+        <input class="field-input" value="{{form.field}}" data-key="field" bindinput="onInput" placeholder="如：神经内科、光电工程" placeholder-class="ph" />
       </view>
     </view>
 
-    <!-- 为什么想参加 -->
-    <view class="group-label mono">为什么想参加本期</view>
-    <view class="group-card">
-      <textarea
-        class="textarea"
-        value="{{form.why}}"
-        data-key="why"
-        bindinput="onInput"
-        placeholder="可以聊聊：你对『目标管理 / 坚持哲学 / 长期主义』的思考，或者你与马拉松、与研究生涯的故事……"
-        placeholder-class="ph"
-        maxlength="-1"
-        auto-height
-      />
-    </view>
+    <!-- v3 · 留言墙 · 自我介绍 -->
+    <block wx:if="{{isV3}}">
+      <view class="group-label group-label--wall">
+        <text class="mono">留言墙 · 一句话身份</text>
+        <text class="mono wall-tag">WALL</text>
+      </view>
+      <view class="group-card">
+        <view class="field">
+          <view class="field-label">昵称</view>
+          <input class="field-input" value="{{form.wallNickname}}" data-key="wallNickname" bindinput="onInput" placeholder="可化名 · 上墙时使用" placeholder-class="ph" maxlength="20" />
+        </view>
+        <view class="textarea-wrap textarea-wrap--inline">
+          <textarea
+            class="textarea textarea--small"
+            value="{{form.selfIntro}}"
+            data-key="selfIntro"
+            bindinput="onInput"
+            placeholder="例：华西皮肤科 · 研二 / 麻醉科主治 / 社会学田野中…"
+            placeholder-class="ph"
+            maxlength="{{selfIntroMax}}"
+            auto-height
+          />
+          <view class="char-count {{selfIntroCount > selfIntroMax ? 'char-count--over' : ''}}">{{selfIntroCount}} / {{selfIntroMax}}</view>
+        </view>
+      </view>
 
-    <!-- consent -->
-    <view class="consent" bindtap="toggleAgree">
-      <view class="checkbox {{agreed ? 'checkbox-on' : ''}}">
-        <view wx:if="{{agreed}}" class="check"></view>
+      <!-- v3 · 留言墙 · 想问的问题 -->
+      <view class="group-label group-label--wall">
+        <text class="mono">留言墙 · 想问皮里士多德什么</text>
+        <text class="mono wall-tag">WALL</text>
+      </view>
+      <view class="group-card">
+        <view class="textarea-wrap">
+          <textarea
+            class="textarea"
+            value="{{form.expectation}}"
+            data-key="expectation"
+            bindinput="onInput"
+            placeholder="一两句话即可。例：医美的边界在哪里？普通人怎么判断要不要做？……"
+            placeholder-class="ph"
+            maxlength="{{expectationMax}}"
+            auto-height
+          />
+          <view class="char-count {{expectationCount > expectationMax ? 'char-count--over' : ''}}">{{expectationCount}} / {{expectationMax}}</view>
+        </view>
+      </view>
+
+      <!-- 匿名 callout -->
+      <view class="wall-callout">
+        <view class="wall-callout__icon">i</view>
+        <view class="wall-callout__body">
+          <view class="wall-callout__title">以上两题会在活动现场以匿名昵称形式滚动展示</view>
+          <view class="wall-callout__sub">留言墙不会显示真名 · 你也可以下方取消授权 · 不影响报名结果</view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 老期：为什么想参加 -->
+    <block wx:else>
+      <view class="group-label mono">为什么想参加本期</view>
+      <view class="group-card">
+        <textarea
+          class="textarea"
+          value="{{form.why}}"
+          data-key="why"
+          bindinput="onInput"
+          placeholder="可以聊聊：你对本期主题的思考，或与你专业相关的故事……"
+          placeholder-class="ph"
+          maxlength="-1"
+          auto-height
+        />
+      </view>
+    </block>
+
+    <!-- consent · 吧规 -->
+    <view class="consent" bindtap="toggleRules">
+      <view class="checkbox {{consentRules ? 'checkbox-on' : ''}}">
+        <view wx:if="{{consentRules}}" class="check"></view>
       </view>
       <view class="consent-text">
         我已阅读并同意 <text class="consent-link">DCT · 吧规</text>：保密 · 尊重 · 不贴标签 · 非治疗场合 · 轮流发言 · 友好纠错。
+      </view>
+    </view>
+
+    <!-- consent · 留言墙（v3） -->
+    <view wx:if="{{isV3}}" class="consent consent--wall" bindtap="toggleWall">
+      <view class="checkbox {{consentWall ? 'checkbox-on checkbox-on--gold' : ''}}">
+        <view wx:if="{{consentWall}}" class="check"></view>
+      </view>
+      <view class="consent-text">
+        我同意上述两题以<text class="consent-strong">匿名昵称</text>形式在现场电子留言墙展示。取消则仅供讲者参考，不上墙。
       </view>
     </view>
 

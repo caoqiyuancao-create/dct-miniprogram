@@ -15,10 +15,24 @@
       <view class="serif hero-title">已收到</view>
       <view class="hero-sub">
         <view>谢谢你愿意和我们一起</view>
-        <view>在绩效逻辑之外，聊点真的东西</view>
+        <view>{{isV3 ? '在“变得更好”的喧闹之外，留一点冷思考。' : '在绩效逻辑之外，聊点真的东西'}}</view>
       </view>
     </view>
   </poster-sky>
+
+  <!-- v3 · 留言墙预告卡 -->
+  <view wx:if="{{isV3}}" class="section">
+    <view class="wall-card" bindtap="goWall" hover-class="wall-card-hover">
+      <view class="wall-card__deco"></view>
+      <view class="mono wall-card__kicker">WALL · 当晚电视上滚动展示</view>
+      <view class="serif wall-card__title">你写下的，会被看到。</view>
+      <view class="wall-card__body">你留下的一句话身份和想问的问题，会在入场和中场以匿名形式在咖啡厅 TV 上滚动播放。</view>
+      <view class="wall-card__btn">
+        <text>看看现场留言墙长什么样</text>
+        <view class="wall-card__chev"></view>
+      </view>
+    </view>
+  </view>
 
   <!-- timeline -->
   <view class="section">
@@ -38,7 +52,6 @@
     </view>
   </view>
 
-  <!-- notice -->
   <view class="section">
     <view class="notice">
       <view class="notice-bullet"></view>
@@ -48,15 +61,13 @@
     </view>
   </view>
 
-  <!-- CHG-03 F2 · 加入手机日历 -->
   <view class="section">
-    <button class="cal-btn" bindtap="addToCalendar" hover-class="cal-btn-hover" aria-label="加入手机日历，DCT 第二期 4 月 25 日">
+    <button class="cal-btn" bindtap="addToCalendar" hover-class="cal-btn-hover" aria-label="加入手机日历">
       <view class="cal-icon"></view>
       <text>加入手机日历</text>
     </button>
   </view>
 
-  <!-- CHG-03 F4 · 生成邀请券（占位实现，真实运行时绘制） -->
   <view class="section">
     <button class="ticket-btn" bindtap="generateTicket" hover-class="ticket-hover" aria-label="生成邀请券海报">
       <view class="ticket-icon"></view>
@@ -69,7 +80,6 @@
     <button class="back-btn" bindtap="backToLanding" hover-class="back-hover">回到主题介绍</button>
   </view>
 
-  <!-- F4 · 隐藏 canvas，绘制后转图片再保存 -->
   <canvas
     canvas-id="ticketCanvas"
     class="ticket-canvas"

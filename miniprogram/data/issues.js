@@ -1,5 +1,5 @@
 const data = {
-  current: 'vol02',
+  current: 'vol03',
 
   brand: {
     name: 'DCT',
@@ -14,8 +14,8 @@ const data = {
       '用科学的态度，聊天马行空的奇思妙想'
     ],
     announcements: [
-      { type: 'signup', text: '第二期 · 六星之路 · 报名开放中', date: '至 2026.04.22' },
-      { type: 'info', text: 'DCT 客厅地址暂定武侯区玉林', date: '' }
+      { type: 'signup', text: '第三期 · 医美热时代的冷思考 · 报名开放中', date: '至 2026.05.20' },
+      { type: 'info', text: '本期搬到武侯区棕南正街「陌生的朋友」咖啡厅', date: '' }
     ]
   },
 
@@ -23,18 +23,73 @@ const data = {
     {
       id: 'vol03',
       number: 3,
-      status: 'upcoming',
-      title: '（主题征集中）',
-      subtitle: '第三期 · 敬请期待',
-      date: '',
-      speaker: { name: '', title: '' },
-      poster: '',
-      summary: '下一期主题与嘉宾正在酝酿中，欢迎通过 DCT 客厅留言推荐你想听的话题。'
+      status: 'signup',
+      title: '医美热时代的冷思考',
+      subtitle: '当“变得更美”成为一种时代命题，它究竟意味着什么？',
+      fullTitle: '医美热时代的冷思考',
+      subtitle2: '“变得更好”，究竟是谁的命题？',
+      date: '2026.05.23',
+      dateText: '2026 年 5 月 23 日（周六）',
+      timeDetail: '19:00 入场 · 21:30 结束',
+      location: '武侯区棕南正街 "陌生的朋友" 咖啡厅',
+      locationNote: '本期搬出客厅 · 与「陌生的朋友」共办的公共场 ',
+      price: '88 元 / 位',
+      priceNote: '含一份甜品 + 一杯饮品 · 可打包带走',
+      speaker: {
+        name: '皮里士多德',
+        title: '博士',
+        org: '华西医院 · 皮肤科',
+        bio: '45° 的华西皮肤科博士',
+        photo: '/assets/speaker-vol03-halfbody.jpg',
+        avatar: '/assets/speaker-vol03-halfbody.jpg'
+      },
+      poster: '/assets/poster-vol03.jpg',
+      points: [
+        {
+          num: '01',
+          title: '医学的界限是什么',
+          sub: '',
+          body: '医美是医学技术，也有作用机制、适应证与风险边界。\n\n它能改变什么？又不能承担什么？'
+        },
+        {
+          num: '02',
+          title: '能做，该做？',
+          sub: '',
+          body: '当技术越来越普及，问题不只是“能不能做”。\n\n还有：适不适合做？做到什么程度？'
+        },
+        {
+          num: '03',
+          title: '谁在定义更好',
+          sub: '',
+          body: '滤镜、平台、流量与广告，正在塑造我们对“更好看”的想象。\n\n“更美”从来不只是个人选择。'
+        },
+        {
+          num: '04',
+          title: '改变之前，先问为什么',
+          sub: '',
+          body: '想变美并不浅薄。\n\n但在改变之前，也许可以先问：我想实现什么样的想象？'
+        }
+      ],
+      teaserQuestions: [
+        '医学的界限在哪里？',
+        '“美”由谁定义？',
+        '当我们想变美时，我们在回应什么？',
+        '医美改变的是皮肤，还是自我？'
+      ],
+      menu: [
+        { name: '黑松露巴斯克蛋糕', tag: '甜品' },
+        { name: '抹茶巴斯克蛋糕', tag: '甜品' },
+        { name: '椰柠冰茶', tag: '饮品 · 自选' },
+        { name: '黑芝麻脆脆拿铁', tag: '饮品 · 自选' },
+        { name: '粉雾岛屿饮品', tag: '饮品 · 自选' },
+        { name: '好喝的抹茶芭乐椰', tag: '饮品 · 自选' }
+      ],
+      menuFootnote: '更多饮品可访问大众点评搜索「陌生的朋友」'
     },
     {
       id: 'vol02',
       number: 2,
-      status: 'signup',
+      status: 'finished',
       title: '六星之路',
       subtitle: '我的目标管理与坚持哲学',
       fullTitle: '六星之路：我的目标管理与坚持哲学',
@@ -79,7 +134,13 @@ const data = {
         { name: '桑葚巴斯克', tag: '攀枝花桑葚季' },
         { name: '桑葚酸奶杯', tag: '攀枝花桑葚季' },
         { name: '红酒 · 有醇 / 无醇', tag: '自选' }
-      ]
+      ],
+      summary: '第二期我们请到了西南交大光电工程研究所的高晓蓉教授——一位马拉松「六星跑者」。他们聊了多重身份下的年度目标管理、坚持哲学与「让期待落地」的生活实践。详细回顾与现场照片整理中，敬请期待。',
+      highlights: [
+        { quote: '我们不是在跑马拉松，是在用脚步丈量世界。', author: '高晓蓉' },
+        { quote: '目标不是结果，是你决心为它改变生活顺序的那一刻。', author: 'DCT 主创' }
+      ],
+      photos: []
     },
     {
       id: 'vol01',

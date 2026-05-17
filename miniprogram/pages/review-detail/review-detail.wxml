@@ -100,7 +100,268 @@
     </view>
   </view>
 
-  <!-- ============ GENERIC 通用版（vol02 + 其他兜底）============ -->
+  <!-- ============ CANDLE-TRACK 变体（vol02）· 烛光与赛道 B 版 ============ -->
+  <view wx:elif="{{variant === 'candle-track'}}" class="candle-track">
+
+    <!-- § HERO · 海报全幅 -->
+    <view class="ct-hero">
+      <image class="ct-hero__img" src="{{cT.heroImg || issue.poster}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      <view class="ct-hero__top-fade"></view>
+      <view class="ct-hero__bottom-fade"></view>
+      <view class="ct-hero__meta">
+        <text class="mono">DCT · VOL.0{{issue.number}} · 回顾</text>
+        <text class="mono ct-hero__meta-right">{{cTHeroDateAttendees}}</text>
+      </view>
+      <view class="ct-hero__bottom">
+        <view class="ct-hero__badge mono">
+          <view class="ct-hero__badge-stars">
+            <view class="ct-star" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this"></view>
+          </view>
+          <text>{{cT.heroBadge}}</text>
+        </view>
+        <view class="serif ct-hero__title">
+          白天她在<text class="ct-hero__title-gold">跑道</text>上，<text class="ct-hero__br"></text>
+          夜晚她在<text class="ct-hero__title-candle">客厅</text>里。
+        </view>
+        <view class="serif ct-hero__sub">{{cT.heroSub}}</view>
+      </view>
+    </view>
+
+    <!-- § Speaker 过渡条 -->
+    <view class="ct-speaker-bar">
+      <view class="ct-speaker-bar__avatar">
+        <image class="ct-speaker-bar__avatar-img" src="{{cT.speakerImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      </view>
+      <view class="ct-speaker-bar__body">
+        <view class="mono ct-speaker-bar__kicker">SPEAKER · 主讲</view>
+        <view class="serif ct-speaker-bar__name">{{cTSpeakerLine}}</view>
+      </view>
+      <view class="mono ct-speaker-bar__date">{{cTDateChip}}</view>
+    </view>
+
+    <!-- § 01 · 一万公里之外 -->
+    <view class="ct-s1">
+      <view class="mono ct-s1__kicker">§ 01 · 一万公里之外</view>
+      <view class="serif ct-s1__h">
+        所谓"六星"——<text class="ct-br"></text>
+        六座<text class="ct-s1__h-gold">城市</text>，
+        六条<text class="ct-s1__h-gold">赛道</text>，
+        六次<text class="ct-s1__h-gold">出发</text>。
+      </view>
+      <view class="ct-s1__cities">
+        <view class="ct-city" wx:for="{{cT.sixCities}}" wx:key="*this" wx:for-index="i">
+          <view class="ct-city__star"></view>
+          <view class="serif ct-city__name">{{item}}</view>
+          <view class="mono ct-city__num">0{{i+1}}</view>
+        </view>
+      </view>
+      <view class="ct-s1__stats">
+        <view class="ct-stat" wx:for="{{cT.stats}}" wx:key="label">
+          <view class="serif ct-stat__num">
+            {{item.num}}<text class="ct-stat__unit">{{item.unit}}</text>
+          </view>
+          <view class="mono ct-stat__label">{{item.label}}</view>
+        </view>
+      </view>
+      <view class="serif ct-s1__outro">
+        {{cT.section1Outro[0]}}<text class="ct-br"></text>
+        <text>{{cTSection1OutroSplit.head}}</text>
+        <text wx:if="{{cTSection1OutroSplit.hl}}" class="ct-s1__outro-u">{{cTSection1OutroSplit.hl}}</text>
+        <text>{{cTSection1OutroSplit.tail}}</text>
+      </view>
+    </view>
+
+    <!-- § 02 · 章节插页 · 烛光大图 -->
+    <view class="ct-candle">
+      <image class="ct-candle__img" src="{{cT.candleImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      <view class="ct-candle__top-fade"></view>
+      <view class="ct-candle__bottom-fade"></view>
+      <view class="mono ct-candle__marker">{{cT.candleChapter.marker}}</view>
+      <view class="ct-candle__bottom">
+        <view class="serif ct-candle__lines">
+          {{cT.candleChapter.lines[0]}}<text class="ct-br"></text>
+          {{cT.candleChapter.lines[1]}}<text class="ct-candle__hl">{{cT.candleChapter.hl}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- § LEAD · drop cap -->
+    <view class="ct-lead">
+      <text class="serif ct-lead__cap">{{cT.leadCap}}</text>
+      <text>{{cTLeadSplit.head}}</text>
+      <text wx:if="{{cTLeadSplit.hl}}" class="ct-lead__hl">{{cTLeadSplit.hl}}</text>
+      <text>{{cTLeadSplit.tail}}</text>
+    </view>
+
+    <!-- § HOOK -->
+    <view class="ct-hook-wrap">
+      <view class="ct-hook">
+        <view class="ct-hook__tab mono">{{cT.hook.kicker}}</view>
+        <view class="serif ct-hook__lines">
+          {{cT.hook.q1}}<text class="ct-hook__gold">{{cT.hook.q1Hl}}</text>{{cT.hook.q1Tail}}<text class="ct-br"></text>
+          {{cT.hook.q2}}<text class="ct-br"></text>
+          {{cT.hook.q3}}<text class="ct-hook__u">{{cT.hook.q3Hl}}</text>{{cT.hook.q3Tail}}
+        </view>
+      </view>
+    </view>
+
+    <!-- § 03 · 四线索 -->
+    <view class="ct-threads">
+      <view class="mono ct-threads__kicker">{{cT.threadsKicker}}</view>
+      <view class="ct-thread {{item.isLast ? 'ct-thread--last' : ''}}" wx:for="{{cTThreads}}" wx:key="num">
+        <view class="serif ct-thread__num">{{item.num}}</view>
+        <view class="ct-thread__text">{{item.text}}</view>
+      </view>
+    </view>
+
+    <!-- § 双图 bowl + cake -->
+    <view class="ct-side">
+      <image class="ct-side__img" src="{{cT.bowlImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      <image class="ct-side__img" src="{{cT.cakeSliceImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+    </view>
+    <view class="serif ct-side__cap">{{cT.sideCaption}}</view>
+
+    <!-- § 04 · 大金句 -->
+    <view class="ct-bigq-wrap">
+      <view class="ct-bigq">
+        <view class="ct-bigq__glow1"></view>
+        <view class="ct-bigq__glow2"></view>
+        <view class="serif ct-bigq__mark">"</view>
+        <view class="serif ct-bigq__text">{{cT.bigQuote}}</view>
+        <view class="ct-bigq__foot">
+          <view class="ct-bigq__stars">
+            <view class="ct-star ct-star--small" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this"></view>
+          </view>
+          <view class="mono ct-bigq__cite">· VOL.0{{issue.number}} · 现场金句</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- § 05 · habits -->
+    <view class="ct-habits">
+      <view class="mono ct-habits__kicker">{{cT.habitsKicker}}</view>
+      <view class="serif ct-habits__title">{{cT.habitsTitle}}</view>
+      <view class="serif ct-habits__sub">{{cT.habitsSub}}</view>
+      <view class="ct-habits__rail">
+        <view class="ct-habit" wx:for="{{cTHabits}}" wx:key="k">
+          <view class="ct-habit__dot {{item.first ? 'ct-habit__dot--first' : ''}}"></view>
+          <view class="ct-habit__head">
+            <view class="serif ct-habit__k">{{item.k}}</view>
+            <view class="ct-habit__line"></view>
+          </view>
+          <view class="ct-habit__d">{{item.d}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- § 06 · 情感高点 -->
+    <view class="ct-peak">
+      <view class="ct-peak__photo">
+        <image class="ct-peak__photo-img" src="{{cT.speakerImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+        <view class="ct-peak__photo-fade"></view>
+        <view class="ct-peak__photo-meta mono">
+          <text>{{cT.peakMeta[0]}}</text>
+          <text class="ct-peak__photo-meta-right">{{cT.peakMeta[1]}}</text>
+        </view>
+      </view>
+      <view class="ct-peak__body">
+        <view class="mono ct-peak__kicker">{{cT.peakKicker}}</view>
+        <view class="serif ct-peak__mark">"</view>
+        <view class="serif ct-peak__quote">
+          {{cT.peakQuote[0]}}<text class="ct-br"></text>
+          {{cT.peakQuote[1]}}<text class="ct-br"></text>
+          <text class="ct-peak__hl">{{cT.peakHl}}</text>。
+        </view>
+        <view class="ct-peak__essay">
+          <text>{{cTPeakBodySplit.head}}</text>
+          <text wx:if="{{cTPeakBodySplit.hl}}" class="ct-peak__essay-strong">{{cTPeakBodySplit.hl}}</text>
+          <text>{{cTPeakBodySplit.tail}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- § 07 · 12 majors -->
+    <view class="ct-majors">
+      <view class="mono ct-majors__kicker">{{cT.majorsKicker}}</view>
+      <view class="serif ct-majors__title">
+        {{cT.majorsTitleLead}} <text class="ct-majors__hl">{{cT.majorsTitleHl}}</text> {{cT.majorsTitleTail}}
+      </view>
+      <view class="ct-majors__pills">
+        <view class="ct-pill" wx:for="{{cT.majors}}" wx:key="*this">{{item}}</view>
+      </view>
+      <view class="ct-majors__body">
+        <text>{{cTMajorsBodySplit.head}}</text>
+        <text wx:if="{{cTMajorsBodySplit.hl}}" class="ct-majors__body-u">{{cTMajorsBodySplit.hl}}</text>
+        <text>{{cTMajorsBodySplit.tail}}</text>
+      </view>
+    </view>
+
+    <!-- § 现场全景 -->
+    <view class="ct-aud">
+      <image class="ct-aud__img" src="{{cT.audienceImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      <view class="serif ct-aud__cap">
+        {{cT.audienceCaption[0]}}<text class="ct-br"></text>
+        {{cT.audienceCaption[1]}}
+      </view>
+    </view>
+
+    <!-- § 08 · 收尾 -->
+    <view class="ct-closing">
+      <view class="ct-closing__stars">
+        <view class="ct-star" wx:for="{{[1,2,3,4,5,6]}}" wx:key="*this"></view>
+      </view>
+      <view class="mono ct-closing__kicker">{{cT.thanksKicker}}</view>
+      <view class="serif ct-closing__thanks">
+        {{cT.thanksTitle[0]}}<text class="ct-br"></text>
+        {{cT.thanksTitle[1]}}<text class="ct-closing__thanks-u">{{cT.thanksHl}}</text>{{cT.thanksTail}}
+      </view>
+      <view class="ct-closing__essay">
+        <view class="ct-closing__essay-line" wx:for="{{cTClosingEssay}}" wx:key="index">
+          <block wx:if="{{item.hasHl}}">
+            <text>{{item.head}}</text>
+            <text class="ct-closing__essay-hl">{{item.hl}}</text>
+            <text>{{item.tail}}</text>
+          </block>
+          <block wx:elif="{{item.hasStrong}}">
+            <text>{{item.head}}</text>
+            <text class="ct-closing__essay-strong">{{item.strong}}</text>
+            <text>{{item.tail}}</text>
+          </block>
+          <block wx:else>
+            <text>{{item.plain}}</text>
+          </block>
+        </view>
+      </view>
+      <view class="ct-sheep">
+        <view class="ct-sheep__icon">🐑</view>
+        <view class="serif ct-sheep__title">
+          {{cT.sheepTitle}}<text class="ct-br"></text>
+          {{cT.sheepIntro}}<text class="ct-sheep__hl">{{cT.sheepHl}}</text>{{cT.sheepTail}}
+        </view>
+      </view>
+      <view class="ct-closing__p">{{cT.closingP}}</view>
+      <view class="serif ct-closing__sig">{{cT.signature}}</view>
+    </view>
+
+    <!-- § 报名本期 CTA -->
+    <view class="ct-cta-wrap">
+      <view class="ct-cta" bindtap="goLanding" hover-class="ct-cta-hover">
+        <view class="ct-cta__glow"></view>
+        <view class="ct-cta__left">
+          <view class="mono ct-cta__kicker">报名本期 · VOL.03</view>
+          <view class="serif ct-cta__title">医美热时代的冷思考</view>
+          <view class="serif ct-cta__meta">2026.05.23 · 陌生的朋友 · 88 元 / 位</view>
+        </view>
+        <view class="ct-cta__arrow">→</view>
+      </view>
+      <view class="ct-back" bindtap="goReviewList" hover-class="ct-back-hover">
+        <view class="serif ct-back__t">返回往期列表</view>
+        <view class="ct-back__chev">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ============ GENERIC 通用版（兜底 · 没有 recap 或其他变体）============ -->
   <view wx:else class="page">
     <view class="cover {{issue.poster ? 'cover--image' : 'cover--placeholder'}}">
       <image wx:if="{{issue.poster}}" class="cover-img" src="{{issue.poster}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />

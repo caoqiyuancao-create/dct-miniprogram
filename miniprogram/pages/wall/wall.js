@@ -1,12 +1,14 @@
 // CHG-20260517-01 · 电子留言墙 · 现场咖啡厅 TV 大屏（16:9 横屏）
 //
-// MVP：seed 数据硬编码；左：今晚到场者一句话身份，右：大家想问的问题。
-// TODO（下一期）：把 WALL_INTROS / WALL_QUESTIONS 换成 cloudfunctions/getWallFeed —
-// 从 signups 集合捞 consentWall=true + 运营审核通过的 selfIntro / expectation。
+// 实时数据：每 15s 调 cloudfunctions/getWallFeed 拉取 signups 集合中
+//   issueId='vol03' + consentWall ≠ false + wallApproved ≠ false 的记录。
+// Fallback：云函数失败 / 数据为空 时回退到 seed 数据，保证大屏永远不空。
 
 const D = require('../../data/issues.js');
 
-const WALL_INTROS = [
+const FEED_POLL_MS = 15000;
+
+const WALL_INTROS_SEED = [
   { who: '华西皮肤科·研二',   line: '对医美又心动又警惕' },
   { who: '麻醉科·主治',       line: '看够了手术室里的"美丽代价"' },
   { who: '社会学·田野中',     line: '在研究"被看见的脸"' },
@@ -27,7 +29,7 @@ const WALL_INTROS = [
   { who: '甜品师·陌生的朋友', line: '今晚也是后厨的我' }
 ];
 
-const WALL_QUESTIONS = [
+const WALL_QUESTIONS_SEED = [
   '医美的边界在哪里？什么时候是"医"，什么时候只是"美"？',
   '普通人怎么判断自己是不是真的需要医美？',
   '医美到底在解决问题，还是在制造焦虑？',
@@ -58,24 +60,28 @@ Page({
     dateLabel: '',
     introsToShow: [],
     qsToShow: [],
-    qsTotal: WALL_QUESTIONS.length
+    qsTotal: 0,
+    isLive: false  // 是否拿到了云函数实时数据
   },
 
   _clockTimer: null,
   _introTimer: null,
   _qTimer: null,
+  _feedTimer: null,
   _introIdx: 0,
   _qIdx: 0,
+  _intros: WALL_INTROS_SEED,
+  _questions: WALL_QUESTIONS_SEED,
 
   onLoad() {
     const cur = D.getCurrent();
     const speakerName = (cur && cur.speaker && cur.speaker.name) || '讲者';
-    const dateLabel = `${cur && cur.date} · ${cur && cur.location ? '陌生的朋友咖啡厅' : ''}`.trim();
 
     this.setData({
       cur,
       speakerName,
-      dateLabel: cur && cur.date ? `${cur.date} · 陌生的朋友咖啡厅` : ''
+      dateLabel: cur && cur.date ? `${cur.date} · 陌生的朋友咖啡厅` : '',
+      qsTotal: this._questions.length
     });
 
     this._tick();
@@ -83,30 +89,40 @@ Page({
 
     this._clockTimer = setInterval(() => this._tick(), 1000);
     this._introTimer = setInterval(() => {
-      this._introIdx = (this._introIdx + 1) % WALL_INTROS.length;
+      this._introIdx = (this._introIdx + 1) % this._intros.length;
       this._renderColumns({ introOnly: true });
     }, 3000);
     this._qTimer = setInterval(() => {
-      this._qIdx = (this._qIdx + 1) % WALL_QUESTIONS.length;
+      this._qIdx = (this._qIdx + 1) % this._questions.length;
       this._renderColumns({ qOnly: true });
     }, 4200);
+
+    // 首次立刻拉一次，之后每 15s 轮询
+    this._fetchFeed();
+    this._feedTimer = setInterval(() => this._fetchFeed(), 15000);
   },
 
   onUnload() {
     if (this._clockTimer) clearInterval(this._clockTimer);
     if (this._introTimer) clearInterval(this._introTimer);
     if (this._qTimer) clearInterval(this._qTimer);
+    if (this._feedTimer) clearInterval(this._feedTimer);
   },
 
   onHide() {
     // 后台时停止 timer，避免功耗
     if (this._clockTimer) { clearInterval(this._clockTimer); this._clockTimer = null; }
+    if (this._feedTimer)  { clearInterval(this._feedTimer);  this._feedTimer = null; }
   },
 
   onShow() {
     if (!this._clockTimer) {
       this._tick();
       this._clockTimer = setInterval(() => this._tick(), 1000);
+    }
+    if (!this._feedTimer) {
+      this._fetchFeed();
+      this._feedTimer = setInterval(() => this._fetchFeed(), 15000);
     }
   },
 
@@ -119,16 +135,43 @@ Page({
     });
   },
 
+  _fetchFeed() {
+    if (!wx.cloud || !wx.cloud.callFunction) return;
+    wx.cloud.callFunction({ name: 'getWallFeed', data: { limit: 200 } })
+      .then(res => {
+        const r = (res && res.result) || {};
+        if (!r.ok) return;
+        const newIntros = Array.isArray(r.intros) ? r.intros : [];
+        const newQs = Array.isArray(r.questions) ? r.questions : [];
+        // 至少要有 3 条 intro 才用 live；否则回退 seed（避免大屏太空）
+        if (newIntros.length >= 3) {
+          this._intros = newIntros;
+        }
+        if (newQs.length >= 3) {
+          this._questions = newQs;
+        }
+        this.setData({
+          isLive: newIntros.length >= 3 || newQs.length >= 3,
+          qsTotal: this._questions.length
+        });
+      })
+      .catch(err => {
+        console.warn('[getWallFeed] failed:', err && err.errMsg);
+      });
+  },
+
   _renderColumns(opts) {
     opts = opts || {};
     const patch = {};
+    const intros = this._intros;
+    const questions = this._questions;
     if (!opts.qOnly) {
       const introsToShow = [];
       for (let k = 0; k < VISIBLE_INTROS; k++) {
-        const item = WALL_INTROS[(this._introIdx + k) % WALL_INTROS.length];
+        const item = intros[(this._introIdx + k) % intros.length];
         introsToShow.push({
           who: item.who,
-          initial: item.who.charAt(0),
+          initial: (item.who && item.who.charAt(0)) || '·',
           line: item.line,
           opacity: 1 - (k * 0.16)
         });
@@ -138,10 +181,10 @@ Page({
     if (!opts.introOnly) {
       const qsToShow = [];
       for (let k = 0; k < VISIBLE_QS; k++) {
-        const idx = (this._qIdx + k) % WALL_QUESTIONS.length;
+        const idx = (this._qIdx + k) % questions.length;
         qsToShow.push({
           num: `Q.${pad2(idx + 1)}`,
-          text: WALL_QUESTIONS[idx],
+          text: questions[idx],
           opacity: 1 - (k * 0.18)
         });
       }

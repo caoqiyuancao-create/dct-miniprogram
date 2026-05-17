@@ -70,7 +70,7 @@
     <view class="mono footer__brand">DCT · DOG, CHEF &amp; THERAPIST · EST.2026 · CHENGDU</view>
     <view class="footer__live">
       <view class="footer__live-dot"></view>
-      <text>留言墙实时更新 · 仍可在小程序内继续提交</text>
+      <text>{{isLive ? '实时同步中 · 来自报名留言' : '示例预览 · 等待真实留言'}}</text>
     </view>
   </view>
 

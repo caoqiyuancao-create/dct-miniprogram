@@ -173,8 +173,8 @@ const CONSTELLATION = [
   { x: 82, y: 70, s: 16, o: 0.85 }
 ];
 
-// ===== 留言墙 seed 数据（与小程序 wall.js 同源） =====
-const WALL_INTROS = [
+// ===== 留言墙 seed 数据（fallback；getWallFeed 拿到 ≥3 条时被替换） =====
+const WALL_INTROS_SEED = [
   { who: '华西皮肤科·研二',   line: '对医美又心动又警惕' },
   { who: '麻醉科·主治',       line: '看够了手术室里的"美丽代价"' },
   { who: '社会学·田野中',     line: '在研究"被看见的脸"' },
@@ -194,7 +194,7 @@ const WALL_INTROS = [
   { who: '皮肤科·进修',       line: '从基层来听一些不一样的声音' },
   { who: '甜品师·陌生的朋友', line: '今晚也是后厨的我' }
 ];
-const WALL_QUESTIONS = [
+const WALL_QUESTIONS_SEED = [
   '医美的边界在哪里？什么时候是"医"，什么时候只是"美"？',
   '普通人怎么判断自己是不是真的需要医美？',
   '医美到底在解决问题，还是在制造焦虑？',
@@ -213,6 +213,12 @@ const WALL_QUESTIONS = [
 ];
 const SELF_INTRO_MAX = 40;
 const EXPECTATION_MAX = 120;
+
+// 留言墙实时数据缓存（getWallFeed 拉到 ≥3 条时替换 SEED）
+let WALL_INTROS = WALL_INTROS_SEED;
+let WALL_QUESTIONS = WALL_QUESTIONS_SEED;
+let WALL_IS_LIVE = false;
+const WALL_FEED_POLL_MS = 15000;
 
 // ===== Render helpers =====
 function el(id) { return document.getElementById(id); }
@@ -395,6 +401,32 @@ function renderWallQs() {
   elx.innerHTML = arr.join('');
 }
 
+let wallFeedTimer = null;
+
+async function fetchWallFeed() {
+  try {
+    const app = await ensureAuth();
+    const res = await app.callFunction({ name: 'getWallFeed', data: { limit: 200 } });
+    const r = (res && res.result) || {};
+    if (!r.ok) return;
+    const intros = Array.isArray(r.intros) ? r.intros : [];
+    const qs = Array.isArray(r.questions) ? r.questions : [];
+    let changed = false;
+    if (intros.length >= 3) { WALL_INTROS = intros; changed = true; }
+    if (qs.length >= 3)     { WALL_QUESTIONS = qs; changed = true; }
+    if (changed) {
+      WALL_IS_LIVE = true;
+      // 同步更新 footer 提示
+      const liveEl = document.getElementById('wall-live-text');
+      if (liveEl) liveEl.textContent = '实时同步中 · 来自报名留言';
+      renderWallIntros();
+      renderWallQs();
+    }
+  } catch (err) {
+    console.warn('[getWallFeed] failed:', err && err.message);
+  }
+}
+
 function startWallTimers() {
   stopWallTimers();
   renderWallClock();
@@ -409,12 +441,16 @@ function startWallTimers() {
     wallQIdx = (wallQIdx + 1) % WALL_QUESTIONS.length;
     renderWallQs();
   }, 4200);
+  // 立刻拉一次 + 之后每 15s 轮询
+  fetchWallFeed();
+  wallFeedTimer = setInterval(fetchWallFeed, WALL_FEED_POLL_MS);
 }
 
 function stopWallTimers() {
   if (wallClockTimer) { clearInterval(wallClockTimer); wallClockTimer = null; }
   if (wallIntroTimer) { clearInterval(wallIntroTimer); wallIntroTimer = null; }
   if (wallQTimer)     { clearInterval(wallQTimer);     wallQTimer = null; }
+  if (wallFeedTimer)  { clearInterval(wallFeedTimer);  wallFeedTimer = null; }
 }
 
 // ===== Home（首页）渲染 + 轮播 =====

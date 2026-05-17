@@ -1,0 +1,9 @@
+{
+  "name": "getWallFeed",
+  "version": "1.0.0",
+  "description": "DCT vol03 现场电子留言墙数据源（实时读取 signups 集合中 issueId=vol03 + consentWall 的记录）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

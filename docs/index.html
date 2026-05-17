@@ -72,67 +72,21 @@
         <span>返回首页</span>
       </a>
 
-      <div class="about-stage scene-0" id="about-stage">
-        <div class="stage-rays"></div>
-
-        <!-- Scene 0 · sky -->
-        <div class="about-scene scene-sky">
-          <div class="cloud cloud-a"></div>
-          <div class="cloud cloud-b"></div>
-          <div class="cloud cloud-c"></div>
-        </div>
-        <!-- Scene 1 · three -->
-        <div class="about-scene scene-three">
-          <div class="role-orb role-d">D<span>Dog</span></div>
-          <div class="role-orb role-c">C<span>Chef</span></div>
-          <div class="role-orb role-t">T<span>Therapist</span></div>
-        </div>
-        <!-- Scene 2 · seedling -->
-        <div class="about-scene scene-seedling">
-          <div class="field-grid">
-            <div class="field-tile"></div><div class="field-tile"></div><div class="field-tile"></div>
-            <div class="field-tile"></div><div class="field-tile"></div><div class="field-tile"></div>
-          </div>
-          <div class="sprout">
-            <div class="sprout-stem"></div>
-            <div class="sprout-leaf sprout-left"></div>
-            <div class="sprout-leaf sprout-right"></div>
-          </div>
-        </div>
-        <!-- Scene 3 · brand -->
-        <div class="about-scene scene-brand">
-          <div class="serif big-brand">DCT</div>
-          <div class="mono brand-sub">DOCTORS' CRAZY THINKING</div>
-        </div>
-        <!-- Scene 4 · living -->
-        <div class="about-scene scene-living">
-          <div class="lamp"></div>
-          <div class="sofa">
-            <div class="sofa-back"></div>
-            <div class="sofa-seat"></div>
-            <div class="pillow pillow-a"></div>
-            <div class="pillow pillow-b"></div>
-          </div>
-        </div>
-        <!-- Scene 5 · invite -->
-        <div class="about-scene scene-invite">
-          <div class="invite-stars">
-            <div class="gold-star star-0"></div>
-            <div class="gold-star star-1"></div>
-            <div class="gold-star star-2"></div>
-            <div class="gold-star star-3"></div>
-            <div class="gold-star star-4"></div>
-          </div>
-          <div class="serif invite-dct">DCT</div>
-        </div>
-
-        <div class="scene-caption">
-          <div class="serif scene-title" id="about-scene-title">一切从天时地利人和说起</div>
-          <div class="scene-sub" id="about-scene-sub">2026 · 一个客厅 · 三个 PhD</div>
-        </div>
-
-        <div class="about-dots" id="about-dots"></div>
-        <div class="mono replay" id="about-replay" hidden>↻ REPLAY</div>
+      <!-- About 起源动画 · 视频版（替代原 6 幕 CSS keyframes 占位） -->
+      <div class="about-video">
+        <video
+          id="about-video"
+          class="about-video__el"
+          src="assets/origin-story.mp4"
+          autoplay
+          muted
+          playsinline
+          loop
+          preload="metadata"
+          webkit-playsinline="true"
+          x5-playsinline="true"
+        ></video>
+        <button class="about-video__replay mono" id="about-video-replay" type="button">↻ REPLAY</button>
       </div>
 
       <div class="about-section">

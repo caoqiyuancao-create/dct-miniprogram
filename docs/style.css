@@ -1584,7 +1584,47 @@ input, textarea { font: inherit; }
 }
 
 /* ===================================================================
-   ABOUT · 关于 DCT
+   ABOUT · 关于 DCT · 起源故事视频（CHG-20260518-01）
+   替换原 6 幕 CSS keyframes 动画，使用 MP4 视频。
+=================================================================== */
+.about-video {
+  position: relative;
+  width: 100%;
+  background: #0c1f3d;
+  overflow: hidden;
+  /* 16:9 aspect ratio container */
+  aspect-ratio: 16 / 9;
+  max-height: 56vh;
+}
+.about-video__el {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #0c1f3d;
+}
+.about-video__replay {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: rgba(15,40,85,0.72);
+  color: #f3d97a;
+  border: 0.5px solid rgba(243,217,122,0.5);
+  font-size: 10.5px;
+  letter-spacing: 2px;
+  font-family: "SF Mono", Menlo, monospace;
+  cursor: pointer;
+  z-index: 5;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+.about-video__replay:active { background: rgba(15,40,85,0.92); opacity: 0.85; }
+
+/* ===================================================================
+   ABOUT · 关于 DCT（旧 6 幕 CSS keyframes 动画 · 已被视频替换 · 样式保留无害）
 =================================================================== */
 .about-stage {
   position: relative; overflow: hidden;

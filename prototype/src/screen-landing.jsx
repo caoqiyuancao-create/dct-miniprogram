@@ -297,11 +297,11 @@ function ScreenLanding({ go }) {
             <>
               DCT 第三期，我们邀请到 <span style={{ color: '#0f2855', fontWeight: 500 }}>{cur.speaker.name}</span>——一位在华西临床与实验室之间往返的皮肤科医生，和我们一起重新理解“医美热”。
               <br /><br />
-              医美当然关乎技术：光、电、注射......每一种手段背后都有真实的医学逻辑、适应证与风险边界。
+              医美当然关乎技术。光、电、注射......每一种手段背后都有真实的医学逻辑、适应证与风险边界——<span style={{ color: '#0f2855', fontWeight: 500 }}>它能改变什么，又不能承担什么</span>。
               <br /><br />
-              但医美也不只是技术。它同时牵动着审美标准、身体感受、情绪压力、消费选择，以及一个更隐秘的问题：<span style={{ color: '#0f2855', fontWeight: 500 }}>当我们想要改变自己的脸和身体时，我们真正想改变的是什么？</span>
+              医美也不只是技术。技术能改变的，是脸上可量化的部分；而“变美”的感受，从来不是单靠技术兑现的承诺。它同时牵动着审美标准、身体感受、情绪压力、消费选择，以及一个更隐秘的问题：<span style={{ color: '#0f2855', fontWeight: 500 }}>当我们想要改变自己的脸和身体时，我们真正想改变的是什么？</span>
               <br /><br />
-              这一次，我们不急着赞成，也不急着反对。我们想把“变美”这件事放回更大的语境里：医学如何参与审美，技术如何改变身体经验，而“变得更好”又是如何被想象、被定义、被追求的。
+              想变美并不浅薄。但在改变之前，也许可以先问：我想实现的，是谁的想象？这一次，我们不急着赞成，也不急着反对——我们想把“变美”这件事放回更大的语境里：医学如何参与审美，技术如何改变身体经验，而“变得更好”又是如何被想象、被定义、被追求的。
             </>
           ) : (
             <>DCT 第二期，我们很荣幸邀请到{cur.speaker.name}教授来到客厅，与我们分享她关于<span style={{ color: '#0f2855', fontWeight: 500 }}>目标、坚持与多重人生角色</span>的思考。</>
@@ -443,14 +443,14 @@ function ScreenLanding({ go }) {
             }}>{cur.menuFootnote}</div>
           )}
 
-          {/* v3: Gia 制作 + 主题饮品预告 */}
+          {/* v3: Gia 制作小卡（CHG-20260517-02 删掉「主题饮品打样」副行——本期饮品已定，无需再说打样中） */}
           {isV3 && (
             <div style={{
               marginTop: 14, padding: '12px 14px',
               borderRadius: 12,
               background: 'rgba(107,76,30,0.06)',
               border: '0.5px dashed rgba(107,76,30,0.28)',
-              display: 'flex', gap: 12, alignItems: 'flex-start',
+              display: 'flex', gap: 12, alignItems: 'center',
             }}>
               <div style={{
                 width: 26, height: 26, borderRadius: 13, flexShrink: 0,
@@ -460,11 +460,8 @@ function ScreenLanding({ go }) {
                 fontFamily: '"Noto Serif SC", serif',
                 boxShadow: '0 2px 6px rgba(107,76,30,0.25)',
               }}>G</div>
-              <div style={{ flex: 1, fontSize: 12, color: C.warmInk, lineHeight: 1.65 }}>
-                <div style={{ fontWeight: 600 }}>甜品仍由 Gia 制作 ✦</div>
-                <div style={{ color: C.warmText, marginTop: 2 }}>
-                  更多<b style={{ color: C.warmInk }}>主题饮品</b>正在打样中 · 敬请期待
-                </div>
+              <div style={{ flex: 1, fontSize: 12, color: C.warmInk, lineHeight: 1.65, fontWeight: 600 }}>
+                甜品仍由 Gia 制作 ✦
               </div>
             </div>
           )}

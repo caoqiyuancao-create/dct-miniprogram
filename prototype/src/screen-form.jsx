@@ -80,7 +80,7 @@ function ScreenForm({ go }) {
               onChange={set('expectation')}
               placeholder='对本期主题的期待 / 想抛给皮里士多德的问题'
               minHeight={110}
-              maxLen={120}
+              maxLen={250}
               charCount={v.expectation.length}
             />
           </FieldGroup>

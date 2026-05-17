@@ -34,28 +34,112 @@ const PAST_ISSUES = [
     subtitle: '我的目标管理与坚持哲学',
     date: '2026.04.25',
     speaker: { name: '高晓蓉', title: '教授', org: '西南交通大学光电工程研究所' },
-    poster: 'assets/gao-portrait.jpg',
-    summary: '第二期我们请到了西南交大光电工程研究所的高晓蓉教授——一位马拉松「六星跑者」。他们聊了多重身份下的年度目标管理、坚持哲学与「让期待落地」的生活实践。详细回顾与现场照片整理中，敬请期待。',
-    highlights: [
-      { quote: '我们不是在跑马拉松，是在用脚步丈量世界。', author: '高晓蓉' },
-      { quote: '目标不是结果，是你决心为它改变生活顺序的那一刻。', author: 'DCT 主创' }
+    poster: 'assets/vol02-cover.jpg',
+    summary: '第二期我们请到了西南交大光电工程研究所的高晓蓉教授——一位马拉松「六星跑者」。她讲马拉松、读书会、英语单词打卡、博物馆公益讲解——一件一件都很认真，把每一件放进了无数个普通的一天。',
+    photos: [
+      'assets/vol02-speaker.jpg',
+      'assets/vol02-cake-candle.jpg',
+      'assets/vol02-audience.jpg',
+      'assets/vol02-bowl.jpg',
+      'assets/vol02-cake-slice.jpg'
     ],
-    photos: []
+    // TODO: 自定义 candle-track 详情页待下一个 PR 实现，目前用通用版式渲染
+    recap: {
+      variant: 'candle-track',
+      topic: '六星之路 · 我的目标管理与坚持哲学',
+      attendees: '客厅 · 12 人',
+      heroImg:      'assets/poster.png',
+      candleImg:    'assets/vol02-cake-candle.jpg',
+      speakerImg:   'assets/vol02-speaker.jpg',
+      audienceImg:  'assets/vol02-audience.jpg',
+      bowlImg:      'assets/vol02-bowl.jpg',
+      cakeSliceImg: 'assets/vol02-cake-slice.jpg',
+      heroBadge: 'SIX · STAR · FINISHER',
+      heroTitle: ['白天她在跑道上，', '夜晚她在客厅里。'],
+      heroSub: '一场关于理想、现实、坚持、疲惫、热爱与放弃的真诚对谈。',
+      sixCities: ['东京', '波士顿', '伦敦', '柏林', '芝加哥', '纽约'],
+      stats: [
+        { num: '10,000', unit: '公里', label: '累计跑步里程' },
+        { num: '1,314',  unit: '次',   label: '记录里的跑步次数' }
+      ],
+      threads: [
+        '"六星"不是终点，而是一段日常生活的副产物',
+        '怎样开始一件事，怎样重复，怎样在做了很多遍之后仍然重新看见它',
+        '在不喜欢、甚至厌倦的时候，继续感受事情本身的细节',
+        '我们缺的不是想象，是在想象成为现实之前，忍受焦虑的能力'
+      ],
+      bigQuote: '所谓"六星"，是六座城市、六条赛道、六次出发。\n但真正打动我们的，是她怎样把一件事，一点点做成生活的一部分。',
+      habits: [
+        { k: '跑步',           d: '日复一日，跑到 10,000 公里 · 第 1,314 次' },
+        { k: '读书会',         d: '带领、组织、出席，不缺席' },
+        { k: '英语单词打卡',   d: '每天一打卡，多年未断' },
+        { k: '国际会议追踪',   d: '把全球研究节奏装进作息' },
+        { k: '博物馆公益讲解', d: '把所学，反复讲给陌生人' },
+        { k: '公益',           d: '建图书馆 · 资助学生 · 长期投入' }
+      ],
+      peakQuote: ['她带来的不是标准答案。', '而是一份非常具体、非常诚实的——'],
+      peakHl: '生命材料',
+      peakBody: '她身上有一种动人的生命力——那不是被包装出来的"励志感"，而是一种长期生活之后，仍然保有的敏锐、热情和安静。',
+      majors: ['光电', '电气', '医学', '哲学', '文字学', '人类学', '心理', '建筑', '法学', '材料', '历史', '计算机'],
+      closingP: '如果你也在某件事上长跑过、犹豫过、不喜欢过，又重新开始过——欢迎来 DCT 客厅坐坐 ～'
+    },
+    highlights: [
+      { quote: '所谓"六星"，是六座城市、六条赛道、六次出发。但真正打动我们的，是她怎样把一件事，一点点做成生活的一部分。', author: 'DCT 第二期 · 现场金句' },
+      { quote: '她带来的不是标准答案。而是一份非常具体、非常诚实的——生命材料。', author: 'DCT 第二期 · 编辑笔记' }
+    ]
   },
   {
     id: 'vol01',
     number: 1,
     status: 'finished',
-    title: '（回顾整理中）',
-    subtitle: '第一期 · 2026.03.28',
+    title: '我们在客厅里聊了成人 ADHD',
+    subtitle: '不是一场普通科普，也不是一次严肃讲座',
     date: '2026.03.28',
-    speaker: { name: '包文欣 / 徐佳淇 / 曹栖源', title: '主创' },
-    poster: '',
-    summary: 'DCT 的第一次聚会，三位主创分别以 Dog、Chef、Therapist 三个身份切入，分享了关于知识、真诚与深度交流的期待。回顾文章正在整理中，欢迎期待。',
-    highlights: [
-      { quote: '在绩效逻辑之外，留一块真诚分享的精神自留地。', author: 'DCT 主创' }
+    speaker: { name: '曹叔', title: 'DCT 首席心理治疗师' },
+    poster: 'assets/vol01-hero.jpg',
+    photos: [
+      'assets/vol01-hero.jpg',
+      'assets/vol01-speaker-dogs.jpg',
+      'assets/vol01-talk.jpg',
+      'assets/vol01-dessert.jpg',
+      'assets/vol01-cocktail.jpg'
     ],
-    photos: []
+    // recap · 客厅夜谈 D 版结构化字段（详情页变体 night-talk）
+    recap: {
+      variant: 'night-talk',
+      topic: '成人 ADHD 与诊断扩张',
+      attendees: '客厅 · 15 人',
+      sub: '那天晚上的客厅里，灯亮着，狗在脚边，我们相遇',
+      leadHero: 'assets/vol01-hero.jpg',
+      speakerImg: 'assets/vol01-speaker-dogs.jpg',
+      sideImgs: ['assets/vol01-dessert.jpg', 'assets/vol01-cocktail.jpg'],
+      sideCaption: '也有甜点、酒、猫狗——和一些突然安静下来的瞬间。',
+      hook: {
+        kicker: '我们的问题',
+        lines: [
+          { text: '成人 ADHD，' },
+          { text: '究竟是被医学发现的疾病，', accent: '被医学发现', color: 'amber' },
+          { text: '还是被时代塑造出来的诊断？', accent: '被时代塑造', color: 'ember' }
+        ]
+      },
+      threadsIntro: '我们顺着这个问题，慢慢拆开了几条线索 ——',
+      threads: [
+        'ADHD 如何从"儿童多动"逐渐走向"成人注意力问题"；',
+        '精神、精神医学和药理学如何与人们理解痛苦的方式相互纠缠；',
+        '媒体、畅销书和社交平台如何让越来越多人在诊断里认出自己；',
+        '当"拖延、混乱、无法完成任务"被医学语言重新解释时——\n我们到底是在治疗疾病，还是在回应一个高绩效时代的焦虑。'
+      ],
+      bigQuote: '当我们把越来越多生活中的挫败交给医学来解释时，我们治愈的是疾病，还是现代社会对"完美表现"的焦虑？',
+      closing: {
+        title: '欢迎你也来，\n客厅里坐坐 ～',
+        body: '有一点学术，有一点生活，有一点"不太正经"——但真的认真在想问题。'
+      },
+      keywords: ['成人 ADHD', '精神医学', '医疗化', '表现焦虑', '现代生活']
+    },
+    summary: '第一期 DCT 在玉林一间客厅里聊了「成人 ADHD」——主讲人曹叔抛出的问题是：成人 ADHD 究竟是被医学发现的疾病，还是被时代塑造出来的诊断？我们没有急着给答案，而是顺着这个问题拆开了精神医学史、诊断扩张、药物、媒体与高绩效焦虑等几条线索。',
+    highlights: [
+      { quote: '当我们把越来越多生活中的挫败交给医学来解释时，我们治愈的是疾病，还是现代社会对"完美表现"的焦虑？', author: 'DCT 第一期 · 现场金句' }
+    ]
   }
 ];
 const PAST_COUNT = PAST_ISSUES.length;
@@ -71,11 +155,11 @@ const ABOUT_SCENES = [
 ];
 
 const ABOUT_CREATORS = [
-  { letter: 'D', word: 'Dog',       name: '包文欣', role: '狗子',
+  { letter: 'D', word: '"Dog"',     name: '包包大人', role: '狗子',
     desc: '重度爱狗人士。把对一只狗的耐心、好奇和温柔，复刻进对每一个人的提问里。' },
-  { letter: 'C', word: 'Chef',      name: '徐佳淇', role: '厨子',
+  { letter: 'C', word: 'Chef',      name: 'Gia', role: '厨子',
     desc: '家宴的策划者。相信好的食物能让人放松地说真话——所以每一期都有限定的甜品与酒。' },
-  { letter: 'T', word: 'Therapist', name: '曹栖源', role: '治疗师',
+  { letter: 'T', word: 'Therapist', name: '曹叔', role: '治疗师',
     desc: '日常工作是聆听与共情。把临床里训练出的「倾听肌肉」，搬进这间客厅。' }
 ];
 
@@ -659,10 +743,22 @@ function renderReviewDetail() {
   const root = el('review-detail-content');
   if (!root) return;
 
+  // 按 recap.variant 派发自定义版式
+  const r = issue.recap || {};
+  if (r.variant === 'night-talk') {
+    root.innerHTML = renderNightTalk(issue);
+    return;
+  }
+  // candle-track 待下一个 PR 实现自定义版式，先走通用版兜底
+  root.innerHTML = renderGenericReviewDetail(issue);
+}
+
+// 通用版 review-detail 渲染
+function renderGenericReviewDetail(issue) {
   const hasHighlights = issue.highlights && issue.highlights.length > 0;
   const hasPhotos     = issue.photos && issue.photos.length > 0;
 
-  root.innerHTML = `
+  return `
     <div class="rd-cover ${issue.poster ? 'rd-cover--image' : 'rd-cover--placeholder'}">
       ${issue.poster ? `<img class="rd-cover-img" src="${issue.poster}" alt="${issue.title}" />` : `<div class="rd-cover-star"></div>`}
       <div class="rd-cover-shade"></div>
@@ -706,6 +802,108 @@ function renderReviewDetail() {
       </div>` : ''}
     <div class="cta-wrap">
       <a class="back-btn" href="#/review">返回往期列表</a>
+    </div>
+  `;
+}
+
+// 客厅夜谈 D 版（vol01）— 暗色长卷 + 暖纸收尾
+function renderNightTalk(issue) {
+  const r = issue.recap;
+  const renderHookLine = (line) => {
+    if (!line.accent) return escapeHtml(line.text);
+    const parts = line.text.split(line.accent);
+    const colorClass = line.color === 'amber' ? 'night-hook-amber' : line.color === 'ember' ? 'night-hook-ember' : '';
+    return `${escapeHtml(parts[0] || '')}<span class="${colorClass}">${escapeHtml(line.accent)}</span>${escapeHtml(parts[1] || '')}`;
+  };
+  return `
+    <div class="night-talk">
+      <!-- HERO 全景图 -->
+      <div class="night-hero">
+        <img class="night-hero__img" src="${r.leadHero || issue.poster}" alt="${issue.title}" />
+        <div class="night-hero__top-fade"></div>
+        <div class="night-hero__bottom-fade"></div>
+        <div class="mono night-hero__vol">VOL.0${issue.number} · ${issue.date || ''}</div>
+        ${r.attendees ? `<div class="mono night-hero__attendees">${r.attendees}</div>` : ''}
+      </div>
+
+      <!-- 主标题 -->
+      <div class="night-title-wrap">
+        <div class="serif night-title">${escapeHtml(issue.title)}</div>
+        ${(issue.subtitle || r.sub) ? `<div class="serif night-subtitle">${issue.subtitle ? escapeHtml(issue.subtitle) : ''}${issue.subtitle && r.sub ? '<br/>' : ''}${r.sub ? escapeHtml(r.sub) : ''}</div>` : ''}
+      </div>
+
+      <!-- HOOK -->
+      ${r.hook ? `
+      <div class="night-hook">
+        <div class="mono night-hook__kicker">${escapeHtml(r.hook.kicker)}</div>
+        <div class="serif night-hook__lines">
+          ${r.hook.lines.map(l => renderHookLine(l)).join('<br/>')}
+        </div>
+        <div class="night-hook__rule"></div>
+      </div>` : ''}
+
+      <!-- 主讲人图 -->
+      ${r.speakerImg ? `
+      <div class="night-speaker">
+        <div class="night-speaker__frame">
+          <img src="${r.speakerImg}" alt="speaker" />
+        </div>
+        <div class="mono night-speaker__cap">↑ 主讲 ${issue.speaker && issue.speaker.name ? escapeHtml(issue.speaker.name) : ''} · 一盏台灯 · 两只氛围组</div>
+      </div>` : ''}
+
+      <!-- 4 条线索 -->
+      ${r.threads && r.threads.length ? `
+      <div class="night-threads">
+        <div class="serif night-threads__h">我们没有急着给答案</div>
+        ${r.threadsIntro ? `<div class="serif night-threads__intro">${escapeHtml(r.threadsIntro)}</div>` : ''}
+        ${r.threads.map((t, i) => `
+          <div class="night-thread ${i === r.threads.length - 1 ? 'night-thread--last' : ''}">
+            <div class="serif night-thread__num">${String(i + 1).padStart(2, '0')}</div>
+            <div class="night-thread__text">${escapeHtml(t).replace(/\n/g, '<br/>')}</div>
+          </div>
+        `).join('')}
+      </div>` : ''}
+
+      <!-- 双图小拼 -->
+      ${r.sideImgs && r.sideImgs.length ? `
+      <div class="night-side">
+        ${r.sideImgs.map(s => `<div class="night-side__frame"><img src="${s}" alt="" /></div>`).join('')}
+        ${r.sideCaption ? `<div class="serif night-side__cap">${escapeHtml(r.sideCaption)}</div>` : ''}
+      </div>` : ''}
+
+      <!-- 大引文 -->
+      ${r.bigQuote ? `
+      <div class="night-bigq">
+        <div class="serif night-bigq__mark">"</div>
+        <div class="serif night-bigq__text">${escapeHtml(r.bigQuote)}</div>
+        <div class="night-bigq__foot">
+          <div class="mono night-bigq__cite">VOL.0${issue.number} · 现场回顾</div>
+          <div class="mono night-bigq__share">分享 ↗</div>
+        </div>
+      </div>` : ''}
+
+      <!-- 收尾 · 暖纸 -->
+      <div class="night-closing">
+        <div class="mono night-closing__kicker">FROM YOUR HOSTS</div>
+        <div class="serif night-closing__title">${escapeHtml((r.closing && r.closing.title) || '欢迎你也来，\n客厅里坐坐 ～').replace(/\n/g, '<br/>')}</div>
+        ${r.closing && r.closing.body ? `<div class="night-closing__body">${escapeHtml(r.closing.body)}</div>` : ''}
+        ${r.keywords && r.keywords.length ? `
+          <div class="night-keywords">
+            ${r.keywords.map(k => `<div class="mono night-kw">#${escapeHtml(k)}</div>`).join('')}
+          </div>` : ''}
+        <a class="night-cta" href="#/landing">
+          <div class="night-cta__glow"></div>
+          <div class="night-cta__left">
+            <div class="mono night-cta__brand">DCT · 客厅学术沙龙</div>
+            <div class="serif night-cta__title">报名本期</div>
+          </div>
+          <div class="night-cta__arrow">→</div>
+        </a>
+        <a class="night-back" href="#/review">
+          <div class="serif night-back__t">返回往期列表</div>
+          <div class="night-back__chev">›</div>
+        </a>
+      </div>
     </div>
   `;
 }

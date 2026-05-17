@@ -1,49 +1,161 @@
-<view class="page" wx:if="{{issue}}">
-  <view class="cover {{issue.poster ? 'cover--image' : 'cover--placeholder'}}">
-    <image wx:if="{{issue.poster}}" class="cover-img" src="{{issue.poster}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
-    <view wx:else class="cover-star"></view>
-    <view class="cover-shade"></view>
-    <view class="cover-copy">
-      <view class="mono cover-kicker">VOL.0{{issue.number}} · {{issue.date || '—'}}</view>
-      <view class="serif cover-title">{{issue.title}}</view>
-      <view wx:if="{{issue.subtitle}}" class="cover-sub">{{issue.subtitle}}</view>
-    </view>
-  </view>
+<view wx:if="{{issue}}">
 
-  <view wx:if="{{issue.speaker.name}}" class="section">
-    <view class="speaker-card">
-      <view class="mono card-kicker">SPEAKER</view>
-      <view class="serif speaker-name">
-        {{issue.speaker.name}}
-        <text class="speaker-title">{{issue.speaker.title}}</text>
+  <!-- ============ NIGHT-TALK 变体（vol01）· 客厅夜谈 D 版 ============ -->
+  <view wx:if="{{variant === 'night-talk'}}" class="night-talk">
+
+    <!-- HERO 全景图 -->
+    <view class="night-hero">
+      <image class="night-hero__img" src="{{issue.recap.leadHero || issue.poster}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      <view class="night-hero__top-fade"></view>
+      <view class="night-hero__bottom-fade"></view>
+      <view class="mono night-hero__vol">VOL.0{{issue.number}} · {{issue.date || ''}}</view>
+      <view wx:if="{{issue.recap.attendees}}" class="mono night-hero__attendees">{{issue.recap.attendees}}</view>
+    </view>
+
+    <!-- 主标题 -->
+    <view class="night-title-wrap">
+      <view class="serif night-title">{{issue.title}}</view>
+      <view wx:if="{{issue.subtitle || issue.recap.sub}}" class="serif night-subtitle">
+        <text wx:if="{{issue.subtitle}}">{{issue.subtitle}}</text>
+        <view wx:if="{{issue.subtitle && issue.recap.sub}}" class="night-subtitle__br"></view>
+        <text wx:if="{{issue.recap.sub}}">{{issue.recap.sub}}</text>
       </view>
-      <view wx:if="{{issue.speaker.org}}" class="speaker-org">{{issue.speaker.org}}</view>
+    </view>
+
+    <!-- HOOK -->
+    <view wx:if="{{issue.recap.hook}}" class="night-hook">
+      <view class="mono night-hook__kicker">{{issue.recap.hook.kicker}}</view>
+      <view class="serif night-hook__lines">
+        <block wx:for="{{nightHookLines}}" wx:key="index">
+          <view wx:if="{{item.hasAccent}}">
+            <text>{{item.head}}</text>
+            <text class="night-hook__accent {{item.colorClass}}">{{item.accent}}</text>
+            <text>{{item.tail}}</text>
+          </view>
+          <view wx:else>{{item.plainText}}</view>
+        </block>
+      </view>
+      <view class="night-hook__rule"></view>
+    </view>
+
+    <!-- 主讲人图 -->
+    <view wx:if="{{issue.recap.speakerImg}}" class="night-speaker">
+      <view class="night-speaker__frame">
+        <image src="{{issue.recap.speakerImg}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      </view>
+      <view class="mono night-speaker__cap">↑ 主讲 {{issue.speaker.name}} · 一盏台灯 · 两只氛围组</view>
+    </view>
+
+    <!-- 4 条线索 -->
+    <view wx:if="{{nightThreads.length > 0}}" class="night-threads">
+      <view class="serif night-threads__h">我们没有急着给答案</view>
+      <view wx:if="{{issue.recap.threadsIntro}}" class="serif night-threads__intro">{{issue.recap.threadsIntro}}</view>
+      <view class="night-thread {{item.isLast ? 'night-thread--last' : ''}}" wx:for="{{nightThreads}}" wx:key="num">
+        <view class="serif night-thread__num">{{item.num}}</view>
+        <view class="night-thread__text">{{item.text}}</view>
+      </view>
+    </view>
+
+    <!-- 双图小拼 -->
+    <view wx:if="{{issue.recap.sideImgs && issue.recap.sideImgs.length > 0}}" class="night-side">
+      <view class="night-side__frame" wx:for="{{issue.recap.sideImgs}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      </view>
+      <view wx:if="{{issue.recap.sideCaption}}" class="serif night-side__cap">{{issue.recap.sideCaption}}</view>
+    </view>
+
+    <!-- 大引文 -->
+    <view wx:if="{{issue.recap.bigQuote}}" class="night-bigq">
+      <view class="serif night-bigq__mark">"</view>
+      <view class="serif night-bigq__text">{{issue.recap.bigQuote}}</view>
+      <view class="night-bigq__foot">
+        <view class="mono night-bigq__cite">VOL.0{{issue.number}} · 现场回顾</view>
+        <view class="mono night-bigq__share">分享 ↗</view>
+      </view>
+    </view>
+
+    <!-- 收尾 · 暖纸 -->
+    <view class="night-closing">
+      <view class="mono night-closing__kicker">FROM YOUR HOSTS</view>
+      <view class="serif night-closing__title">{{issue.recap.closing.title || '欢迎你也来，\n客厅里坐坐 ～'}}</view>
+      <view wx:if="{{issue.recap.closing.body}}" class="night-closing__body">{{issue.recap.closing.body}}</view>
+
+      <view wx:if="{{issue.recap.keywords && issue.recap.keywords.length > 0}}" class="night-keywords">
+        <view class="mono night-kw" wx:for="{{issue.recap.keywords}}" wx:key="*this">#{{item}}</view>
+      </view>
+
+      <view class="night-cta" bindtap="goLanding" hover-class="night-cta-hover">
+        <view class="night-cta__glow"></view>
+        <view class="night-cta__left">
+          <view class="mono night-cta__brand">DCT · 客厅学术沙龙</view>
+          <view class="serif night-cta__title">报名本期</view>
+        </view>
+        <view class="night-cta__arrow">→</view>
+      </view>
+
+      <view class="night-back" bindtap="goReviewList" hover-class="night-back-hover">
+        <view class="serif night-back__t">返回往期列表</view>
+        <view class="night-back__chev">›</view>
+      </view>
     </view>
   </view>
 
-  <view wx:if="{{issue.summary}}" class="section">
-    <view class="mono section-kicker">RECAP</view>
-    <view class="serif section-title">当日留痕</view>
-    <view class="summary">{{issue.summary}}</view>
-  </view>
-
-  <view wx:if="{{hasHighlights}}" class="section">
-    <view class="mono section-kicker">HIGHLIGHTS</view>
-    <view class="serif section-title">几句金句</view>
-    <view class="quote-card" wx:for="{{issue.highlights}}" wx:key="quote">
-      <view class="serif quote-text">「{{item.quote}}」</view>
-      <view wx:if="{{item.author}}" class="quote-author">— {{item.author}}</view>
+  <!-- ============ GENERIC 通用版（vol02 + 其他兜底）============ -->
+  <view wx:else class="page">
+    <view class="cover {{issue.poster ? 'cover--image' : 'cover--placeholder'}}">
+      <image wx:if="{{issue.poster}}" class="cover-img" src="{{issue.poster}}" mode="aspectFill" lazy-load="true" binderror="onImgError" />
+      <view wx:else class="cover-star"></view>
+      <view class="cover-shade"></view>
+      <view class="cover-copy">
+        <view class="mono cover-kicker">VOL.0{{issue.number}} · {{issue.date || '—'}}</view>
+        <view class="serif cover-title">{{issue.title}}</view>
+        <view wx:if="{{issue.subtitle}}" class="cover-sub">{{issue.subtitle}}</view>
+      </view>
     </view>
-  </view>
 
-  <view wx:if="{{!hasPhotos}}" class="section">
-    <view class="photos-card">
-      <view class="mono photos-kicker">PHOTOS</view>
-      <view class="photos-text">当日照片整理中</view>
+    <view wx:if="{{issue.speaker.name}}" class="section">
+      <view class="speaker-card">
+        <view class="mono card-kicker">SPEAKER</view>
+        <view class="serif speaker-name">
+          {{issue.speaker.name}}
+          <text class="speaker-title">{{issue.speaker.title}}</text>
+        </view>
+        <view wx:if="{{issue.speaker.org}}" class="speaker-org">{{issue.speaker.org}}</view>
+      </view>
     </view>
-  </view>
 
-  <view class="bottom-action">
-    <button class="back-btn" bindtap="goBack" hover-class="back-hover">返回往期列表</button>
+    <view wx:if="{{issue.summary}}" class="section">
+      <view class="mono section-kicker">RECAP</view>
+      <view class="serif section-title">当日留痕</view>
+      <view class="summary">{{issue.summary}}</view>
+    </view>
+
+    <view wx:if="{{hasHighlights}}" class="section">
+      <view class="mono section-kicker">HIGHLIGHTS</view>
+      <view class="serif section-title">几句金句</view>
+      <view class="quote-card" wx:for="{{issue.highlights}}" wx:key="quote">
+        <view class="serif quote-text">「{{item.quote}}」</view>
+        <view wx:if="{{item.author}}" class="quote-author">— {{item.author}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{!hasPhotos}}" class="section">
+      <view class="photos-card">
+        <view class="mono photos-kicker">PHOTOS</view>
+        <view class="photos-text">当日照片整理中</view>
+      </view>
+    </view>
+
+    <view wx:if="{{hasPhotos}}" class="section">
+      <view class="mono section-kicker">PHOTOS</view>
+      <view class="serif section-title">现场记录</view>
+      <view class="photos-grid">
+        <image class="photo-tile" src="{{item}}" mode="aspectFill" lazy-load="true" binderror="onImgError" wx:for="{{issue.photos}}" wx:key="*this" />
+      </view>
+    </view>
+
+    <view class="bottom-action">
+      <button class="back-btn" bindtap="goBack" hover-class="back-hover">返回往期列表</button>
+    </view>
   </view>
 </view>

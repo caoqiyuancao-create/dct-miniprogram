@@ -17,22 +17,22 @@ Page({
     creators: [
       {
         letter: 'D',
-        word: 'Dog',
-        name: '包文欣',
+        word: '"Dog"',
+        name: '包包大人',
         role: '狗子',
         desc: '重度爱狗人士。把对一只狗的耐心、好奇和温柔，复刻进对每一个人的提问里。'
       },
       {
         letter: 'C',
         word: 'Chef',
-        name: '徐佳淇',
+        name: 'Gia',
         role: '厨子',
         desc: '家宴的策划者。相信好的食物能让人放松地说真话——所以每一期都有限定的甜品与酒。'
       },
       {
         letter: 'T',
         word: 'Therapist',
-        name: '曹栖源',
+        name: '曹叔',
         role: '治疗师',
         desc: '日常工作是聆听与共情。把临床里训练出的「倾听肌肉」，搬进这间客厅。'
       }

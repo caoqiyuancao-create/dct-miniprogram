@@ -9,22 +9,32 @@
 
 ```
 prototype/
-├── DCT第二期报名.html      # 原型主入口（多 device 并排展示）
+├── DCT第三期报名.html      # 原型主入口（多 device 并排展示）
+├── DCT第二期报名.html      # 早期版本快照
 ├── DESIGN-CHANGES.md       # 变更单（最新需求 / 已合并历史）
+├── README.md               # 本文件
 ├── src/                    # 各屏 React 组件
 │   ├── app.jsx             # 多设备外壳
 │   ├── screen-home.jsx     # 主页
 │   ├── screen-about.jsx    # 关于 DCT
-│   ├── screen-review.jsx   # 往期回顾
+│   ├── screen-review.jsx   # 往期回顾（列表 + 通用详情兜底）
+│   ├── screen-review-vol01.jsx  # ⭐ vol.01 专属·客厅夜谈版式（按 issue.recap 数据驱动）
 │   ├── screen-landing.jsx  # 本期着陆
 │   ├── screen-detail.jsx   # 活动须知 / 吧规
 │   ├── screen-form.jsx     # 报名填表
 │   ├── screen-success.jsx  # 提交成功
+│   ├── screen-wall.jsx     # 电子留言墙（咖啡厅 TV）
 │   ├── poster-bg.jsx       # 蓝天 + 光芒 + 星点（PosterSky 组件）
 │   └── miniprogram-chrome.jsx # 模拟小程序顶部栏
 ├── components/             # 可复用 React 组件（如 ios-frame.jsx）
-├── data/                   # 期次数据（issues.js）
-└── assets/                 # 真实图片资产（高老师肖像 / logo / 海报...）
+├── data/issues.js          # 期次数据中心（单一数据源）
+├── assets/                 # 主程序真实图片资产
+└── explore/                # ⭐ 设计探索沙盒（见 explore/README.md）
+    ├── README.md           # 沙盒索引 + 新开期次的开场白模板
+    ├── design-canvas.jsx   # 所有探索画板共享的 canvas
+    ├── DCT关于&往期-探索.html
+    ├── DCT第一期回顾-探索.html
+    └── ...
 ```
 
 ---

@@ -1993,3 +1993,89 @@ input, textarea { font: inherit; }
 }
 .photos-kicker { font-size: 10px; color: var(--mute); letter-spacing: 3px; margin-bottom: 6px; }
 .photos-text { font-size: 13px; color: var(--mute); }
+
+/* ===================================================================
+   客厅夜谈 D 版（vol01）· night-talk variant · 暗色长卷 + 暖纸收尾
+=================================================================== */
+.night-talk {
+  background: radial-gradient(120% 50% at 50% 0%, #4a2d18 0%, #2a180a 60%, #1a0e05 100%);
+  color: #faf1de;
+  min-height: 100vh;
+  font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+.night-talk .serif { font-family: "Songti SC", "STSong", "Noto Serif SC", serif; }
+.night-talk .mono  { font-family: "SF Mono", Menlo, ui-monospace, monospace; letter-spacing: 1px; }
+
+.night-hero { position: relative; height: 380px; overflow: hidden; }
+.night-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.night-hero__top-fade { position: absolute; top: 0; left: 0; right: 0; height: 90px; background: linear-gradient(180deg, rgba(26,14,5,0.55) 0%, transparent 100%); pointer-events: none; }
+.night-hero__bottom-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 130px; background: linear-gradient(180deg, transparent 0%, rgba(26,14,5,0.55) 60%, rgba(26,14,5,0.95) 100%); pointer-events: none; }
+.night-hero__vol { position: absolute; top: 54px; left: 16px; font-size: 10px; color: #e4a049; letter-spacing: 3px; }
+.night-hero__attendees { position: absolute; top: 54px; right: 16px; font-size: 9.5px; color: #faf1de; opacity: 0.85; letter-spacing: 2px; }
+
+.night-title-wrap { padding: 22px 22px 0; }
+.night-title { font-size: 28px; font-weight: 900; color: #faf1de; line-height: 1.3; letter-spacing: 1px; }
+.night-subtitle { font-style: italic; font-size: 13px; color: #faf1de; opacity: 0.78; margin-top: 12px; line-height: 1.7; }
+
+.night-hook { padding: 36px 22px 6px; }
+.night-hook__kicker { font-size: 9.5px; color: #e4a049; letter-spacing: 4px; margin-bottom: 14px; }
+.night-hook__lines { font-size: 23px; font-weight: 800; color: #faf1de; line-height: 1.6; letter-spacing: 1px; }
+.night-hook-amber { color: #e4a049; font-style: italic; }
+.night-hook-ember { color: #d97757; font-style: italic; }
+.night-hook__rule { width: 50px; height: 2px; background: #e4a049; margin-top: 22px; opacity: 0.7; }
+
+.night-speaker { padding: 24px 22px 6px; }
+.night-speaker__frame { border: 1px solid rgba(228,160,73,0.27); padding: 4px; }
+.night-speaker__frame img { width: 100%; height: 240px; object-fit: cover; display: block; filter: brightness(0.92); }
+.night-speaker__cap { font-size: 9px; color: #e4a049; letter-spacing: 2px; margin-top: 6px; padding-left: 2px; }
+
+.night-threads { padding: 26px 22px 0; }
+.night-threads__h { font-size: 16px; font-weight: 700; color: #faf1de; line-height: 1.6; margin-bottom: 4px; }
+.night-threads__intro { font-style: italic; font-size: 12.5px; color: #faf1de; opacity: 0.6; margin-bottom: 18px; }
+.night-thread { display: flex; gap: 12px; padding: 12px 0; border-bottom: 0.5px solid rgba(228,160,73,0.2); }
+.night-thread__num { font-size: 22px; font-weight: 900; color: #e4a049; line-height: 0.9; width: 24px; flex-shrink: 0; letter-spacing: -1px; padding-top: 2px; }
+.night-thread__text { font-size: 12.5px; color: #faf1de; opacity: 0.85; line-height: 1.85; }
+.night-thread--last .night-thread__text { opacity: 1; font-weight: 600; }
+
+.night-side { padding: 22px 22px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.night-side__frame { border: 1px solid rgba(228,160,73,0.27); padding: 3px; }
+.night-side__frame img { width: 100%; height: 100px; object-fit: cover; display: block; filter: brightness(0.92); }
+.night-side__cap { grid-column: span 2; font-style: italic; font-size: 12px; color: #faf1de; opacity: 0.6; line-height: 1.7; margin-top: 2px; }
+
+.night-bigq { padding: 32px 22px 0; }
+.night-bigq__mark { font-size: 80px; color: #e4a049; opacity: 0.6; line-height: 0.3; height: 28px; }
+.night-bigq__text { font-style: italic; font-size: 19px; font-weight: 600; color: #faf1de; line-height: 1.8; letter-spacing: 0.5px; margin-top: 8px; white-space: pre-line; }
+.night-bigq__foot { display: flex; align-items: center; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 0.5px solid rgba(228,160,73,0.4); }
+.night-bigq__cite { font-size: 9.5px; color: #e4a049; letter-spacing: 2px; flex: 1; }
+.night-bigq__share { font-size: 9px; color: #faf1de; padding: 3px 9px; border: 0.5px solid rgba(250,241,222,0.33); border-radius: 10px; }
+
+.night-closing {
+  margin-top: 36px;
+  background: #faf1de; color: #3a2412;
+  padding: 28px 24px 40px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -8px 24px rgba(0,0,0,0.3);
+}
+.night-closing__kicker { font-size: 9.5px; color: #b85c2f; letter-spacing: 3px; margin-bottom: 8px; }
+.night-closing__title { font-size: 17px; font-weight: 800; color: #8c3f1c; line-height: 1.55; }
+.night-closing__body { font-size: 12.5px; color: #5a3a1e; line-height: 1.85; margin-top: 10px; }
+.night-keywords { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.night-kw { font-size: 10px; color: #b85c2f; letter-spacing: 1px; padding: 4px 9px; background: #fdf7e8; border: 0.5px solid #e7d7b3; border-radius: 10px; }
+.night-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #d97757 0%, #b85c2f 60%, #8c3f1c 100%);
+  border-radius: 14px; padding: 18px 20px;
+  position: relative; overflow: hidden;
+  color: #faf1de;
+  box-shadow: 0 6px 18px rgba(184,92,47,0.33);
+}
+.night-cta__glow { position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; border-radius: 60px; background: radial-gradient(circle, rgba(228,160,73,0.33) 0%, transparent 70%); pointer-events: none; }
+.night-cta__left { position: relative; z-index: 2; }
+.night-cta__brand { font-size: 10px; opacity: 0.85; letter-spacing: 3px; }
+.night-cta__title { font-size: 19px; font-weight: 800; margin-top: 4px; letter-spacing: 1px; }
+.night-cta__arrow { width: 44px; height: 44px; border-radius: 22px; background: #faf1de; color: #8c3f1c; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; margin-left: 12px; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,0.2); position: relative; z-index: 2; }
+.night-back { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding: 12px 14px; border: 0.5px solid #e7d7b3; border-radius: 12px; color: inherit; }
+.night-back__t { font-size: 13px; font-weight: 700; color: #8c3f1c; }
+.night-back__chev { font-size: 16px; color: #8a6a3e; }

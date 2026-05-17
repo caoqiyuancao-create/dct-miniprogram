@@ -179,3 +179,125 @@
 
 .back-btn::after { border: none; }
 .back-hover { background: rgba(255,255,255,0.7); }
+
+/* 通用版 · 照片网格 */
+.photos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+.photo-tile {
+  width: 100%;
+  height: 240rpx;
+  border-radius: 16rpx;
+  display: block;
+  background: #e7eef8;
+}
+
+/* ===================================================================
+   NIGHT-TALK 变体（vol01）· 客厅夜谈 D 版 · 暗色长卷 + 暖纸收尾
+=================================================================== */
+.night-talk {
+  background: radial-gradient(120% 50% at 50% 0%, #4a2d18 0%, #2a180a 60%, #1a0e05 100%);
+  color: #faf1de;
+  min-height: 100vh;
+}
+.night-talk .serif { font-family: "Songti SC", "STSong", serif; }
+.night-talk .mono  { font-family: "SF Mono", Menlo, ui-monospace, monospace; letter-spacing: 2rpx; }
+
+/* hero */
+.night-hero {
+  position: relative;
+  height: 760rpx;
+  overflow: hidden;
+}
+.night-hero__img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.night-hero__top-fade { position: absolute; top: 0; left: 0; right: 0; height: 180rpx; background: linear-gradient(180deg, rgba(26,14,5,0.55) 0%, transparent 100%); }
+.night-hero__bottom-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 260rpx; background: linear-gradient(180deg, transparent 0%, rgba(26,14,5,0.55) 60%, rgba(26,14,5,0.95) 100%); }
+.night-hero__vol { position: absolute; top: 108rpx; left: 32rpx; font-size: 20rpx; color: #e4a049; letter-spacing: 6rpx; }
+.night-hero__attendees { position: absolute; top: 108rpx; right: 32rpx; font-size: 19rpx; color: #faf1de; opacity: 0.85; letter-spacing: 4rpx; }
+
+/* 主标题 */
+.night-title-wrap { padding: 44rpx 44rpx 0; }
+.night-title { font-size: 56rpx; font-weight: 900; color: #faf1de; line-height: 1.3; letter-spacing: 2rpx; }
+.night-subtitle { font-style: italic; font-size: 26rpx; color: #faf1de; opacity: 0.78; margin-top: 24rpx; line-height: 1.7; }
+.night-subtitle__br { height: 8rpx; }
+
+/* HOOK */
+.night-hook { padding: 72rpx 44rpx 12rpx; }
+.night-hook__kicker { font-size: 19rpx; color: #e4a049; letter-spacing: 8rpx; margin-bottom: 28rpx; }
+.night-hook__lines { font-size: 46rpx; font-weight: 800; color: #faf1de; line-height: 1.6; letter-spacing: 2rpx; }
+.night-hook__accent { font-style: italic; }
+.night-hook__accent--amber { color: #e4a049; }
+.night-hook__accent--ember { color: #d97757; }
+.night-hook__rule { width: 100rpx; height: 4rpx; background: #e4a049; margin-top: 44rpx; opacity: 0.7; }
+
+/* 主讲人图 */
+.night-speaker { padding: 48rpx 44rpx 12rpx; }
+.night-speaker__frame { border: 2rpx solid rgba(228,160,73,0.27); padding: 8rpx; }
+.night-speaker__frame image { width: 100%; height: 480rpx; display: block; filter: brightness(0.92); }
+.night-speaker__cap { font-size: 18rpx; color: #e4a049; letter-spacing: 4rpx; margin-top: 12rpx; padding-left: 4rpx; }
+
+/* 4 条线索 */
+.night-threads { padding: 52rpx 44rpx 0; }
+.night-threads__h { font-size: 32rpx; font-weight: 700; color: #faf1de; line-height: 1.6; margin-bottom: 8rpx; }
+.night-threads__intro { font-style: italic; font-size: 25rpx; color: #faf1de; opacity: 0.6; margin-bottom: 36rpx; }
+.night-thread { display: flex; gap: 24rpx; padding: 24rpx 0; border-bottom: 1rpx solid rgba(228,160,73,0.2); }
+.night-thread__num { font-size: 44rpx; font-weight: 900; color: #e4a049; line-height: 0.9; width: 48rpx; flex-shrink: 0; letter-spacing: -2rpx; padding-top: 4rpx; }
+.night-thread__text { font-size: 25rpx; color: #faf1de; opacity: 0.85; line-height: 1.85; white-space: pre-line; }
+.night-thread--last .night-thread__text { opacity: 1; font-weight: 600; }
+
+/* 双图小拼 */
+.night-side { padding: 44rpx 44rpx 0; display: flex; flex-wrap: wrap; gap: 16rpx; }
+.night-side__frame { width: calc(50% - 8rpx); border: 2rpx solid rgba(228,160,73,0.27); padding: 6rpx; box-sizing: border-box; }
+.night-side__frame image { width: 100%; height: 200rpx; display: block; filter: brightness(0.92); }
+.night-side__cap { width: 100%; font-style: italic; font-size: 24rpx; color: #faf1de; opacity: 0.6; line-height: 1.7; margin-top: 8rpx; }
+
+/* 大引文 */
+.night-bigq { padding: 64rpx 44rpx 0; }
+.night-bigq__mark { font-size: 160rpx; color: #e4a049; opacity: 0.6; line-height: 0.3; height: 56rpx; }
+.night-bigq__text { font-style: italic; font-size: 38rpx; font-weight: 600; color: #faf1de; line-height: 1.8; letter-spacing: 1rpx; margin-top: 16rpx; white-space: pre-line; }
+.night-bigq__foot { display: flex; align-items: center; gap: 20rpx; margin-top: 36rpx; padding-top: 28rpx; border-top: 1rpx solid rgba(228,160,73,0.4); }
+.night-bigq__cite { font-size: 19rpx; color: #e4a049; letter-spacing: 4rpx; flex: 1; }
+.night-bigq__share { font-size: 18rpx; color: #faf1de; padding: 6rpx 18rpx; border: 1rpx solid rgba(250,241,222,0.33); border-radius: 20rpx; }
+
+/* 收尾 · 暖纸 */
+.night-closing {
+  margin-top: 72rpx;
+  background: #faf1de; color: #3a2412;
+  padding: 56rpx 48rpx 80rpx;
+  border-top-left-radius: 40rpx; border-top-right-radius: 40rpx;
+  box-shadow: 0 -16rpx 48rpx rgba(0,0,0,0.3);
+}
+.night-closing__kicker { font-size: 19rpx; color: #b85c2f; letter-spacing: 6rpx; margin-bottom: 16rpx; }
+.night-closing__title { font-size: 34rpx; font-weight: 800; color: #8c3f1c; line-height: 1.55; white-space: pre-line; }
+.night-closing__body { font-size: 25rpx; color: #5a3a1e; line-height: 1.85; margin-top: 20rpx; }
+.night-keywords { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 32rpx; }
+.night-kw { font-size: 20rpx; color: #b85c2f; letter-spacing: 2rpx; padding: 8rpx 18rpx; background: #fdf7e8; border: 1rpx solid #e7d7b3; border-radius: 20rpx; }
+.night-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 40rpx;
+  background: linear-gradient(135deg, #d97757 0%, #b85c2f 60%, #8c3f1c 100%);
+  border-radius: 28rpx; padding: 36rpx 40rpx;
+  position: relative; overflow: hidden;
+  color: #faf1de;
+  box-shadow: 0 12rpx 36rpx rgba(184,92,47,0.33);
+}
+.night-cta-hover { opacity: 0.92; transform: scale(0.99); }
+.night-cta__glow { position: absolute; top: -40rpx; right: -40rpx; width: 240rpx; height: 240rpx; border-radius: 50%; background: radial-gradient(circle, rgba(228,160,73,0.33) 0%, transparent 70%); }
+.night-cta__left { position: relative; z-index: 2; }
+.night-cta__brand { font-size: 19rpx; opacity: 0.85; letter-spacing: 6rpx; }
+.night-cta__title { font-size: 38rpx; font-weight: 800; margin-top: 8rpx; letter-spacing: 2rpx; }
+.night-cta__arrow {
+  width: 88rpx; height: 88rpx; border-radius: 44rpx;
+  background: #faf1de; color: #8c3f1c;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; font-weight: 700;
+  margin-left: 24rpx; flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.2);
+  position: relative; z-index: 2;
+}
+.night-back { display: flex; align-items: center; justify-content: space-between; margin-top: 20rpx; padding: 24rpx 28rpx; border: 1rpx solid #e7d7b3; border-radius: 24rpx; }
+.night-back-hover { background: #fdf7e8; }
+.night-back__t { font-size: 26rpx; font-weight: 700; color: #8c3f1c; }
+.night-back__chev { font-size: 32rpx; color: #8a6a3e; }

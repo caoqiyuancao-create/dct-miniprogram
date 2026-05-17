@@ -209,6 +209,47 @@
 
 ---
 
+### CHG-20260517-02 · 第三期文案微调（4 处）— 2026-05-17 · `0740dc3`
+
+**类型**：🎨 纯 UI 改动 + 1 处配置常量（vol03 报名表 expectation 字段上限）
+**触发方**：用户在真机预览后给出反馈
+**对应原型**：仅文案级，未触发新 prototype tag
+
+**完成内容**：
+
+1. **about 页 HOW 章节**：删掉「咖啡馆」
+   - 原：`我们刻意没有选讲堂、咖啡馆、共享空间——而是客厅`
+   - 改：`我们刻意没有选讲堂、共享空间——而是客厅`
+   - 原因：第三期本来就在咖啡厅办，留着「咖啡馆」逻辑不一致
+   - 文件：`docs/index.html` · `miniprogram/pages/about/about.wxml`
+
+2. **landing 页 Gia 备注小卡**：删掉副行
+   - 删除：`更多<b>主题饮品</b>正在打样中 · 敬请期待`
+   - 保留：`甜品仍由 Gia 制作 ✦`（主行）
+   - 原因：本期饮品已确定（陌生的朋友联名菜单 6 条），无需再说"打样中"
+   - 文件：`docs/index.html` · `miniprogram/pages/landing/landing.wxml`
+
+3. **报名表「想问皮里士多德什么」字数上限**：120 → **250**
+   - 涉及：前端 maxlength + 字数计数 + 服务端校验三处同步
+   - 文件：
+     - `docs/app.js`：`EXPECTATION_MAX = 250`
+     - `docs/index.html`：`maxlength="250"` + char-count 显示 `0 / 250`
+     - `miniprogram/pages/form/form.js`：`EXPECTATION_MAX = 250`
+     - `miniprogram/cloudfunctions/submitSignup/index.js`：服务端 `EXPECTATION_MAX = 250`
+   - **已重新部署 submitSignup 到云端**（ModTime: 2026-05-17 21:43:01）
+
+4. **about 页「什么样的人会来」**：「每期 10–15 人」→「每期都精挑细选」
+   - 原：`每期 10–15 人，多学科背景优先，尽量不要让客厅变成同一个领域的回音室`
+   - 改：`每期都精挑细选，多学科背景优先，尽量不要让客厅变成同一个领域的回音室`
+   - 原因：用户希望强调「小数目高质量」精神，不要被具体人数框死
+   - 文件：`docs/index.html` · `miniprogram/pages/about/about.wxml`
+
+**给设计端的提示**：
+- 如果设计端 prototype 里还有这些老文案（`咖啡馆` / `主题饮品打样` / `10-15 人`），下一版同步时记得同步修
+- expectation 字数上限的 UI（textarea 高度）目前没改，250 字可能要稍微更大的输入框，下次设计可考虑
+
+---
+
 ### CHG-20260517-01-D · landing 合并「四问」与「冷思考」 — 2026-05-17
 
 **类型**：🎨 纯 UI 改动 + 数据结构小调整（仅 vol03）

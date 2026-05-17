@@ -725,6 +725,12 @@ function getIssueById(id) {
   return PAST_ISSUES.find(i => i.id === id) || PAST_ISSUES[0];
 }
 
+// HTML 转义工具（renderNightTalk / renderCandleTrack 大量使用）
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[<>&"']/g, c =>
+    ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
 function renderReviewDetail() {
   // 从 hash 取 ?id=xxx
   const hash = location.hash || '';

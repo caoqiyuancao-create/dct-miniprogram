@@ -7,9 +7,11 @@
     "pages/landing/landing",
     "pages/detail/detail",
     "pages/form/form",
-    "pages/success/success"
+    "pages/success/success",
+    "pages/wall/wall"
   ],
   "entryPagePath": "pages/home/home",
+  "resizable": true,
   "window": {
     "backgroundTextStyle": "light",
     "backgroundColor": "#f6f8fc",

@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>DCT VOL.03 · 现场电子留言墙 · 大屏专用</title>
+<meta name="viewport" content="width=1920, initial-scale=1" />
+<meta name="description" content="DCT 第三期 · 医美热时代的冷思考 · 现场咖啡厅 TV 大屏专用" />
+<link rel="icon" href="assets/logo.png" />
+<style>
+  :root {
+    --gold:      #e9b949;
+    --gold-deep: #c9a24a;
+    --ink:       #0b1f3a;
+    --blue:      #2c5ca0;
+    --blue-deep: #1a3a78;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #050d1d;
+    color: #fff;
+    font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    cursor: none; /* 大屏无鼠标 */
+  }
+  .serif { font-family: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", serif; }
+  .mono  { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, ui-monospace, monospace; }
+
+  /* ===== 大屏根容器（16:9） ===== */
+  .wall-tv {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at top right, #1d3d6b 0%, #0c1f3d 50%, #050d1d 100%);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  /* 大字水印 */
+  .watermark {
+    position: absolute;
+    right: -40px; bottom: -120px;
+    font-size: 560px; font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    letter-spacing: 16px;
+    line-height: 1; pointer-events: none;
+    z-index: 1;
+  }
+
+  /* 装饰星 */
+  .star-deco {
+    position: absolute;
+    background: var(--gold);
+    clip-path: polygon(50% 0%,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0% 50%,42% 42%);
+    z-index: 1;
+  }
+  .star-deco-1 { right: 8%; top: 12%; width: 28px; height: 28px; opacity: 0.55; }
+  .star-deco-2 { left: 5%;  top: 20%; width: 20px; height: 20px; opacity: 0.4; }
+  .star-deco-3 { right: 6%; top: 62%; width: 18px; height: 18px; opacity: 0.35; }
+  .star-deco-4 { left: 3%;  top: 86%; width: 24px; height: 24px; opacity: 0.4; }
+
+  /* ===== HEADER ===== */
+  .header {
+    padding: 36px 80px 24px;
+    display: flex; align-items: center; gap: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative; z-index: 2;
+  }
+  .header__logo {
+    width: 96px; height: 96px; border-radius: 48px;
+    background: #fff; padding: 6px;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.4);
+  }
+  .header__center { flex: 1; min-width: 0; }
+  .header__kicker {
+    font-size: 22px; letter-spacing: 6px;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .header__title {
+    font-size: 56px; font-weight: 900; color: #fff;
+    letter-spacing: 4px; line-height: 1.15;
+  }
+  .header__title-gold { color: var(--gold); }
+
+  .header__right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .header__clock {
+    font-size: 64px; font-weight: 500;
+    letter-spacing: 6px; color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .header__clock-gold { color: var(--gold); }
+  .header__date { font-size: 20px; color: rgba(255,255,255,0.55); letter-spacing: 3px; }
+
+  /* ===== 两列内容（桌面 grid 真正横版） ===== */
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr 2px 1fr;
+    padding: 36px 64px 0;
+    gap: 48px;
+    height: 100%;
+    overflow: hidden;
+    position: relative; z-index: 2;
+    box-sizing: border-box;
+  }
+  .col { min-width: 0; overflow: hidden; }
+  .cols__divider {
+    background: linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.18) 70%, transparent 100%);
+  }
+  .col__kicker { font-size: 22px; letter-spacing: 6px; margin-bottom: 14px; font-weight: 500; }
+  .col__kicker--blue { color: #9ac4ff; }
+  .col__kicker--gold { color: var(--gold); }
+  .col__title { font-size: 50px; font-weight: 800; color: #fff; letter-spacing: 2px; line-height: 1.15; }
+  .col__sub { font-size: 18px; color: rgba(255,255,255,0.55); margin-top: 10px; letter-spacing: 1px; }
+
+  /* ===== Intros ===== */
+  .intros {
+    margin-top: 32px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .intro-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 20px;
+    padding: 22px 28px;
+    display: flex; gap: 24px; align-items: center;
+    animation: wallEnter 0.6s ease forwards;
+  }
+  .intro-card__avatar {
+    width: 64px; height: 64px; border-radius: 32px;
+    background: linear-gradient(135deg, rgba(154,196,255,0.2) 0%, rgba(154,196,255,0.05) 100%);
+    border: 1px solid rgba(154,196,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 700; color: #bfd8ff;
+    font-family: "SF Mono", Menlo, monospace; flex-shrink: 0;
+  }
+  .intro-card__body { flex: 1; min-width: 0; }
+  .intro-card__who {
+    font-size: 20px; color: #9ac4ff; letter-spacing: 1.5px; margin-bottom: 6px;
+  }
+  .intro-card__line {
+    font-size: 32px; color: #fff; line-height: 1.4; font-weight: 400;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* ===== Questions ===== */
+  .questions {
+    margin-top: 32px;
+    display: flex; flex-direction: column; gap: 36px;
+  }
+  .q-card {
+    position: relative;
+    padding: 14px 0 32px 56px;
+    border-bottom: 1px solid rgba(233,185,73,0.18);
+    animation: wallEnter 0.65s ease forwards;
+  }
+  .q-card__quote {
+    position: absolute; left: -8px; top: -12px;
+    font-size: 80px; color: rgba(233,185,73,0.6);
+    line-height: 1; font-weight: 700;
+  }
+  .q-card__num {
+    font-size: 20px; color: var(--gold); letter-spacing: 3px;
+    margin-bottom: 12px; font-weight: 500;
+  }
+  .q-card__text {
+    font-size: 36px; color: #fff; line-height: 1.45; letter-spacing: 0.6px;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    padding: 22px 64px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 100%);
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    position: relative; z-index: 3; gap: 24px;
+  }
+  .footer__brand { font-size: 20px; color: rgba(255,255,255,0.55); letter-spacing: 4px; }
+  .footer__live { display: flex; align-items: center; gap: 14px; font-size: 22px; color: rgba(255,255,255,0.7); }
+  .footer__live-dot {
+    width: 14px; height: 14px; border-radius: 7px;
+    background: #5fd97b; box-shadow: 0 0 16px #5fd97b;
+    animation: wallPulse 1.6s ease-in-out infinite;
+  }
+  .footer__live-dot.is-pending { background: #c9a24a; box-shadow: 0 0 12px #c9a24a; }
+
+  /* 错误浮层 */
+  .err-banner {
+    position: absolute; left: 50%; bottom: 88px;
+    transform: translateX(-50%);
+    padding: 10px 24px; border-radius: 24px;
+    background: rgba(194,84,80,0.18);
+    border: 1px solid rgba(194,84,80,0.5);
+    color: #ffb8b6;
+    font-size: 16px; letter-spacing: 1px;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+    display: none;
+  }
+  .err-banner.is-visible { display: block; }
+
+  @keyframes wallPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.8); }
+  }
+  @keyframes wallEnter {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: var(--intro-op, 1); transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="wall-tv">
+  <div class="watermark serif">冷思考</div>
+  <div class="star-deco star-deco-1"></div>
+  <div class="star-deco star-deco-2"></div>
+  <div class="star-deco star-deco-3"></div>
+  <div class="star-deco star-deco-4"></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <img class="header__logo" src="assets/logo.png" alt="DCT" />
+    <div class="header__center">
+      <div class="mono header__kicker">DCT · ACADEMIC SALON · VOL.03</div>
+      <div class="serif header__title">
+        医美热时代的<span class="header__title-gold">冷</span>思考
+      </div>
+    </div>
+    <div class="header__right">
+      <div class="mono header__clock" id="clock">00:00<span class="header__clock-gold">:00</span></div>
+      <div class="mono header__date">2026.05.23 · 陌生的朋友咖啡厅</div>
+    </div>
+  </div>
+
+  <!-- 两列 -->
+  <div class="cols">
+    <div class="col col-left">
+      <div class="mono col__kicker col__kicker--blue">WHO IS HERE TONIGHT</div>
+      <div class="serif col__title">今晚，谁来到了 DCT？</div>
+      <div class="col__sub">来自不同学科、不同视角的朋友</div>
+      <div class="intros" id="intros"></div>
+    </div>
+    <div class="cols__divider"></div>
+    <div class="col col-right">
+      <div class="mono col__kicker col__kicker--gold">WHAT WE'RE ASKING TONIGHT</div>
+      <div class="serif col__title">大家想问 皮里士多德 什么？</div>
+      <div class="col__sub">今晚我们真正关心的问题</div>
+      <div class="questions" id="qs"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="mono footer__brand">DCT · DOG, CHEF &amp; THERAPIST · EST.2026 · CHENGDU</div>
+    <div class="footer__live">
+      <div class="footer__live-dot is-pending" id="live-dot"></div>
+      <span id="live-text">连接中 · 等待留言上线…</span>
+    </div>
+  </div>
+
+  <div class="err-banner" id="err-banner"></div>
+</div>
+
+<!-- ===================================================================
+     SEED 数据 + Logic
+=================================================================== -->
+<script>
+const INTROS_SEED = [
+  { who: '华西皮肤科·研二',   line: '对医美又心动又警惕' },
+  { who: '麻醉科·主治',       line: '看够了手术室里的"美丽代价"' },
+  { who: '社会学·田野中',     line: '在研究"被看见的脸"' },
+  { who: '设计师·成都',       line: '每天画女孩的脸，最近开始画皱纹' },
+  { who: '心理咨询师',         line: '陪了很多女孩走进医院又走出来' },
+  { who: '医学生·临八',       line: '正在被科研和临床双重塑形' },
+  { who: '咖啡因依赖者',       line: '想知道抗衰是不是智商税' },
+  { who: '皮肤敏感患者',       line: '光是修复屏障就够我学一辈子' },
+  { who: '前媒体人·转行中',   line: '写过太多医美稿，现在不敢写了' },
+  { who: '产科医生',           line: '产后修复≠医美，但常被混为一谈' },
+  { who: '神经科·博后',       line: '想聊聊"皮肤是另一个大脑"' },
+  { who: '哲学系·硕一',       line: '在研究"什么算是变美"' },
+  { who: '化妆品研发',         line: '配方里加得越多，敬畏越多' },
+  { who: '产品经理·25',       line: '每天被算法推美貌焦虑' },
+  { who: '正畸医生',           line: '我的同行们也常被问"做了吗"' },
+  { who: '严肃讨论爱好者',     line: '想听一次不带广告的医美课' },
+  { who: '皮肤科·进修',       line: '从基层来听一些不一样的声音' },
+  { who: '甜品师·陌生的朋友', line: '今晚也是后厨的我' }
+];
+
+const QS_SEED = [
+  '医美的边界在哪里？什么时候是"医"，什么时候只是"美"？',
+  '普通人怎么判断自己是不是真的需要医美？',
+  '医美到底在解决问题，还是在制造焦虑？',
+  '皮肤科医生自己怎么看抗衰？',
+  '心理上的"不接纳自己"，能靠医美解决吗？',
+  '当伴侣 / 父母不支持，要不要继续？',
+  '审美标准被算法压成一张脸，我们还能选择吗？',
+  '医美前最重要的一个问题，应该是什么？',
+  '所谓"早 C 晚 A"到底是科学还是营销？',
+  '修复屏障和医美抗老，应该先做哪个？',
+  '一个皮肤科医生最常劝退别人做的项目是什么？',
+  '"轻医美"真的轻吗？',
+  '当我们说"自然感"——到底是谁定义的自然？',
+  '如果只能给一个建议，你会对 25 岁的人说什么？',
+  '如果只能给一个建议，你会对 45 岁的人说什么？'
+];
+
+const VISIBLE_INTROS = 5;
+const VISIBLE_QS = 4;
+const POLL_MS = 15000;        // 15s 拉一次 getWallFeed
+const INTRO_ROTATE_MS = 3000;
+const Q_ROTATE_MS     = 4200;
+
+let intros    = INTROS_SEED.slice();
+let questions = QS_SEED.slice();
+let introIdx  = 0;
+let qIdx      = 0;
+let isLive    = false;
+let consecutiveErrors = 0;
+
+function pad2(n) { return String(n).padStart(2, '0'); }
+
+function renderClock() {
+  const now = new Date();
+  document.getElementById('clock').innerHTML =
+    pad2(now.getHours()) + ':' + pad2(now.getMinutes()) +
+    '<span class="header__clock-gold">:' + pad2(now.getSeconds()) + '</span>';
+}
+
+function renderIntros() {
+  const html = [];
+  for (let k = 0; k < VISIBLE_INTROS; k++) {
+    const it = intros[(introIdx + k) % intros.length];
+    const op = 1 - (k * 0.16);
+    html.push(`
+      <div class="intro-card" style="--intro-op:${op}; opacity:${op}">
+        <div class="intro-card__avatar">${(it.who || '·').charAt(0)}</div>
+        <div class="intro-card__body">
+          <div class="mono intro-card__who">${escapeHtml(it.who || '匿名朋友')}</div>
+          <div class="intro-card__line">"${escapeHtml(it.line || '')}"</div>
+        </div>
+      </div>
+    `);
+  }
+  document.getElementById('intros').innerHTML = html.join('');
+}
+
+function renderQs() {
+  const html = [];
+  for (let k = 0; k < VISIBLE_QS; k++) {
+    const idx = (qIdx + k) % questions.length;
+    const op = 1 - (k * 0.18);
+    html.push(`
+      <div class="q-card" style="--intro-op:${op}; opacity:${op}">
+        <div class="serif q-card__quote">"</div>
+        <div class="mono q-card__num">Q.${pad2(idx + 1)}</div>
+        <div class="serif q-card__text">${escapeHtml(questions[idx])}</div>
+      </div>
+    `);
+  }
+  document.getElementById('qs').innerHTML = html.join('');
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[<>&"]/g, c =>
+    ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;' }[c]));
+}
+
+function setLive(live, errMsg) {
+  isLive = live;
+  const dot = document.getElementById('live-dot');
+  const txt = document.getElementById('live-text');
+  const err = document.getElementById('err-banner');
+  if (live) {
+    dot.classList.remove('is-pending');
+    txt.textContent = '实时同步中 · 来自报名留言';
+    err.classList.remove('is-visible');
+  } else if (errMsg) {
+    dot.classList.add('is-pending');
+    txt.textContent = '示例预览 · 等待连接…';
+    err.textContent = errMsg;
+    err.classList.add('is-visible');
+  } else {
+    dot.classList.add('is-pending');
+    txt.textContent = '示例预览 · 等待真实留言';
+    err.classList.remove('is-visible');
+  }
+}
+
+/* ===== CloudBase 调用 ===== */
+let cloudApp = null;
+let authReady = null;
+
+async function ensureAuth() {
+  if (authReady) return authReady;
+  authReady = (async () => {
+    const start = Date.now();
+    while (typeof cloudbase === 'undefined') {
+      if (Date.now() - start > 8000) throw new Error('云端 SDK 加载失败');
+      await new Promise(r => setTimeout(r, 150));
+    }
+    const env = (window.__DCT_CONFIG__ && window.__DCT_CONFIG__.env) || '';
+    if (!env) throw new Error('CloudBase env 未配置');
+    cloudApp = cloudbase.init({ env });
+    const auth = cloudApp.auth({ persistence: 'local' });
+    const state = await auth.getLoginState();
+    if (!state) await auth.signInAnonymously();
+    return cloudApp;
+  })();
+  return authReady;
+}
+
+async function fetchFeed() {
+  try {
+    const app = await ensureAuth();
+    const res = await app.callFunction({ name: 'getWallFeed', data: { limit: 200 } });
+    const r = (res && res.result) || {};
+    if (!r.ok) throw new Error(r.msg || 'getWallFeed not ok');
+    const newIntros = Array.isArray(r.intros) ? r.intros : [];
+    const newQs     = Array.isArray(r.questions) ? r.questions : [];
+    let changed = false;
+    if (newIntros.length >= 3) { intros = newIntros; changed = true; }
+    if (newQs.length >= 3)     { questions = newQs;  changed = true; }
+    consecutiveErrors = 0;
+    if (changed) {
+      setLive(true);
+      renderIntros();
+      renderQs();
+    } else if (!isLive) {
+      // 后端连通但还没有留言到达：显示「等待真实留言」+ 用 seed
+      setLive(false);
+    }
+  } catch (err) {
+    consecutiveErrors++;
+    console.warn('[getWallFeed] failed:', err && err.message);
+    // 连续 3 次失败才打错误浮层（避免偶发抖动）
+    if (consecutiveErrors >= 3) {
+      setLive(false, '后端连接失败 · 显示示例数据');
+    }
+  }
+}
+
+/* ===== 启动 ===== */
+renderClock();
+renderIntros();
+renderQs();
+setInterval(renderClock, 1000);
+setInterval(() => { introIdx = (introIdx + 1) % intros.length; renderIntros(); }, INTRO_ROTATE_MS);
+setInterval(() => { qIdx     = (qIdx + 1) % questions.length; renderQs();     }, Q_ROTATE_MS);
+
+// 立即拉一次 + 每 15s 轮询
+fetchFeed();
+setInterval(fetchFeed, POLL_MS);
+
+// 大屏长时间运行：每 30 分钟主动 reload 一次，防内存堆积
+setTimeout(() => location.reload(), 30 * 60 * 1000);
+
+// ESC 退出全屏 / F 进入全屏（运营快捷键）
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'f' || e.key === 'F') {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  }
+  if (e.key === 'r' || e.key === 'R') {
+    fetchFeed();  // 手动刷新
+  }
+});
+</script>
+
+<!-- CloudBase Web SDK -->
+<script>
+  (function loadCloudbase() {
+    var urls = [
+      'https://static.cloudbase.net/cloudbase-js-sdk/2.19.3/cloudbase.full.js',
+      'https://cdn.jsdelivr.net/npm/@cloudbase/js-sdk@2.19.3/dist/cloudbase.full.js',
+      'https://unpkg.com/@cloudbase/js-sdk@2.19.3/dist/cloudbase.full.js'
+    ];
+    var i = 0;
+    function tryNext() {
+      if (i >= urls.length) { console.error('[wall-tv] cloudbase CDNs all failed'); return; }
+      var s = document.createElement('script');
+      s.src = urls[i++];
+      s.async = false;
+      s.onerror = function () { console.warn('[wall-tv] cdn failed:', s.src); tryNext(); };
+      document.head.appendChild(s);
+    }
+    tryNext();
+  })();
+</script>
+<script src="config.js"></script>
+
+</body>
+</html>

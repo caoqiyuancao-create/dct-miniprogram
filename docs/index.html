@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>DCT 第二期 · 六星之路 · 报名</title>
+  <title>DCT 第三期 · 医美热时代的冷思考 · 报名</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="description" content="DCT 学术沙龙第二期报名 · 高晓蓉教授 · 六星之路 · 2026.04.25" />
-  <meta name="theme-color" content="#eef4fb" />
+  <meta name="description" content="DCT 学术沙龙第三期报名 · 皮里士多德博士 · 医美热时代的冷思考 · 2026.05.23 · 武侯区棕南 陌生的朋友咖啡厅" />
+  <meta name="theme-color" content="#0c1f3d" />
   <link rel="icon" href="assets/logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -15,92 +15,326 @@
 
   <div id="app">
 
-    <!-- ============ SCREEN: LANDING ============ -->
-    <section class="screen" data-screen="landing">
-      <div class="sky tone-light hero-sky">
+    <!-- ============ SCREEN: HOME ============ -->
+    <section class="screen" data-screen="home">
+      <div class="sky tone-light home-hero-sky">
         <div class="sky-texture"></div>
         <div class="sky-rays"></div>
-        <div class="sky-stars" data-stars="landing"></div>
+        <div class="sky-stars" data-stars="home"></div>
 
-        <div class="hero">
-          <div class="hero-left">
-            <div class="mono eyebrow">DCT · VOL.02 · 2026.04.25</div>
-            <div class="serif hero-title">
-              <div>六星</div>
-              <div>之路</div>
-            </div>
-            <div class="subline">
-              <span class="star-bullet star-gold"></span>
-              <span>目标管理与坚持哲学</span>
-            </div>
-            <div class="subline-dash">——写给学术追梦人的漫谈</div>
+        <div class="home-hero">
+          <div class="logo-shell">
+            <img class="logo-img" src="assets/logo.png" alt="DCT" />
           </div>
-          <div class="hero-portrait-wrap">
-            <img class="hero-portrait" src="assets/gao-portrait.jpg" alt="高晓蓉教授" />
-            <div class="hero-portrait-fade"></div>
-          </div>
-        </div>
+          <div class="mono brand-line">DOCTORS' CRAZY THINKING</div>
+          <div class="serif home-title">认真地胡思乱想</div>
 
-        <div class="speaker-wrap">
-          <div class="speaker-card">
-            <div class="speaker-avatar">
-              <img src="assets/gao-avatar-poster.png" alt="高晓蓉" />
-            </div>
-            <div class="speaker-info">
-              <div class="speaker-name">高晓蓉 <span class="speaker-title">教授</span></div>
-              <div class="speaker-bio">
-                <div>西南交通大学光电工程研究所</div>
-                <div>马拉松六星跑者 "Six Star Finisher"</div>
-              </div>
-            </div>
+          <div class="slogan-box" id="home-slogans"></div>
+
+          <div class="announcement">
+            <div class="mono ann-badge ann-badge--signup" id="home-ann-badge">OPEN</div>
+            <div class="ann-copy" id="home-ann-copy"></div>
           </div>
         </div>
       </div>
 
-      <!-- opening -->
+      <div class="entries">
+        <a class="entry-card entry-card--primary" href="#/landing">
+          <div class="entry-glow"></div>
+          <div class="mono entry-kicker" id="home-entry-kicker">VOL.03 · 报名开放中</div>
+          <div class="serif entry-title">本期报名</div>
+          <div class="entry-body">医美热时代的冷思考 · 当"变得更美"成为一种时代命题，它究竟意味着什么？</div>
+          <div class="mono entry-meta">2026 年 5 月 23 日（周六）</div>
+          <div class="entry-arrow"></div>
+        </a>
+
+        <div class="entry-row">
+          <a class="entry-card entry-card--secondary" href="#/about">
+            <div class="mono entry-kicker">ABOUT</div>
+            <div class="serif entry-title entry-title--small">关于 DCT</div>
+            <div class="entry-body">创办的故事</div>
+          </a>
+          <a class="entry-card entry-card--secondary" href="#/review">
+            <div class="mono entry-kicker">ARCHIVE</div>
+            <div class="serif entry-title entry-title--small">往期回顾</div>
+            <div class="entry-body">已有 2 期</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="mono home-footer">EST.2026 · CHENGDU · IN A LIVING ROOM</div>
+    </section>
+
+    <!-- ============ SCREEN: ABOUT ============ -->
+    <section class="screen" data-screen="about" hidden>
+      <a class="back-bar" href="#/">
+        <span class="back-arrow"></span>
+        <span>返回首页</span>
+      </a>
+
+      <div class="about-stage scene-0" id="about-stage">
+        <div class="stage-rays"></div>
+
+        <!-- Scene 0 · sky -->
+        <div class="about-scene scene-sky">
+          <div class="cloud cloud-a"></div>
+          <div class="cloud cloud-b"></div>
+          <div class="cloud cloud-c"></div>
+        </div>
+        <!-- Scene 1 · three -->
+        <div class="about-scene scene-three">
+          <div class="role-orb role-d">D<span>Dog</span></div>
+          <div class="role-orb role-c">C<span>Chef</span></div>
+          <div class="role-orb role-t">T<span>Therapist</span></div>
+        </div>
+        <!-- Scene 2 · seedling -->
+        <div class="about-scene scene-seedling">
+          <div class="field-grid">
+            <div class="field-tile"></div><div class="field-tile"></div><div class="field-tile"></div>
+            <div class="field-tile"></div><div class="field-tile"></div><div class="field-tile"></div>
+          </div>
+          <div class="sprout">
+            <div class="sprout-stem"></div>
+            <div class="sprout-leaf sprout-left"></div>
+            <div class="sprout-leaf sprout-right"></div>
+          </div>
+        </div>
+        <!-- Scene 3 · brand -->
+        <div class="about-scene scene-brand">
+          <div class="serif big-brand">DCT</div>
+          <div class="mono brand-sub">DOCTORS' CRAZY THINKING</div>
+        </div>
+        <!-- Scene 4 · living -->
+        <div class="about-scene scene-living">
+          <div class="lamp"></div>
+          <div class="sofa">
+            <div class="sofa-back"></div>
+            <div class="sofa-seat"></div>
+            <div class="pillow pillow-a"></div>
+            <div class="pillow pillow-b"></div>
+          </div>
+        </div>
+        <!-- Scene 5 · invite -->
+        <div class="about-scene scene-invite">
+          <div class="invite-stars">
+            <div class="gold-star star-0"></div>
+            <div class="gold-star star-1"></div>
+            <div class="gold-star star-2"></div>
+            <div class="gold-star star-3"></div>
+            <div class="gold-star star-4"></div>
+          </div>
+          <div class="serif invite-dct">DCT</div>
+        </div>
+
+        <div class="scene-caption">
+          <div class="serif scene-title" id="about-scene-title">一切从天时地利人和说起</div>
+          <div class="scene-sub" id="about-scene-sub">2026 · 一个客厅 · 三个 PhD</div>
+        </div>
+
+        <div class="about-dots" id="about-dots"></div>
+        <div class="mono replay" id="about-replay" hidden>↻ REPLAY</div>
+      </div>
+
+      <div class="about-section">
+        <div class="mono section-kicker">WHY</div>
+        <div class="serif section-title">DCT 从何而来</div>
+        <div class="body-copy">
+          <p>2026 年的春天，三个非典型的精神科 PhD 坐在同一个客厅里——发现彼此都在等待一种久违的状态：愿意慢下来，认真聊一些"不那么有用但很重要"的事。</p>
+          <p>我们把这种状态称作天时地利人和——天时是这一年都在心里酝酿的某种倦怠与好奇，地利是恰好可以容纳几个人坐下来的客厅，人和是这群愿意暴露自己、也愿意倾听别人的朋友。</p>
+        </div>
+        <div class="serif quote">「天时地利人和——对知识和真诚深入交流的期待。」</div>
+      </div>
+
+      <div class="about-section">
+        <div class="mono section-kicker">WHO</div>
+        <div class="serif section-title">三位主创 · D · C · T</div>
+        <div class="body-copy">
+          <p>沙龙的发起人是三个共同读博、各自带着第二、第三身份的精神科医生：</p>
+        </div>
+        <div id="about-creators"></div>
+        <div class="creator-note">※ 主创真实形象 / 漫画头像将于后续插入此处。</div>
+      </div>
+
+      <div class="about-section">
+        <div class="mono section-kicker">WHAT</div>
+        <div class="serif section-title">DCT 的三层意思</div>
+        <div id="about-meanings"></div>
+        <div class="body-copy after-rows">
+          <p>它既是个名字，也是种态度——不必非得"有用"才值得讨论，但讨论时要保留科学训练给我们的那份认真。</p>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <div class="mono section-kicker">HOW</div>
+        <div class="serif section-title">为什么是「客厅里」</div>
+        <div class="body-copy">
+          <p>我们刻意没有选讲堂、咖啡馆、共享空间——而是客厅。它在物理上离生活最近，也在心理上离表演最远。</p>
+          <p>没有 PPT 也行、不正襟危坐也行、说错话也行。我们希望氛围像朋友间的夜谈：有人讲，有人听，有人随时插话，有人沉默地吃一块甜品。</p>
+          <p>每期一位主讲人 · 一个 TA 真心热爱或长期琢磨的话题 · 40 分钟左右分享 · 之后是自由讨论。欢迎打断、追问、不同意——只要友善。</p>
+        </div>
+      </div>
+
+      <div class="about-section">
+        <div class="mono section-kicker">WHO MAY JOIN</div>
+        <div class="serif section-title">什么样的人会来？</div>
+        <div class="body-copy">
+          <p>没有学科限制 · 没有职称门槛 · 不查论文影响因子。</p>
+          <p>我们筛选的标准只有两条：</p>
+        </div>
+        <div class="criteria">
+          <div>真的对当期话题感兴趣——而不是来凑场。</div>
+          <div>愿意友善地交换观点——能讲，也能听；能质疑，也能被质疑。</div>
+        </div>
+        <div class="body-copy">
+          <p>每期 10–15 人，多学科背景优先，尽量不要让客厅变成同一个领域的回音室。</p>
+        </div>
+      </div>
+
+      <div class="closing-card">
+        <div class="serif closing-title">
+          <div>期待和你一起，</div>
+          <div>建设这块精神自留地。</div>
+        </div>
+        <div class="mono closing-meta">DCT · EST. 2026 · CHENGDU</div>
+        <div class="closing-actions">
+          <a class="ghost-btn" href="#/">返回首页</a>
+          <a class="solid-btn" href="#/landing">看看本期</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: REVIEW ============ -->
+    <section class="screen" data-screen="review" hidden>
+      <a class="back-bar" href="#/">
+        <span class="back-arrow"></span>
+        <span>返回首页</span>
+      </a>
+      <div class="review-head">
+        <div class="mono review-kicker">DCT · ARCHIVE</div>
+        <div class="serif review-title">一期一会</div>
+        <div class="review-sub">每一期沙龙的主题、主讲人与当日留痕。</div>
+      </div>
+      <div class="review-list" id="review-list"></div>
+    </section>
+
+    <!-- ============ SCREEN: REVIEW DETAIL ============ -->
+    <section class="screen" data-screen="review-detail" hidden>
+      <a class="back-bar" href="#/review">
+        <span class="back-arrow"></span>
+        <span>返回</span>
+      </a>
+      <div id="review-detail-content"></div>
+    </section>
+
+    <!-- ============ SCREEN: LANDING ============ -->
+    <section class="screen" data-screen="landing">
+
+      <!-- V3 POSTER HERO · 海报作题图 -->
+      <div class="poster-hero">
+        <div class="poster-hero__img-wrap">
+          <img class="poster-hero__img" src="assets/poster-vol03.jpg" alt="DCT 第三期 · 医美热时代的冷思考" />
+          <div class="poster-hero__fade"></div>
+        </div>
+        <div class="poster-hero__foot">
+          <div class="mono poster-hero__chip">DCT · VOL.03 · 2026.05.23</div>
+          <div class="poster-hero__hint">长按海报可保存 / 转发</div>
+        </div>
+      </div>
+
+      <!-- SPEAKER HERO · 半身像深蓝渐变卡 -->
+      <div class="speaker-hero-wrap">
+        <div class="speaker-hero">
+          <div class="speaker-hero__star1"></div>
+          <div class="speaker-hero__star2"></div>
+          <div class="speaker-hero__text">
+            <div class="mono speaker-hero__kicker">SPEAKER · 主讲人</div>
+            <div class="serif speaker-hero__name">皮里士多德</div>
+            <div class="mono speaker-hero__title">博士</div>
+            <div class="speaker-hero__quote">
+              <div class="serif speaker-hero__bio">45° 的华西皮肤科博士</div>
+              <div class="speaker-hero__org">华西医院 · 皮肤科</div>
+            </div>
+          </div>
+          <div class="speaker-hero__photo">
+            <div class="speaker-hero__photo-mask"></div>
+            <img class="speaker-hero__photo-img" src="assets/speaker-vol03-halfbody.jpg" alt="皮里士多德博士" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 诗化副题两行 -->
+      <div class="hero-subtitle">
+        <div class="hero-subtitle__star"></div>
+        <div class="hero-subtitle__col">
+          <div class="serif hero-subtitle__l1">当"变得更美"成为一种时代命题，它究竟意味着什么？</div>
+          <div class="serif hero-subtitle__l2">"变得更好"，究竟是谁的命题？</div>
+        </div>
+      </div>
+
+      <!-- FOUR QUESTIONS · 合并版（CHG-20260517-01 D1/D2/D3） -->
+      <div class="four-q-wrap">
+        <div class="four-q">
+          <div class="four-q__glow four-q__glow--tr"></div>
+          <div class="four-q__glow four-q__glow--bl"></div>
+          <div class="mono four-q__kicker">HE WILL SHARE · 当晚的四个问题</div>
+          <div class="serif four-q__title">"医美热" 的 "冷思考"</div>
+          <div class="four-q__subtitle">当我们谈论变美时，我们在谈论什么？</div>
+          <div class="four-q__list" id="four-q-list"></div>
+        </div>
+      </div>
+
+      <!-- OPENING PITCH -->
       <div class="section section-top">
         <div class="serif opening-title">
-          <div>在学术里保持严谨，</div>
-          <div>在生活中追求热爱。</div>
+          <div>在"变得更好"这件热事上，</div>
+          <div>我们想保留一点"冷思考"。</div>
         </div>
         <div class="opening-body">
-          DCT 第二期，我们很荣幸邀请到高晓蓉教授来到客厅，与我们分享她关于<span class="opening-accent">目标、坚持与多重人生角色</span>的思考。
+          <p>DCT 第三期，我们邀请到 <span class="opening-accent">皮里士多德</span>——一位在华西临床与实验室之间往返的皮肤科医生，和我们一起重新理解"医美热"。</p>
+          <p>医美当然关乎技术：光、电、注射……每一种手段背后都有真实的医学逻辑、适应证与风险边界。</p>
+          <p>但医美也不只是技术。它同时牵动着审美标准、身体感受、情绪压力、消费选择，以及一个更隐秘的问题：<span class="opening-accent">当我们想要改变自己的脸和身体时，我们真正想改变的是什么？</span></p>
+          <p>这一次，我们不急着赞成，也不急着反对。我们想把"变美"这件事放回更大的语境里：医学如何参与审美，技术如何改变身体经验，而"变得更好"又是如何被想象、被定义、被追求的。</p>
         </div>
       </div>
 
-      <!-- three points -->
-      <div class="section">
-        <div class="mono section-kicker">SHE WILL SHARE</div>
-        <div class="serif section-title">从真实经历出发，三个侧面</div>
-        <div class="points" id="points"></div>
-      </div>
+      <!-- v3 已合并入上方四问卡，此处不再渲染 HE WILL SHARE 四张点卡 -->
 
-      <!-- closing pull-quote -->
-      <div class="section">
-        <div class="closing">
-          <div class="closing-text">
-            这不仅是一场成功经验分享，更是<span class="serif closing-accent">一封写给所有学术追梦人的信</span>——关于如何在生活里，持续相信、持续行动，持续成为自己想成为的人。
+      <!-- WALL TEASER · 留言墙预告 -->
+      <a class="section wall-teaser-link" href="#/wall">
+        <div class="wall-teaser">
+          <div class="wall-teaser__thumb">
+            <div class="wall-teaser__line wall-teaser__line--w"></div>
+            <div class="wall-teaser__line wall-teaser__line--g"></div>
+            <div class="wall-teaser__line wall-teaser__line--w2"></div>
+            <div class="wall-teaser__line wall-teaser__line--g2"></div>
           </div>
+          <div class="wall-teaser__body">
+            <div class="wall-teaser__title">
+              现场电子留言墙 <span class="mono wall-teaser__new">NEW</span>
+            </div>
+            <div class="wall-teaser__sub">咖啡厅 TV 将滚动播放每位到场者的一句话身份与想问的问题</div>
+          </div>
+          <span class="chevron"></span>
         </div>
-      </div>
+      </a>
 
-      <!-- event info -->
+      <!-- EVENT INFO -->
       <div class="section">
         <div class="mono section-kicker">WHEN · WHERE · HOW</div>
         <div class="info-card">
           <div class="info-row">
             <div class="mono info-label">时间</div>
             <div class="info-col">
-              <div class="info-value">2026 年 4 月 25 日（周六）</div>
-              <div class="info-sub">18:40 入场 &nbsp;·&nbsp; 19:00 开始</div>
+              <div class="info-value">2026 年 5 月 23 日（周六）</div>
+              <div class="info-sub">19:00 入场 &nbsp;·&nbsp; 21:30 结束</div>
             </div>
           </div>
           <div class="sep"></div>
           <div class="info-row">
             <div class="mono info-label">地点</div>
             <div class="info-col">
-              <div class="info-value">武侯区 玉林 DCT 客厅</div>
-              <div class="info-sub">报名通过后微信通知具体地址</div>
+              <div class="info-value">武侯区棕南正街 "陌生的朋友" 咖啡厅</div>
+              <div class="info-sub">本期搬出客厅 · 与「陌生的朋友」共办的公共场</div>
             </div>
           </div>
           <div class="sep"></div>
@@ -108,28 +342,37 @@
             <div class="mono info-label">入场</div>
             <div class="info-col">
               <div class="info-value">88 元 / 位</div>
-              <div class="info-sub">含一份甜品 + 一杯酒 · 可打包带走</div>
+              <div class="info-sub">含一份甜品 + 一杯饮品 · 可打包带走</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- menu -->
+      <!-- MENU -->
       <div class="section">
-        <div class="mono section-kicker">EARLY SUMMER · LIMITED</div>
+        <div class="mono section-kicker">DCT MENU · FOR SALON #3</div>
         <div class="menu-card">
-          <div class="serif menu-title">初夏季节限定</div>
-          <div class="menu-sub">Mulberry season, from Panzhihua</div>
+          <div class="serif menu-title">陌生的朋友 · 联名菜单</div>
+          <div class="menu-sub">Curated for salon #3, by Strangers</div>
+          <div class="menu-chip">
+            <div class="menu-chip__icon"></div>
+            <span>本期不含正餐 · 建议先吃晚饭再来</span>
+          </div>
           <div class="menu-sep"></div>
           <div class="menu-list" id="menu"></div>
-          <div class="menu-foot">
-            <div>本期不提供正餐，建议先吃过晚饭再来～</div>
-            <div>担心甜品负担也可以打包带走。</div>
+          <div class="menu-foot">更多饮品可访问大众点评搜索「陌生的朋友」</div>
+          <!-- Gia 备注小卡 -->
+          <div class="gia-card">
+            <div class="serif gia-card__badge">G</div>
+            <div class="gia-card__body">
+              <div class="gia-card__main">甜品仍由 Gia 制作 ✦</div>
+              <div class="gia-card__sub">更多<b class="gia-card__sub-strong">主题饮品</b>正在打样中 · 敬请期待</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- what is DCT -->
+      <!-- WHAT IS DCT -->
       <div class="section">
         <div class="dct-head">
           <img src="assets/logo.png" alt="DCT" class="dct-logo" />
@@ -141,13 +384,12 @@
         <div class="dct-tagline">——用科学的态度，聊天马行空的奇思妙想</div>
         <div class="dct-latin">Doctors' Crazy Thinking · Dog, Chef &amp; Therapist</div>
         <div class="dct-body">
-          <div>一个家庭式学术沙龙。在工具理性与量化评价的围困之外，开辟一处关乎真诚叙事、异质交流与严肃思考的精神驻地。</div>
-          <div class="dct-body-line2">在客厅里聊学术，也聊生活；聊目标，也聊热爱。</div>
+          本期我们走出客厅，去到「陌生的朋友」咖啡厅。医美看似是一个关于脸和皮肤的话题，但它背后连接着<span class="opening-accent">医学技术、消费社会、审美秩序和每个人与自己的关系</span>。DCT 想做的，正是在这些看似日常的问题里，保留一点认真追问的空间。
         </div>
         <div class="serif dct-invite">期待和你一起，建设这块精神自留地。</div>
       </div>
 
-      <!-- rules entry -->
+      <!-- RULES ENTRY -->
       <div class="section">
         <a class="rules-entry" href="#/detail">
           <div>
@@ -162,7 +404,7 @@
       <div class="cta-wrap">
         <a class="cta" href="#/form">
           <span class="star-bullet star-cta"></span>
-          <span>报名参加第二期</span>
+          <span>报名参加第三期</span>
           <span class="star-bullet star-cta"></span>
         </a>
         <div class="cta-sub">
@@ -184,6 +426,7 @@
         <div class="detail-hero">
           <div class="mono detail-eyebrow">DCT · 怎么玩</div>
           <div class="serif detail-title">认真玩，认真想</div>
+          <div class="detail-sub">本期搬出客厅，去到「陌生的朋友」咖啡厅 · 一个更轻、更公共的场</div>
         </div>
       </div>
 
@@ -198,16 +441,16 @@
           <div class="info-row">
             <div class="mono info-label">时间</div>
             <div class="info-col">
-              <div class="info-value">2026 年 4 月 25 日（周六）</div>
-              <div class="info-sub">18:40 入场 · 19:00 开始</div>
+              <div class="info-value">2026 年 5 月 23 日（周六）</div>
+              <div class="info-sub">19:00 入场 · 21:30 结束</div>
             </div>
           </div>
           <div class="sep"></div>
           <div class="info-row">
             <div class="mono info-label">地点</div>
             <div class="info-col">
-              <div class="info-value">武侯区 玉林 DCT 客厅</div>
-              <div class="info-sub">报名通过后微信通知具体地址</div>
+              <div class="info-value">武侯区棕南正街 "陌生的朋友" 咖啡厅</div>
+              <div class="info-sub">本期搬出客厅 · 与「陌生的朋友」共办的公共场</div>
             </div>
           </div>
           <div class="sep"></div>
@@ -215,7 +458,15 @@
             <div class="mono info-label">入场</div>
             <div class="info-col">
               <div class="info-value">88 元 / 位</div>
-              <div class="info-sub">含一份甜品 + 一杯酒 · 可打包带走</div>
+              <div class="info-sub">含一份甜品 + 一杯饮品 · 可打包带走</div>
+            </div>
+          </div>
+          <div class="sep"></div>
+          <div class="info-row">
+            <div class="mono info-label">主讲</div>
+            <div class="info-col">
+              <div class="info-value">皮里士多德 · 博士 · 华西医院 · 皮肤科</div>
+              <div class="info-sub">45° 的华西皮肤科博士</div>
             </div>
           </div>
         </div>
@@ -289,17 +540,60 @@
           </label>
         </div>
 
-        <div class="group-label mono">为什么想参加本期</div>
+        <!-- v3 · 留言墙 · 一句话身份 -->
+        <div class="group-label group-label--wall">
+          <span class="mono">留言墙 · 一句话身份</span>
+          <span class="mono wall-tag">WALL</span>
+        </div>
         <div class="group-card">
-          <textarea name="why" class="textarea"
-            placeholder="可以聊聊：你对『目标管理 / 坚持哲学 / 长期主义』的思考，或者你与马拉松、与研究生涯的故事……"></textarea>
+          <label class="field">
+            <span class="field-label">昵称</span>
+            <input name="wallNickname" type="text" maxlength="20" placeholder="可化名 · 上墙时使用" />
+          </label>
+          <div class="textarea-wrap textarea-wrap--inline">
+            <textarea name="selfIntro" id="selfIntro" class="textarea textarea--small" maxlength="40"
+              placeholder="例：华西皮肤科 · 研二 / 麻醉科主治 / 社会学田野中…"></textarea>
+            <div class="char-count" id="selfIntro-count">0 / 40</div>
+          </div>
         </div>
 
+        <!-- v3 · 留言墙 · 想问的问题 -->
+        <div class="group-label group-label--wall">
+          <span class="mono">留言墙 · 想问皮里士多德什么</span>
+          <span class="mono wall-tag">WALL</span>
+        </div>
+        <div class="group-card">
+          <div class="textarea-wrap">
+            <textarea name="expectation" id="expectation" class="textarea" maxlength="120"
+              placeholder="一两句话即可。例：医美的边界在哪里？普通人怎么判断要不要做？……"></textarea>
+            <div class="char-count" id="expectation-count">0 / 120</div>
+          </div>
+        </div>
+
+        <!-- 匿名 callout -->
+        <div class="wall-callout">
+          <div class="wall-callout__icon">i</div>
+          <div class="wall-callout__body">
+            <div class="wall-callout__title">以上两题会在活动现场以匿名昵称形式滚动展示</div>
+            <div class="wall-callout__sub">留言墙不会显示真名 · 你也可以下方取消授权 · 不影响报名结果</div>
+          </div>
+        </div>
+
+        <!-- consent · 吧规 -->
         <label class="consent">
-          <input type="checkbox" id="agree" checked />
+          <input type="checkbox" id="agree-rules" />
           <span class="checkbox"><span class="check"></span></span>
           <span class="consent-text">
             我已阅读并同意 <a class="consent-link" href="#/detail">DCT · 吧规</a>：保密 · 尊重 · 不贴标签 · 非治疗场合 · 轮流发言 · 友好纠错。
+          </span>
+        </label>
+
+        <!-- consent · 留言墙（默认勾选） -->
+        <label class="consent consent--wall">
+          <input type="checkbox" id="agree-wall" checked />
+          <span class="checkbox checkbox--gold"><span class="check"></span></span>
+          <span class="consent-text">
+            我同意上述两题以<span class="consent-strong">匿名昵称</span>形式在现场电子留言墙展示。取消则仅供讲者参考，不上墙。
           </span>
         </label>
 
@@ -321,9 +615,23 @@
           <div class="serif success-title">已收到</div>
           <div class="success-sub">
             <div>谢谢你愿意和我们一起</div>
-            <div>精神出走</div>
+            <div>在"变得更好"的喧闹之外，留一点冷思考</div>
           </div>
         </div>
+      </div>
+
+      <!-- v3 · 留言墙预告卡 -->
+      <div class="section">
+        <a class="wall-card" href="#/wall">
+          <div class="wall-card__deco"></div>
+          <div class="mono wall-card__kicker">WALL · 当晚电视上滚动展示</div>
+          <div class="serif wall-card__title">你写下的，会被看到。</div>
+          <div class="wall-card__body">你留下的一句话身份和想问的问题，会在入场和中场以匿名形式在咖啡厅 TV 上滚动播放。</div>
+          <div class="wall-card__btn">
+            <span>看看现场留言墙长什么样</span>
+            <span class="wall-card__chev"></span>
+          </div>
+        </a>
       </div>
 
       <div class="section">
@@ -339,17 +647,59 @@
         </div>
       </div>
 
-      <div class="section">
-        <div class="notice">
-          <span class="star-bullet notice-bullet"></span>
-          <div class="notice-text">
-            因本期名额有限，为保证每位参与者的体验，我们可能会通过电话与你做一次简短的确认与访谈。请留意来电。
-          </div>
-        </div>
-      </div>
-
       <div class="cta-wrap">
         <a class="back-btn" href="#/">回到主题介绍</a>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: WALL（横屏 TV 预览） ============ -->
+    <section class="screen" data-screen="wall" hidden>
+      <div class="wall">
+        <div class="watermark serif">冷思考</div>
+        <div class="wall-star-deco wall-star-deco--1"></div>
+        <div class="wall-star-deco wall-star-deco--2"></div>
+        <div class="wall-star-deco wall-star-deco--3"></div>
+        <div class="wall-star-deco wall-star-deco--4"></div>
+
+        <a class="wall-back" href="#/">← 返回</a>
+
+        <div class="wall-header">
+          <img class="wall-header__logo" src="assets/logo.png" alt="DCT" />
+          <div class="wall-header__center">
+            <div class="mono wall-header__kicker">DCT · ACADEMIC SALON · VOL.03</div>
+            <div class="serif wall-header__title">
+              医美热时代的<span class="wall-header__title-gold">冷</span>思考
+            </div>
+          </div>
+          <div class="wall-header__right">
+            <div class="mono wall-header__clock" id="wall-clock">00:00<span class="wall-clock-gold">:00</span></div>
+            <div class="mono wall-header__date">2026.05.23 · 陌生的朋友咖啡厅</div>
+          </div>
+        </div>
+
+        <div class="wall-cols">
+          <div class="wall-col wall-col-left">
+            <div class="mono wall-col__kicker wall-col__kicker--blue">WHO IS HERE TONIGHT</div>
+            <div class="serif wall-col__title">今晚，谁来到了 DCT？</div>
+            <div class="wall-col__sub">30 个身份 · 来自不同学科、不同视角</div>
+            <div class="wall-intros" id="wall-intros"></div>
+          </div>
+          <div class="wall-cols__divider"></div>
+          <div class="wall-col wall-col-right">
+            <div class="mono wall-col__kicker wall-col__kicker--gold">WHAT WE'RE ASKING TONIGHT</div>
+            <div class="serif wall-col__title">大家想问 皮里士多德 什么？</div>
+            <div class="wall-col__sub">今晚我们真正关心的问题</div>
+            <div class="wall-questions" id="wall-qs"></div>
+          </div>
+        </div>
+
+        <div class="wall-footer">
+          <div class="mono wall-footer__brand">DCT · DOG, CHEF &amp; THERAPIST · EST.2026 · CHENGDU</div>
+          <div class="wall-footer__live">
+            <div class="wall-footer__live-dot"></div>
+            <span id="wall-live-text">示例预览 · 等待真实留言</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -358,7 +708,7 @@
 
   </div>
 
-  <!-- CloudBase Web SDK (CDN with fallbacks — try Tencent first, then jsdelivr, then unpkg) -->
+  <!-- CloudBase Web SDK (CDN with fallbacks) -->
   <script>
     (function loadCloudbase() {
       var urls = [
@@ -368,10 +718,7 @@
       ];
       var i = 0;
       function tryNext() {
-        if (i >= urls.length) {
-          console.error('[dct] all cloudbase CDNs failed');
-          return;
-        }
+        if (i >= urls.length) { console.error('[dct] all cloudbase CDNs failed'); return; }
         var s = document.createElement('script');
         s.src = urls[i++];
         s.async = false;

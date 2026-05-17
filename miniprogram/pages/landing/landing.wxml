@@ -1,104 +1,144 @@
 <view class="page">
 
-  <!-- U1 · 顶部金色滚动进度条（CHG-20260428-02 U1） -->
+  <!-- 顶部金色滚动进度条 -->
   <view class="scroll-progress" aria-hidden="true">
     <view class="scroll-progress__fill" style="width: {{progress}}%"></view>
   </view>
 
-  <!-- HERO -->
-  <poster-sky tone="light" min-height="880rpx">
-    <view class="hero">
-      <view class="hero-left">
-        <view class="hero-meta-row">
-          <view class="mono eyebrow">DCT · VOL.02 · 2026.04.25</view>
-          <!-- F5 · 倒计时 chip（CHG-20260428-03 F5） -->
-          <view wx:if="{{daysLeftLabel}}" class="mono countdown-chip">{{daysLeftLabel}}</view>
+  <!-- HERO · V3PosterHero（海报作题图） -->
+  <view class="poster-hero">
+    <view class="poster-hero__img-wrap">
+      <image class="poster-hero__img"
+             src="{{posterSrc}}"
+             mode="widthFix"
+             show-menu-by-longpress="true"
+             lazy-load="false"
+             binderror="onImgError" />
+      <view class="poster-hero__fade"></view>
+    </view>
+    <view class="poster-hero__foot">
+      <view class="mono poster-hero__chip">{{posterDateChip}}</view>
+      <view class="poster-hero__hint">长按海报可保存 / 转发</view>
+    </view>
+
+    <!-- F5 倒计时 chip 浮于右上 -->
+    <view wx:if="{{daysLeftLabel}}" class="mono poster-countdown">{{daysLeftLabel}}</view>
+  </view>
+
+  <!-- F1 报名状态横幅 -->
+  <view wx:if="{{regStatus}}" class="reg-banner reg-banner--{{regStatus}}" catchtap="goForm">
+    <view class="reg-banner__dot"></view>
+    <view class="reg-banner__text">{{regBannerText}}</view>
+  </view>
+
+  <!-- SPEAKER HERO（v3 半身像卡） -->
+  <view wx:if="{{isV3 && speakerPhoto}}" class="speaker-hero-wrap">
+    <view class="speaker-hero">
+      <view class="speaker-hero__star1"></view>
+      <view class="speaker-hero__star2"></view>
+
+      <view class="speaker-hero__text">
+        <view class="mono speaker-hero__kicker">SPEAKER · 主讲人</view>
+        <view class="serif speaker-hero__name">{{speakerName}}</view>
+        <view wx:if="{{speakerTitle}}" class="mono speaker-hero__title">{{speakerTitle}}</view>
+        <view class="speaker-hero__quote">
+          <view class="serif speaker-hero__bio">{{speakerBio}}</view>
+          <view wx:if="{{speakerOrg}}" class="speaker-hero__org">{{speakerOrg}}</view>
         </view>
-        <view class="serif title">
-          <view>六星</view>
-          <view>之路</view>
-        </view>
-        <view class="subline">
-          <view class="star-bullet star-gold"></view>
-          <text class="subline-text">目标管理与坚持哲学</text>
-        </view>
-        <view class="subline-dash">——写给学术追梦人的漫谈</view>
       </view>
-      <view class="hero-portrait-wrap">
-        <image class="hero-portrait"
-               src="/assets/gao-portrait.jpg"
+
+      <view class="speaker-hero__photo">
+        <view class="speaker-hero__photo-mask"></view>
+        <image class="speaker-hero__photo-img"
+               src="{{speakerPhoto}}"
                mode="aspectFill"
                lazy-load="true"
                binderror="onImgError" />
-        <view class="hero-portrait-fade"></view>
       </view>
     </view>
+  </view>
 
-    <!-- F1 · 报名状态横幅（CHG-20260428-03 F1） -->
-    <view wx:if="{{regStatus}}" class="reg-banner reg-banner--{{regStatus}}" catchtap="goForm">
-      <view class="reg-banner__dot"></view>
-      <view class="reg-banner__text">{{regBannerText}}</view>
+  <!-- v3 副标题诗化两行 -->
+  <view wx:if="{{isV3}}" class="hero-subtitle">
+    <view class="hero-subtitle__star"></view>
+    <view class="hero-subtitle__col">
+      <view class="serif hero-subtitle__l1">{{cur.subtitle}}</view>
+      <view wx:if="{{cur.subtitle2 && cur.subtitle2 !== cur.subtitle}}" class="serif hero-subtitle__l2">{{cur.subtitle2}}</view>
     </view>
+  </view>
 
-    <!-- speaker card -->
-    <view class="speaker-wrap {{regStatus ? 'speaker-wrap--with-banner' : ''}}">
-      <view class="speaker-card">
-        <view class="speaker-avatar">
-          <image src="/assets/gao-avatar-poster.png"
-                 mode="aspectFill"
-                 class="speaker-avatar-img"
-                 lazy-load="true"
-                 binderror="onImgError" />
-        </view>
-        <view class="speaker-info">
-          <view class="speaker-name">
-            <text>高晓蓉</text>
-            <text class="speaker-title"> 教授</text>
+  <!-- FOUR QUESTIONS · 合并自原"四问"+"医美热的冷思考"（CHG-20260517-01 · D2） -->
+  <view wx:if="{{isV3 && teaserQuestions.length}}" class="four-q-wrap">
+    <view class="four-q">
+      <view class="four-q__glow four-q__glow--tr"></view>
+      <view class="four-q__glow four-q__glow--bl"></view>
+      <view class="mono four-q__kicker">HE WILL SHARE · 当晚的四个问题</view>
+      <view class="serif four-q__title">“医美热” 的 “冷思考”</view>
+      <view class="four-q__subtitle">当我们谈论变美时，我们在谈论什么？</view>
+      <view class="four-q__list">
+        <view wx:for="{{teaserQuestions}}" wx:key="num" class="four-q__row">
+          <view class="four-q__row-top">
+            <view class="mono four-q__no">{{item.num}}</view>
+            <view class="serif four-q__q">{{item.q}}</view>
           </view>
-          <view class="speaker-bio">
-            <view>西南交通大学光电工程研究所</view>
-            <view>马拉松六星跑者 "Six Star Finisher"</view>
-          </view>
+          <view wx:if="{{item.a}}" class="four-q__a">{{item.a}}</view>
         </view>
       </view>
     </view>
-  </poster-sky>
-
-  <dct-origin-story />
+  </view>
 
   <!-- OPENING PITCH -->
   <view class="section section-top">
     <view class="serif opening-title">
-      <view>在学术里保持严谨，</view>
-      <view>在生活中追求热爱。</view>
+      <view>{{pitchTitleL1}}</view>
+      <view>{{pitchTitleL2}}</view>
     </view>
-    <view class="opening-body">
-      DCT 第二期，我们很荣幸邀请到高晓蓉教授来到客厅，与我们分享她关于<text class="opening-accent">目标、坚持与多重人生角色</text>的思考。
+    <view wx:if="{{isV3}}" class="opening-body">
+      <view wx:for="{{pitchParagraphs}}" wx:for-item="para" wx:for-index="pi" wx:key="pi" class="opening-para">
+        <text wx:for="{{para.parts}}" wx:for-item="part" wx:for-index="ppi" wx:key="ppi" class="{{part.strong ? 'opening-accent' : ''}}">{{part.text}}</text>
+      </view>
+    </view>
+    <view wx:else class="opening-body">
+      DCT 第{{issueNumberCN}}，我们邀请到{{speakerName}}{{speakerTitle}}，与我们分享。
     </view>
   </view>
 
-  <!-- THREE POINTS · CHG-02 U4 -->
-  <view class="section">
-    <view class="mono section-kicker">SHE WILL SHARE</view>
+  <!-- HE WILL SHARE · v2 专属（CHG-20260517-01 · D3 · v3 已合并入上方四问卡，不再渲染） -->
+  <view wx:if="{{!isV3}}" class="section">
+    <view class="mono section-kicker">HE WILL SHARE</view>
     <view class="serif section-title">从真实经历出发，三个侧面</view>
     <view class="points">
-      <view class="point-card" wx:for="{{points}}" wx:key="num">
-        <!-- left icon container -->
+      <view class="point-card" wx:for="{{pointsWithIcons}}" wx:key="num">
         <view class="point-icon">
-          <!-- lanes: 三条横线 + 三个金点 -->
-          <view wx:if="{{item.icon === 'lanes'}}" class="ico ico-lanes">
+          <view wx:if="{{item.icon === 'syringe'}}" class="ico ico-syringe">
+            <view class="ico-syringe__needle"></view>
+            <view class="ico-syringe__body"></view>
+            <view class="ico-syringe__plunger"></view>
+          </view>
+          <view wx:elif="{{item.icon === 'skinheart'}}" class="ico ico-skinheart">
+            <view class="ico-skinheart__heart"></view>
+            <view class="ico-skinheart__wave"></view>
+          </view>
+          <view wx:elif="{{item.icon === 'tangle'}}" class="ico ico-tangle">
+            <view class="ico-tangle__l1"></view>
+            <view class="ico-tangle__l2"></view>
+            <view class="ico-tangle__l3"></view>
+          </view>
+          <view wx:elif="{{item.icon === 'self'}}" class="ico ico-self">
+            <view class="ico-self__head"></view>
+            <view class="ico-self__body"></view>
+          </view>
+          <view wx:elif="{{item.icon === 'lanes'}}" class="ico ico-lanes">
             <view class="ico-lane"><view class="ico-dot"></view></view>
             <view class="ico-lane"><view class="ico-dot"></view></view>
             <view class="ico-lane"><view class="ico-dot"></view></view>
           </view>
-          <!-- footprint: 两组脚印 -->
           <view wx:elif="{{item.icon === 'footprint'}}" class="ico ico-footprint">
             <view class="ico-foot ico-foot--l1"></view>
             <view class="ico-foot ico-foot--r1"></view>
             <view class="ico-foot ico-foot--l2"></view>
             <view class="ico-foot ico-foot--r2"></view>
           </view>
-          <!-- compass: 圆 + 内嵌指针 -->
           <view wx:elif="{{item.icon === 'compass'}}" class="ico ico-compass">
             <view class="ico-compass-needle"></view>
           </view>
@@ -108,23 +148,36 @@
             <view class="serif point-title">{{item.title}}</view>
             <view class="mono point-num">{{item.num}}</view>
           </view>
-          <view class="point-sub">{{item.sub}}</view>
-          <view class="point-text">{{item.body}}</view>
+          <view wx:if="{{item.sub}}" class="point-sub">{{item.sub}}</view>
+          <view class="point-text">
+            <view wx:for="{{item.bodyParas}}" wx:for-item="para" wx:for-index="pi" wx:key="pi" class="point-para">{{para}}</view>
+          </view>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- CLOSING LINE -->
-  <view class="section">
-    <view class="closing">
-      <view class="closing-text">
-        这不仅是一场成功经验分享，更是<text class="serif closing-accent">一封写给所有学术追梦人的信</text>——关于如何在生活里，持续相信、持续行动，持续成为自己想成为的人。
+  <!-- v3 留言墙预告 -->
+  <view wx:if="{{isV3}}" class="section">
+    <view class="wall-teaser" bindtap="goWall" hover-class="tap-hover" aria-label="预览现场电子留言墙">
+      <view class="wall-teaser__thumb">
+        <view class="wall-teaser__line wall-teaser__line--w"></view>
+        <view class="wall-teaser__line wall-teaser__line--g"></view>
+        <view class="wall-teaser__line wall-teaser__line--w2"></view>
+        <view class="wall-teaser__line wall-teaser__line--g2"></view>
       </view>
+      <view class="wall-teaser__body">
+        <view class="wall-teaser__title">
+          <text>现场电子留言墙</text>
+          <text class="mono wall-teaser__new">NEW</text>
+        </view>
+        <view class="wall-teaser__sub">咖啡厅 TV 将滚动播放每位到场者的一句话身份与想问的问题</view>
+      </view>
+      <view class="chevron"></view>
     </view>
   </view>
 
-  <!-- EVENT INFO · CHG-02 U7：用 :not(:last-child)::after 替代独立 sep 节点 -->
+  <!-- EVENT INFO -->
   <view class="section">
     <view class="mono section-kicker">WHEN · WHERE · HOW</view>
     <view class="info-card">
@@ -138,27 +191,33 @@
     </view>
   </view>
 
-  <!-- SEASONAL MENU · CHG-02 U5 -->
+  <!-- SEASONAL MENU -->
   <view class="section">
-    <view class="mono section-kicker">EARLY SUMMER · LIMITED</view>
+    <view class="mono section-kicker">{{isV3 ? 'DCT MENU · FOR SALON #3' : 'EARLY SUMMER · LIMITED'}}</view>
     <view class="menu-card">
-      <view class="serif menu-title">初夏季节限定</view>
-      <view class="menu-sub">Mulberry season, from Panzhihua</view>
-      <!-- U5 · 不含正餐 chip -->
+      <view class="serif menu-title">{{isV3 ? '陌生的朋友 · 联名菜单' : '初夏季节限定'}}</view>
+      <view class="menu-sub">{{isV3 ? 'Curated for salon #3, by Strangers' : 'Mulberry season, from Panzhihua'}}</view>
       <view class="menu-chip">
         <view class="menu-chip__icon"></view>
         <text>本期不含正餐 · 建议先吃晚饭再来</text>
       </view>
       <view class="menu-sep"></view>
       <view class="menu-list">
-        <view class="menu-row" wx:for="{{menu}}" wx:key="name">
+        <view class="menu-row" wx:for="{{cur.menu}}" wx:key="name">
           <view class="star-bullet star-brown"></view>
           <view class="serif menu-name">{{item.name}}</view>
           <view class="mono menu-tag">{{item.tag}}</view>
         </view>
       </view>
-      <view class="menu-foot">
-        <view>担心甜品负担也可以打包带走。</view>
+      <view wx:if="{{menuFootnote}}" class="menu-foot">{{menuFootnote}}</view>
+
+      <!-- v3 Gia 备注小卡 -->
+      <view wx:if="{{isV3}}" class="gia-card">
+        <view class="serif gia-card__badge">G</view>
+        <view class="gia-card__body">
+          <view class="gia-card__main">甜品仍由 Gia 制作 ✦</view>
+          <view class="gia-card__sub">更多<text class="gia-card__sub-strong">主题饮品</text>正在打样中 · 敬请期待</view>
+        </view>
       </view>
     </view>
   </view>
@@ -178,8 +237,15 @@
     <view class="dct-tagline">——用科学的态度，聊天马行空的奇思妙想</view>
     <view class="dct-latin">Doctors' Crazy Thinking · Dog, Chef & Therapist</view>
     <view class="dct-body">
-      <view>一个家庭学术沙龙。在绩效逻辑之外，留一块真诚分享、自由交流、严肃思考的精神自留地。</view>
-      <view class="dct-body-line2">在客厅里聊学术，也聊生活；聊目标，也聊热爱。</view>
+      <block wx:if="{{isV3}}">
+        <view class="dct-body-para">
+          <text wx:for="{{dctBody}}" wx:for-item="part" wx:key="text" class="{{part.strong ? 'opening-accent' : ''}}">{{part.text}}</text>
+        </view>
+      </block>
+      <block wx:else>
+        <view>一个家庭学术沙龙。在绩效逻辑之外，留一块真诚分享、自由交流、严肃思考的精神自留地。</view>
+        <view class="dct-body-line2">在客厅里聊学术，也聊生活；聊目标，也聊热爱。</view>
+      </block>
     </view>
     <view class="serif dct-invite">期待和你一起，建设这块精神自留地。</view>
   </view>
@@ -210,15 +276,15 @@
     </view>
   </view>
 
-  <!-- U2 · 吸底浮动 CTA（CHG-20260428-02 U2，position: fixed per pasted note） -->
+  <!-- Sticky CTA -->
   <view class="sticky-cta {{stickyVisible ? 'is-visible' : ''}}" catchtap="goForm" aria-hidden="{{!stickyVisible}}">
     <view class="sticky-cta__inner">
       <view class="sticky-cta__info">
-        <view class="mono sticky-cta__kicker">VOL.02 · 04.25</view>
+        <view class="mono sticky-cta__kicker">{{stickyVolDate}}</view>
         <view class="sticky-cta__price">
           <text class="sticky-cta__num">88</text>
           <text class="sticky-cta__unit">元/位</text>
-          <text class="sticky-cta__hint">含甜品+酒</text>
+          <text class="sticky-cta__hint">{{stickyHint}}</text>
         </view>
       </view>
       <view class="sticky-cta__btn">

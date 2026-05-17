@@ -4,6 +4,7 @@
     <view class="hero">
       <view class="mono hero-eyebrow">DCT · 怎么玩</view>
       <view class="serif hero-title">认真玩，认真想</view>
+      <view wx:if="{{isV3}}" class="hero-sub">本期搬出客厅，去到「陌生的朋友」咖啡厅 · 一个更轻、更公共的场</view>
     </view>
   </poster-sky>
 
@@ -18,31 +19,39 @@
     </view>
   </view>
 
-  <!-- event info -->
+  <!-- event info（数据驱动） -->
   <view class="section">
     <view class="mono section-kicker">时间 · 地点 · 入场</view>
     <view class="card info-card">
       <view class="info-row">
         <view class="mono info-label">时间</view>
         <view class="info-col">
-          <view class="info-value">2026 年 4 月 25 日（周六）</view>
-          <view class="info-sub">18:40 入场 · 19:00 开始</view>
+          <view class="info-value">{{dateText}}</view>
+          <view class="info-sub">{{timeDetail}}</view>
         </view>
       </view>
       <view class="sep"></view>
       <view class="info-row">
         <view class="mono info-label">地点</view>
         <view class="info-col">
-          <view class="info-value">武侯区 玉林 DCT 客厅</view>
-          <view class="info-sub">报名通过后微信通知具体地址</view>
+          <view class="info-value">{{location}}</view>
+          <view class="info-sub">{{locationNote}}</view>
         </view>
       </view>
       <view class="sep"></view>
       <view class="info-row">
         <view class="mono info-label">入场</view>
         <view class="info-col">
-          <view class="info-value">88 元 / 位</view>
-          <view class="info-sub">含一份甜品 + 一杯酒 · 可打包带走</view>
+          <view class="info-value">{{price}}</view>
+          <view class="info-sub">{{priceNote}}</view>
+        </view>
+      </view>
+      <view wx:if="{{speakerLine}}" class="sep"></view>
+      <view wx:if="{{speakerLine}}" class="info-row">
+        <view class="mono info-label">主讲</view>
+        <view class="info-col">
+          <view class="info-value">{{speakerLine}}</view>
+          <view wx:if="{{cur.speaker.bio}}" class="info-sub">{{cur.speaker.bio}}</view>
         </view>
       </view>
     </view>
@@ -53,10 +62,17 @@
     <view class="mono section-kicker">DCT · 吧规</view>
     <view class="rules-intro">我们认真玩，所以我们也认真设边界。</view>
     <view class="card rules-card">
-      <view class="rules-row" wx:for="{{rules}}" wx:key="k" wx:for-item="item" wx:for-index="i">
-        <view class="mono rule-num">{{i + 1}}</view>
+      <view
+        class="rules-row {{item.highlight === 'head' ? 'rules-row--head' : ''}} {{item.highlight === 'wall' ? 'rules-row--wall' : ''}}"
+        wx:for="{{rules}}" wx:key="k" wx:for-item="item" wx:for-index="i">
+        <view wx:if="{{item.highlight === 'head'}}" class="rule-star">★</view>
+        <view wx:else class="mono rule-num">{{i + 1}}</view>
         <view class="rule-body">
-          <view class="rule-k">{{item.k}}</view>
+          <view class="rule-head">
+            <view class="rule-k">{{item.k}}</view>
+            <view wx:if="{{item.highlight === 'head'}}" class="mono rule-tag rule-tag--head">HEAD</view>
+            <view wx:if="{{item.tag}}" class="mono rule-tag rule-tag--vol">{{item.tag}}</view>
+          </view>
           <view class="rule-v">{{item.v}}</view>
         </view>
       </view>

@@ -1,10 +1,7 @@
 {
   "navigationBarTitleText": "DCT 学术沙龙",
-  "navigationBarBackgroundColor": "#eef4fb",
-  "navigationBarTextStyle": "black",
+  "navigationBarBackgroundColor": "#0c1f3d",
+  "navigationBarTextStyle": "white",
   "backgroundColor": "#f6f8fc",
-  "usingComponents": {
-    "poster-sky": "/components/poster-sky/poster-sky",
-    "dct-origin-story": "/components/dct-origin-story/dct-origin-story"
-  }
+  "usingComponents": {}
 }

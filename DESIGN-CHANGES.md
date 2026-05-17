@@ -209,6 +209,70 @@
 
 ---
 
+### CHG-20260517-01-D · landing 合并「四问」与「冷思考」 — 2026-05-17
+
+**类型**：🎨 纯 UI 改动 + 数据结构小调整（仅 vol03）
+**对应原型**：`prototype-v3` handoff zip · prototype/DESIGN-CHANGES.md 内 CHG-20260517-01 的 D1/D2/D3
+
+**背景**：原"四个抛给讲者的问题"和下方"HE WILL SHARE / '医美热'的'冷思考'"四张点卡内容重合——同一组主题在 vol03 landing 上出现两次。合并成一个深蓝卡片：四个 Q + 每题一句话注脚；下方 points 区在 vol03 完全移除。vol02 保持原样。
+
+**完成内容**：
+
+- **D1**：`miniprogram/data/issues.js` vol03 `teaserQuestions` 从 `string[]` 升级为 `{ q, a }[]`，4 条问题各带一句注脚（注脚内容来自原 points 卡 body）
+- **D1.5**：`landing.js` 预处理 teaserQuestions 兼容两种 schema（string 与 `{q,a}`），输出 `{ num, q, a }`
+- **D2**：`landing.wxml` 重写 `.four-q` 块：
+  - kicker `FOUR QUESTIONS · 当晚我们会聊` → `HE WILL SHARE · 当晚的四个问题`
+  - 大字 `当我们谈论变美时，我们在谈论什么？`（两行）→ 单行 `"医美热" 的 "冷思考"`
+  - 原大字降级为副题 `当我们谈论变美时，我们在谈论什么？`
+  - 每行结构改为 `[Q.0X + 问题] + 答案段`（左缩进 60rpx），与原型一致
+- **D2-CSS**：`landing.wxss` `.four-q` 加双侧光晕（右上 260rpx · 0.22 + 左下 220rpx · 0.10）；padding 调整为 `40rpx 40rpx 44rpx`；新增 `.four-q__subtitle / __row-top / __no / __q / __a` 类
+- **D3**：`landing.wxml` 把整段 `HE WILL SHARE` 四张 point 卡区块用 `wx:if="{{!isV3}}"` 包住——vol03 不再渲染，vol02 完整保留（含 lanes / footprint / compass 三个图标）
+
+**vol02 回归验证**：
+- 切到 `current: 'vol02'` 时：`isV3=false`、`teaserQuestions=[]`，四问深蓝卡 hidden；下方 HE WILL SHARE 三张 point 卡 + 「从真实经历出发，三个侧面」标题正常渲染；opening pitch 落到 v2 文案；其余 hero-subtitle / 留言墙 / Gia 备注 / WHAT IS DCT 文案均按 `!isV3` 走 v2 分支。无回归。
+
+**文件**：`miniprogram/data/issues.js` / `miniprogram/pages/landing/landing.{js,wxml,wxss}`
+**未改动**：报名 / 登记 / 云函数 / form / success / detail / wall 全部不动。
+
+---
+
+### CHG-20260517-01 · 第三期 vol03 上线 — 2026-05-17
+
+**类型**：⚙️ 功能改动 + 🎨 UI 改动（混合 · 走 GitHub）
+**对应原型 tag**：`prototype-v3`
+
+**完成内容**：
+
+- **data**：`current: 'vol02' → 'vol03'`；vol02 改 `status: 'finished'` + 补 summary/highlights；新增 vol03 完整对象（teaserQuestions×4、points×4 含 `\n\n`、menu×6、menuFootnote、皮里士多德半身像）。`brand.announcements` 整段替换为 v3 文案
+- **assets**：复制设计端 `poster-vol03.jpg` + `speaker-vol03-halfbody.jpg` 到 `miniprogram/assets/`
+- **landing**：整页重写
+  - V3PosterHero（海报本身作 hero，1086:1448 全宽 + 底部 fade + 海报说明）
+  - 删掉旧 hero 头像 + dct-origin-story（不再使用）
+  - SpeakerHero（深蓝渐变卡 + 半身像 + 左缘 mask + 金条引言）
+  - 副标诗化两行 + 金星 bullet
+  - Four Questions 深蓝卡 + 金色 `Q.0X` 编号
+  - OPENING PITCH：4 段 strong 文案（v3 专属）
+  - HE WILL SHARE：4 个 point 卡，`bodyParas` 渲染成两段；新增 syringe/skinheart/tangle/self 4 个 CSS 图标
+  - 留言墙预告卡（跳 `pages/wall`，带 NEW 角标）
+  - 联名菜单 + Gia 备注小卡（虚线 dashed + 金圆 G 徽章）
+  - WHAT IS DCT v3 文案（"本期我们走出客厅……"）
+  - CTA 文字按期号自动生成"报名参加第三期"；sticky CTA `VOL.03 · 05.23`
+  - `landing.js` 完全数据驱动 `getCurrent()`，`onShareAppMessage` 文案 v3
+- **form**：vol03 专属新增 wallNickname / selfIntro (≤40) / expectation (≤120) + 双 consent（吧规 + 上墙）+ 字数计数 + 匿名 callout + 金色 WALL 角标；老期沿用 `why`
+- **success**：留言墙预告卡（深蓝渐变 + 金边胶囊按钮 → wall）；timeline 文案 / Canvas 邀请券 / addPhoneCalendar 常量全数据驱动 v3
+- **detail**：完全 `getCurrent()` 数据驱动；流程时间表 v3 六条（19:00 入场 → 21:25 总结）；吧规重排——"尊重规则"放第一位带金色 ★ HEAD 徽章 + highlight；末尾"留言墙匿名"带 VOL.03 标签 + 蓝渐变 highlight；入场 chips 加一条"愿意留下一句话身份 + 一个问题"
+- **review**：vol02 自动出现在列表（finished 化）；现有 ReviewCard 已有 poster 空占位兜底
+- **🆕 pages/wall**：横屏 16:9 TV 留言墙；左：今晚谁来到了 DCT（18 条 seed）；右：大家想问皮里士多德什么（15 条 seed）；时钟 + 大字水印「冷思考」+ LIVE 脉冲 + 金色装饰星。MVP 用 seed，留 `getWallFeed` 云函数 TODO。`wall.json` 配 `pageOrientation: landscape` + `disableScroll`；app.json `pages` 注册新路由 + `resizable: true`
+- **cloudfunctions/submitSignup**：入库新字段（wallNickname/selfIntro/expectation/consentWall/consentRules/issueId/wallDisplay）；服务端校验 selfIntro≤40 / expectation≤120 / consentRules；邮件 from header / 正文按 issueId 切换"DCT 第三期报名"，邮件正文带留言墙两题内容供运营审核
+- **prototype/**：整包替换为设计端 v3（DCT第三期报名.html + src/screen-wall.jsx + 新 assets/poster-vol03.jpg + speaker-vol03-halfbody.jpg），保留 `DCT第二期报名.html` 作历史
+
+**文件**：
+- 新建：`miniprogram/pages/wall/{js,wxml,wxss,json}`、`miniprogram/assets/poster-vol03.jpg`、`miniprogram/assets/speaker-vol03-halfbody.jpg`
+- 修改：`miniprogram/data/issues.js`、`miniprogram/app.json`、`miniprogram/pages/{landing,form,success,detail}/*`、`miniprogram/cloudfunctions/submitSignup/index.js`
+- 替换：`prototype/**`（整包覆盖）
+
+---
+
 ### CHG-20260428-07 · landing 实现审计后修复 3 处 — 2026-04-28 · `8bf92db`
 
 **修复内容**：

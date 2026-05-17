@@ -209,6 +209,90 @@
 
 ---
 
+### CHG-20260518-06 · OPENING PITCH 段 2/3 文字修剪 — 2026-05-18
+
+**类型**：🎨 纯 UI · 文案修剪
+**对应原型**：`prototype/DESIGN-CHANGES.md` CHG-20260518-06 · `prototype/src/screen-landing.jsx`
+
+**改动**（仅 2 处）：
+
+1. **段 2** 去掉句尾追句：删除「每个人的皮肤状态、身体条件与心理预期也都不一样，"能做"与"该做"是两回事」整句——段尾收在 `它能改变什么，又不能承担什么`（加粗）
+2. **段 3** 去掉开头「但」字 ——「但医美也不只是技术」→「医美也不只是技术」
+
+**文件**：
+- `miniprogram/pages/landing/landing.js` · `V3_PITCH_PARAGRAPHS` 段 2/3
+- `docs/index.html` · `.opening-body` 段 2/3 `<p>`
+
+**未触碰**：四问卡 / OPENING PITCH 加粗 highlight / 字色 / 行距 / 整体结构
+
+---
+
+### CHG-20260518-05 · 四问注脚下沉至 OPENING PITCH 正文 — 2026-05-18
+
+**类型**：🎨 纯 UI · 文案重写
+**对应原型**：`prototype/DESIGN-CHANGES.md` CHG-20260518-05 · `prototype/src/screen-landing.jsx`
+
+**背景**：CHG-20260518-04 重写了四问 Q 之后，原来跟旧 Q 配套的 4 条 `a` 注脚不再贴合新 Q 语义。设计端决定：**清空 4 条 `a`，让深蓝卡只剩 Q.01–Q.04 四行裸问题**；把 4 条 a 的核心点织入下方 OPENING PITCH 正文段落，让叙事密度更紧。
+
+**改动**：
+
+1. **数据层** · `teaserQuestions[].a` 全部清空为 `''`：
+   - `miniprogram/data/issues.js` vol03.teaserQuestions
+   - `docs/app.js` TEASER_QUESTIONS
+   - WXML / app.js 渲染逻辑零改动（既有 `wx:if="{{item.a}}"` 兜底）
+
+2. **OPENING PITCH 4 段重写**：
+   - **段 1** 不变：DCT 第三期，邀请到皮里士多德（加粗）
+   - **段 2** 末尾加粗短句：`它能改变什么，又不能承担什么`（来自原 Q.01 a）
+   - **段 3** 加入新句：`技术能改变的，是脸上可量化的部分；而"变美"的感受，从来不是单靠技术兑现的承诺`（来自原 Q.03 a）
+   - **段 4** 以「想变美并不浅薄」开头，含「我想实现的，是谁的想象？」反问（来自原 Q.04 a），并合并原段 4 + 5
+
+**文件**：
+- `miniprogram/pages/landing/landing.js` · `V3_PITCH_PARAGRAPHS`
+- `docs/index.html` · `.opening-body` 4 `<p>`
+
+**视觉验收点**：
+- 四问深蓝卡只剩 4 行裸问题（Q.0X + 文字），行间 0.5px 半透白线，密度比之前紧凑
+- 下方 OPENING PITCH 共 4 段，加粗 highlight 共 2 处（段 2 末尾 + 段 3 末尾）
+
+---
+
+### CHG-20260518-04 · vol03 landing 四问改写 — 2026-05-18
+
+**类型**：🎨 纯 UI · 文案改写
+**对应原型**：`prototype/DESIGN-CHANGES.md` CHG-20260518-04 · `prototype/data/issues.js`
+
+**改动**：`vol03.teaserQuestions` 4 条 Q 全部替换为最新文案：
+
+| # | 新 Q |
+|---|---|
+| Q.01 | 医美的本质，是"医"，还是"美"？ |
+| Q.02 | 人人都适合医美吗？ |
+| Q.03 | 医美一定会让人变美吗？ |
+| Q.04 | 当我们谈论"变美"时，究竟是在追求什么？ |
+
+> 4 条 `a` 注脚原本由 chat 6 的中间版本写出（"每个人的皮肤状态..."、"技术能改变的..."），但用户后续在 CHG-20260518-05 决定把所有 `a` 清空、把核心点织入 OPENING PITCH 正文，所以本条只记 Q 改写，`a` 的最终状态由 CHG-20260518-05 落地。
+
+**文件**：
+- `miniprogram/data/issues.js` vol03.teaserQuestions
+- `docs/app.js` TEASER_QUESTIONS
+
+**渲染层无需改动**：teaserQuestions 的 `q` 字段渲染逻辑已就位，本条只换数据。
+
+---
+
+### CHG-20260518-03 · prototype 文案 backfill（与 CHG-20260517-02 实现端对齐）— 2026-05-18
+
+**类型**：📋 文档同步 · 仅 prototype/ 改动（**无实现端工作**）
+
+**背景**：CHG-20260517-02 在实现端（miniprogram + docs）做了 4 处文案微调（删咖啡馆 / 删 Gia 副行 / 「10-15 人」→ 「精挑细选」 / expectation 120→250），但设计端 `prototype/` 当时没同步。本次 handoff 时设计端把 prototype 也补齐到一致状态。
+
+**结果**：`prototype/src/{screen-about,screen-landing,screen-form}.jsx` 和 `prototype/data/issues.js` 与实现端完全对齐，没有 drift。
+
+**实现端无任何改动**——这条 CHG 是为了文档完整性记录设计端的 prototype 端 backfill 行为。
+
+---
+
 ### CHG-20260518-02 · hotfix · docs/app.js 加 escapeHtml 函数定义 — 2026-05-18 · `0514daf`
 
 **类型**：🐛 hotfix · 一行函数定义补救

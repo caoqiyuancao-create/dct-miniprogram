@@ -1,83 +1,64 @@
 // Screen — About DCT (创办故事)
-// Content faithful to Vol.01 opening PDF · 6-scene animation + long-form essay
+// Content faithful to Vol.01 opening PDF · 起源动画用 AE 视频 + long-form essay
+// CHG-20260518-01 · 把占位 6 幕动画换成 AE 渲染视频（origin-story.mp4）
 // Comic/portrait art lives in <ArtSlot/> placeholders — replace with real images later.
 
+// 视频来源：docs/assets/origin-story.mp4（6.0 MB · 文件过大不放入 prototype/assets，
+// 原型预览直接从 GitHub raw 取，生产端走 docs/assets/origin-story.mp4 相对路径）
+const ORIGIN_VIDEO_URL = 'https://raw.githubusercontent.com/caoqiyuancao-create/dct-miniprogram/main/docs/assets/origin-story.mp4';
+
 function ScreenAbout({ go }) {
-  const [scene, setScene] = React.useState(0);
-  const [playing, setPlaying] = React.useState(true);
-  const scenes = [
-    { caption: '一切从天时地利人和说起', sub: '2026 · 一个客厅 · 三个 PhD' },
-    { caption: '一只狗、一道菜、一次对话', sub: 'Dog · Chef · Therapist' },
-    { caption: '在绩效之外',           sub: '留一块精神自留地' },
-    { caption: 'Doctors\' Crazy Thinking', sub: '认真地胡思乱想' },
-    { caption: '客厅里的家庭学术沙龙', sub: '一期一会 · 不功利的深度交流' },
-    { caption: '欢迎你也来',           sub: '一起建设这块自留地' },
-  ];
-
-  React.useEffect(() => {
-    if (!playing) return;
-    const t = setTimeout(() => {
-      if (scene < scenes.length - 1) setScene(scene + 1);
-      else setPlaying(false);
-    }, 2400);
-    return () => clearTimeout(t);
-  }, [scene, playing]);
-
-  const replay = () => { setScene(0); setPlaying(true); };
+  const videoRef = React.useRef(null);
+  const replay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  };
 
   return (
     <div style={{ background: '#f6f8fc', minHeight: '100%' }}>
       <WxHeader title="关于 DCT" />
 
-      {/* Animation stage */}
+      {/* Origin story · AE 视频版（替代原 6 幕 CSS keyframes 占位） */}
       <div style={{
-        position: 'relative', height: 320, overflow: 'hidden',
-        background: 'linear-gradient(180deg, #e7f0fa 0%, #c9ddf3 100%)',
+        position: 'relative', width: '100%', aspectRatio: '16 / 9',
+        maxHeight: '56vh', overflow: 'hidden',
+        background: 'linear-gradient(180deg, #0b1f3a 0%, #1d3a6b 100%)',
       }}>
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'conic-gradient(from 210deg at 50% 110%, rgba(255,255,255,0) 0deg, rgba(255,255,255,0.5) 30deg, rgba(255,255,255,0) 60deg, rgba(255,255,255,0.3) 90deg, rgba(255,255,255,0) 120deg, rgba(255,255,255,0.5) 150deg, rgba(255,255,255,0) 180deg)',
-          opacity: 0.5,
-        }} />
-        <AboutScene active={scene === 0} variant="sky" />
-        <AboutScene active={scene === 1} variant="three" />
-        <AboutScene active={scene === 2} variant="seedling" />
-        <AboutScene active={scene === 3} variant="brand" />
-        <AboutScene active={scene === 4} variant="living" />
-        <AboutScene active={scene === 5} variant="invite" />
+        <video
+          ref={videoRef}
+          src={ORIGIN_VIDEO_URL}
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="metadata"
+          webkit-playsinline="true"
+          x5-playsinline="true"
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%', objectFit: 'cover',
+            display: 'block', background: '#0b1f3a',
+          }}
+        />
 
-        <div style={{
-          position: 'absolute', left: 0, right: 0, bottom: 20, textAlign: 'center', color: '#0f2855',
-        }}>
-          <div className="serif" style={{
-            fontSize: 22, fontWeight: 700, letterSpacing: 2,
-            textShadow: '0 1px 0 rgba(255,255,255,0.7)',
-          }}>{scenes[scene].caption}</div>
-          <div style={{ fontSize: 11, color: '#55709a', marginTop: 4, letterSpacing: 1 }}>{scenes[scene].sub}</div>
-        </div>
-
-        <div style={{
-          position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)',
-          display: 'flex', gap: 4,
-        }}>
-          {scenes.map((_, i) => (
-            <div key={i} onClick={() => { setScene(i); setPlaying(false); }}
-              style={{
-                width: i === scene ? 14 : 4, height: 4, borderRadius: 2,
-                background: i === scene ? '#1a3a78' : 'rgba(26,58,120,0.3)',
-                transition: 'all 0.3s',
-              }} />
-          ))}
-        </div>
-
-        {!playing && (
-          <div onClick={replay} style={{
+        {/* REPLAY · 金边胶囊按钮 */}
+        <button
+          type="button"
+          onClick={replay}
+          className="mono"
+          style={{
             position: 'absolute', top: 12, right: 12,
-            background: 'rgba(255,255,255,0.8)', borderRadius: 12,
-            padding: '4px 10px', fontSize: 10, color: '#1a3a78',
-            letterSpacing: 1, fontFamily: '"JetBrains Mono", monospace',
-          }}>↻ REPLAY</div>
-        )}
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            padding: '5px 11px', borderRadius: 999,
+            background: 'rgba(11,31,58,0.55)',
+            border: '0.5px solid rgba(233,185,73,0.7)',
+            backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)',
+            color: '#e9b949', fontSize: 10, letterSpacing: 1.5,
+            cursor: 'pointer', lineHeight: 1.2,
+          }}
+        >↻ REPLAY</button>
       </div>
 
       {/* WHY · DCT 从何而来 */}
@@ -136,7 +117,7 @@ function ScreenAbout({ go }) {
 
       {/* HOW · 客厅里的学术 */}
       <AboutSection kicker="HOW" title="为什么是「客厅里」">
-        <p>我们刻意没有选讲堂、咖啡馆、共享空间——而是<strong>客厅</strong>。它在物理上离生活最近，也在心理上离表演最远。</p>
+        <p>我们刻意没有选讲堂、共享空间——而是<strong>客厅</strong>。它在物理上离生活最近，也在心理上离表演最远。</p>
         <p>没有 PPT 也行、不正襟危坐也行、说错话也行。我们希望氛围像朋友间的夜谈：有人讲，有人听，有人随时插话，有人沉默地吃一块甜品。</p>
         <p>每期一位主讲人 · 一个 TA 真心热爱或长期琢磨的话题 · 40 分钟左右分享 · 之后是自由讨论。<strong>欢迎打断、追问、不同意</strong>——只要友善。</p>
       </AboutSection>
@@ -149,7 +130,7 @@ function ScreenAbout({ go }) {
           <li><strong>真的对当期话题感兴趣</strong>——而不是来凑场。</li>
           <li><strong>愿意友善地交换观点</strong>——能讲，也能听；能质疑，也能被质疑。</li>
         </ul>
-        <p>每期 10–15 人，多学科背景优先，尽量不要让客厅变成同一个领域的回音室。</p>
+        <p>每期都精挑细选，多学科背景优先，尽量不要让客厅变成同一个领域的回音室。</p>
       </AboutSection>
 
       {/* Closing CTA */}
@@ -278,6 +259,8 @@ function Quote({ children }) {
   );
 }
 
+// NOTE: AboutScene 组件保留下方仅作回滚参考（CHG-20260518-01 之后由视频替代）。
+// 当前 ScreenAbout 不再调用 AboutScene；无 DOM 引用，无副作用，方便对照原 6 幕意图。
 function AboutScene({ active, variant }) {
   const common = {
     position: 'absolute', inset: 0, display: 'flex',

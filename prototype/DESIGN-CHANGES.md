@@ -93,6 +93,181 @@
 
 ---
 
+### CHG-20260518-06 · OPENING PITCH 段 2/3 文字修剪
+
+**类型**：🎨 纯 UI 改动（文案微调）
+**页面**：`pages/landing/landing` OPENING PITCH 区块（v3 分支）
+**触发方**：QY 在原型上 inline-edit 删字
+**对应原型**：`prototype/src/screen-landing.jsx` 第 300-302 行
+
+**改动**（在 CHG-20260518-05 基础上继续修剪）：
+
+1. **段 2 末尾删句**：删去「每个人的皮肤状态、身体条件与心理预期也都不一样，"能做"与"该做"是两回事。」
+   - 段 2 现在收在加粗短句：`...风险边界——它能改变什么，又不能承担什么。`
+   - **影响**：Q.02 注脚之前下沉到段 2 的内容被回收。这条 Q.02 注脚不再以正文形式体现——读者要靠现场讲者展开
+2. **段 3 删首字**：「但医美也不只是技术」→「医美也不只是技术」
+   - 去掉"但"字让段落起始更直接、不再是连接前一段的转折
+   - 也合理：上一段已收在加粗短句作 hook，下段独立起更利落
+
+**给 Claude Code 的粘贴说明**：
+> 按 prototype/DESIGN-CHANGES.md 的 CHG-20260518-06 修剪 vol03 landing OPENING PITCH 文字：(1) 段 2 末尾去掉关于"能做与该做"的整句；(2) 段 3 开头去掉"但"字。仅文案修剪，结构/加粗 highlight/字号字色全部不动。
+
+---
+
+### CHG-20260518-05 · 四问注脚下沉至 OPENING PITCH 正文
+
+**类型**：🎨 纯 UI 改动（文案重组）
+**页面**：`pages/landing/landing` 四问深蓝卡 + OPENING PITCH 区块
+**触发方**：QY 在原型 landing 上批注：「把每个小标题下面的补充删掉，把删掉的内容整合进下面板块当中的介绍文字中」
+**对应原型**：`prototype/data/issues.js` vol03 `teaserQuestions[]` + `prototype/src/screen-landing.jsx` OPENING PITCH
+
+**改动**：
+
+1. **数据层**（`issues.js` vol03 `teaserQuestions`）：
+   - 4 条 `{ q, a }` 的 `a` 字段全部清空为 `''`（保留 schema，方便后续如需再加回）
+   - `q` 文案不动
+
+2. **landing 渲染**（`screen-landing.jsx`）：
+   - **无 wxml 结构改动**——`{a && <div>{a}</div>}` 已经条件渲染；`a` 为空字符串时整段不渲染、`marginBottom: a ? 8 : 0` 自动收紧到 0
+   - 视觉上四问卡变成"四行裸 Q"：`Q.0X 问题` 之间用 0.5px 半透白横线分隔，密度比原来紧凑
+   - **OPENING PITCH 段落重写**（v3 分支 only），把 4 条 a 的核心点织入 4 段正文：
+     - 段 2 末尾 + 第二行：织入 Q.01 a（医学的作用机制、适应证、风险边界 + 「它能改变什么，又不能承担什么」加粗）+ Q.02 a（「能做」与「该做」是两回事）
+     - 段 3 开头：织入 Q.03 a（技术只能改变可量化部分；"变美"感受不是单靠技术的承诺）
+     - 段 4 开头：织入 Q.04 a（想变美并不浅薄 / "我想实现的，是谁的想象？"）作为转折钩子
+   - 加粗的 highlight 钉子（`color: #0f2855, fontWeight: 500`）有 2 处：「它能改变什么，又不能承担什么」和原有「当我们想要改变自己的脸和身体时，我们真正想改变的是什么？」
+
+**小程序实现要点**：
+- **数据**：`miniprogram/data/issues.js` vol03 `teaserQuestions[]` 4 条 `a` 字段同步清空为 `''`
+- **WXML**：`landing.wxml` 四问块 `<view class="four-q__a" wx:if="{{item.a}}">` 已有 wx:if，零改动；空字符串自动不渲染
+- **WXSS**：`.four-q__row-top` 的 `margin-bottom` 在 `a` 为空时仍占 16rpx——可以视觉验收后再决定是否需要收紧到 0
+- **OPENING PITCH 文案**：`landing.wxml` 里 v3 分支的 `<text>` 段落按设计端新版本同步替换（4 个段落，结构 + 加粗 highlight 位置保持原样，只换文字内容）。**注意**全角"双引号"和 `——` 破折号原样保留
+
+**给 Claude Code 的粘贴说明**：
+> 按 prototype/DESIGN-CHANGES.md 的 CHG-20260518-05 做两件事：(1) `data/issues.js` vol03 `teaserQuestions[]` 4 条 `a` 清空为 `''`；(2) `landing.wxml` v3 OPENING PITCH 4 段文案按设计端新版本替换（参考 prototype/src/screen-landing.jsx 第 297-305 行）。WXSS 不动，wx:if 已兜底空字符串。
+
+---
+
+### CHG-20260518-04 · vol03 landing 四问改写
+
+**类型**：🎨 纯 UI 改动（文案 / 数据层）
+**页面**：`pages/landing/landing` 深蓝四问卡
+**触发方**：QY 直接在原型 landing 页给出新的四个问题
+**对应原型**：`prototype/data/issues.js` vol03 `teaserQuestions[]`
+
+**改动**（按位置 Q.01 → Q.04）：
+
+| # | 原 Q | 新 Q |
+|---|---|---|
+| 01 | 医学的界限在哪里？ | **医美的本质，是"医"，还是"美"？** |
+| 02 | "美"由谁定义？ | **人人都适合医美吗？** |
+| 03 | 当我们想变美时，我们在回应什么？ | **医美一定会让人变美吗？** |
+| 04 | 医美改变的是皮肤，还是自我？ | **当我们谈论"变美"时，究竟是在追求什么？** |
+
+**注脚 a 同步重写**：
+- **Q.01 a**：保留原 a1（医学技术 / 作用机制 / 适应证与风险边界）—— 与新 Q「医还是美」契合
+- **Q.02 a**：**新写** —— `每个人的皮肤状态、身体条件、心理预期都不一样——"能做"与"该做"是两回事。`（原 a2 关于"美的定义被滤镜塑造"已与新 Q 无关）
+- **Q.03 a**：**新写** —— `技术能改变的，是脸上可量化的部分；但"变美"的感受，从来不是单靠技术兑现的承诺。`（替换原 a3 的"是谁的想象"——已搬到 Q.04 注脚位）
+- **Q.04 a**：复用原 a3（想变美并不浅薄 · 是谁的想象）—— 与新 Q「追求什么」语义重合
+
+**小程序实现要点**：
+- 仅 `miniprogram/data/issues.js` 的 `vol03.teaserQuestions[]` 数组里 4 条文案替换，schema 不变（`{ q, a }` 对象数组）
+- `landing.js` / `landing.wxml` / `landing.wxss` **零改动**——渲染逻辑、Q.0X 编号、左缩进、深蓝卡光晕全部沿用
+- 注意 `"` 全角双引号要原样保留（"医"、"美"、"变美"），别被编辑器误转半角
+
+**给 Claude Code 的粘贴说明**：
+> 按 prototype/DESIGN-CHANGES.md 的 CHG-20260518-04 改 `miniprogram/data/issues.js` 里 vol03 `teaserQuestions[]` 的 4 条 `{q, a}` 文案，**只动文案**，不动 schema、不动 landing 页 wxml/wxss/js。
+
+---
+
+### CHG-20260518-03 · 原型文案 backfill（咖啡馆 / 主题饮品打样 / 10-15 人 / expectation 120→250）
+
+**类型**：🎨 纯 UI 改动（追同实现端）
+**对应实现端**：根 DESIGN-CHANGES `CHG-20260517-02`（2026-05-17 commit `0740dc3`）
+**背景**：实现端在 05-17 已把 4 处文案改掉并部署，但**原型还停留在老文案**。这次按 CHG-20260517-02 在文档末尾给的提示统一 backfill，让设计端和真机一致。
+
+**改动列表**：
+
+1. **`prototype/src/screen-about.jsx` HOW 章节**：删掉「咖啡馆」
+   - 原：`我们刻意没有选讲堂、咖啡馆、共享空间——而是客厅`
+   - 改：`我们刻意没有选讲堂、共享空间——而是客厅`
+
+2. **`prototype/src/screen-about.jsx` WHO MAY JOIN 章节**：「10–15 人」→「精挑细选」
+   - 原：`每期 10–15 人，多学科背景优先`
+   - 改：`每期都精挑细选，多学科背景优先`
+
+3. **`prototype/src/screen-landing.jsx` Gia 备注小卡**：删掉副行 + 改单行版式
+   - 删除：`更多<b>主题饮品</b>正在打样中 · 敬请期待`
+   - 保留：`甜品仍由 Gia 制作 ✦`
+   - 同时把 `alignItems: 'flex-start'` 改成 `'center'` —— 主行收紧后单行垂直居中更平衡
+   - 内部嵌套 `<div>` 主行/副行两层结构铺平成一层（fontWeight 600 直接挂外层）
+
+4. **`prototype/src/screen-form.jsx` expectation 字数上限**：120 → 250
+   - `<TextArea maxLen={120}>` → `<TextArea maxLen={250}>`
+   - 注：实现端 server `EXPECTATION_MAX = 250` 已部署到云端 `submitSignup`
+
+**未触碰**：
+- `prototype/explore/` 下旧探索稿（screens.jsx · vol01-screens.jsx）保留原文案——属于历史草稿，不进生产
+- TextArea 组件 `minHeight = 120` 默认值不动（这是 px 高度，不是字数上限）
+- 实现端 expectation textarea 高度未变，250 字时滚动条会出现——是否要把原型这里 minHeight 调大可下一版讨论
+
+---
+
+### CHG-20260518-01 · About 页起源动画用 AE 视频替代 6 幕 CSS 占位
+
+**类型**：🎨 UI 改动 · 资源依赖（新增 ~6 MB 视频）
+**页面**：`pages/about/about` + `src/screen-about.jsx`
+**对应实现**：根 DESIGN-CHANGES `CHG-20260518-01`（H5 端已落地 docs/index.html）
+**设计意图**：原 about 页"起源故事"是用 6 段 CSS keyframes 实现的占位动画（sky / three / seedling / brand / living / invite 六幕配字幕），QY 长期不满意。这次用 AE 渲染的视频 `origin-story.mp4` 直接替代，更接近最终视觉。
+
+#### 设计端改动
+
+**`prototype/src/screen-about.jsx`**：
+- 删除 `scene` / `playing` 两个 useState + `useEffect` 计时器 + `scenes` 字幕数组（不再需要切幕调度）
+- 删除 6 个 `<AboutScene variant=... />` 调用 + 顶部 dots 切换器 + 底部 caption 字幕区
+- 新增一个 `<video>` 元素：`autoPlay muted playsInline loop preload="metadata"` + `webkit-playsinline` / `x5-playsinline`（iOS Safari + 微信 X5 兼容）
+- 容器尺寸：`aspectRatio: 16/9` · `maxHeight: 56vh`，深蓝兜底背景
+- 右上 `REPLAY` 按钮：`rgba(11,31,58,0.55)` 玻璃毛背景 + 金色 0.7 透明描边 + `backdrop-blur(6px)` · 点击 `video.currentTime = 0; play()`
+- `AboutScene` 组件函数体保留作为回滚参考（未被调用，无副作用）
+
+**视频来源**：原型预览直接走 GitHub raw URL（`https://raw.githubusercontent.com/caoqiyuancao-create/dct-miniprogram/main/docs/assets/origin-story.mp4`）—— 文件太大（6 MB）不放入 prototype/assets。小程序端走相对路径 `assets/animations/origin-story.mp4`（实现端自己 mv 过去）。
+
+#### 小程序实现要点
+
+- **视频路径**：把 `docs/assets/origin-story.mp4` 复制到 `miniprogram/assets/origin-story.mp4`（约 6 MB，注意小程序主包限制 2 MB → 必须走**分包**或**云存储** + `<video src="cloud://...">`）。**推荐云存储**：上传到 `cloud://prod/assets/origin-story.mp4` → 用 `wx.cloud.getTempFileURL` 换 https URL → 放进 `<video>` 的 `src`
+- **WXML 替换**：删掉 `<view class="about-stage">` 块（6 个 scene + dots + replay 占位），换成：
+  ```xml
+  <view class="about-video">
+    <video id="about-video"
+           class="about-video__el"
+           src="{{originVideoUrl}}"
+           autoplay
+           muted
+           loop
+           controls="{{false}}"
+           show-center-play-btn="{{false}}"
+           show-play-btn="{{false}}"
+           show-fullscreen-btn="{{false}}"
+           object-fit="cover"
+           enable-progress-gesture="{{false}}"
+           bindplay="onVideoPlay" />
+    <view class="about-video__replay" bindtap="onVideoReplay">↻ REPLAY</view>
+  </view>
+  ```
+- **WXSS**（rpx ×2）：`.about-video { aspect-ratio: 16/9; max-height: 1120rpx; background: linear-gradient(180deg, #0b1f3a 0%, #1d3a6b 100%); overflow: hidden; }` · `.about-video__el { width: 100%; height: 100%; }` · `.about-video__replay`：胶囊 + 金色描边 + `backdrop-filter: blur(12rpx)`，绝对定位 right: 24rpx, top: 24rpx
+- **JS**：`onLoad` 里 `wx.cloud.getTempFileURL({ fileList: ['cloud://prod/assets/origin-story.mp4'] })` 换出 URL → setData。`onVideoReplay` 里用 `wx.createVideoContext('about-video').seek(0); play()`
+- **原 6 幕 CSS keyframes 样式**（`.about-stage / .about-scene / .cloud / .role-orb / .field-tile / ...` 约 200rpx 行）：**保留**在 about.wxss 文件末尾，无 WXML 引用，无副作用，便于对照 / 回滚
+
+**视觉验收点**：
+- 进入 about 页：起源故事区块自动播放 AE 视频（无声、循环），高度约屏幕 56vh
+- 右上金色「↻ REPLAY」按钮：点击后视频从头播放
+- 视频加载未完成时显示深蓝渐变占位，不显示空白
+- 微信内打开不会被强制全屏
+
+**给 Claude Code 的粘贴说明**：
+> 按 prototype/DESIGN-CHANGES.md 的 CHG-20260518-01 把 about 页 6 幕 CSS 占位动画换成视频版。视频先上传到云存储 `cloud://prod/assets/origin-story.mp4`（约 6 MB · 不要放进主包）；WXML 用 `<video autoplay muted loop>` + 金色 REPLAY 按钮；原 6 幕 CSS 样式保留作回滚参考。**视频源文件**：从 H5 已上线的 `docs/assets/origin-story.mp4` 直接拷贝。
+
+---
+
 ### CHG-20260517-01 · Landing 页 · 合并「四个问题」与「冷思考」两个区块
 
 **类型**：🎨 纯 UI 改动 + 数据结构小调整（仅 vol03）

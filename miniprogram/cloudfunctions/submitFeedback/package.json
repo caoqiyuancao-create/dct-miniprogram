@@ -1,0 +1,10 @@
+{
+  "name": "submitFeedback",
+  "version": "1.0.0",
+  "description": "DCT feedback submission — upsert by (issueId, openid) + email notification + admin summary",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "nodemailer": "^6.9.13"
+  }
+}

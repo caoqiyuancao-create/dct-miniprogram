@@ -93,6 +93,139 @@
 
 ---
 
+### CHG-20260517-01 · Landing 页 · 合并「四个问题」与「冷思考」两个区块
+
+**类型**：🎨 纯 UI 改动 + 数据结构小调整（仅 vol03）
+**页面**：`pages/landing/landing.wxml` + `landing.wxss` + `miniprogram/data/issues.js`
+**设计意图**：原来"四个抛给讲者的问题"和下面的"HE WILL SHARE / '医美热'的'冷思考'"四张点卡内容重合（都是同一组主题）。合并成一个深蓝卡片：四个问题 + 每题下方一句话注脚。原下方那块独立的 points 卡片区在 vol03 里完全移除。vol02 保持原样。
+
+#### D1 · 数据层 · `data/issues.js` 里 vol03 的 `teaserQuestions` 改为对象数组
+
+**原样**（`miniprogram/data/issues.js`）：
+```js
+teaserQuestions: [
+  '医学的界限在哪里？',
+  '"美"由谁定义？',
+  '当我们想变美时，我们在回应什么？',
+  '医美改变的是皮肤，还是自我？',
+],
+```
+
+**目标**：
+```js
+teaserQuestions: [
+  { q: '医学的界限在哪里？',
+    a: '医美是医学技术，也有作用机制、适应证与风险边界——它能改变什么？又不能承担什么？' },
+  { q: '"美"由谁定义？',
+    a: '滤镜、平台、流量与广告，正在塑造我们对"更好看"的想象——"更美"从来不只是个人选择。' },
+  { q: '当我们想变美时，我们在回应什么？',
+    a: '想变美并不浅薄。但在改变之前，也许可以先问：我想实现的，是谁的想象？' },
+  { q: '医美改变的是皮肤，还是自我？',
+    a: '当技术越来越普及，问题不只是"能不能做"——还有适不适合做、做到什么程度。' },
+],
+```
+
+> **兼容性**：WXML 渲染时用 `{{item.q}}` 和 `{{item.a}}`。vol02 没有 `teaserQuestions` 字段，整段 wx:if 包住即可。
+
+#### D2 · WXML · 改造原"四问"深蓝卡
+
+**位置**：landing 页 hero + speaker 卡之后、opening pitch 之前那张深蓝渐变卡。
+
+**WXML 结构改动**：
+```xml
+<view class="four-q" wx:if="{{cur.teaserQuestions}}">
+  <view class="four-q__inner">
+    <!-- 顶部 kicker + 标题 + 副题 -->
+    <view class="four-q__kicker">HE WILL SHARE · 当晚的四个问题</view>
+    <view class="four-q__title">"医美热" 的 "冷思考"</view>
+    <view class="four-q__subtitle">当我们谈论变美时，我们在谈论什么？</view>
+
+    <!-- 四个 Q + A 行 -->
+    <view class="four-q__row" wx:for="{{cur.teaserQuestions}}" wx:key="index">
+      <view class="four-q__row-top">
+        <text class="four-q__no">Q.0{{index + 1}}</text>
+        <text class="four-q__q">{{item.q}}</text>
+      </view>
+      <view class="four-q__a" wx:if="{{item.a}}">{{item.a}}</view>
+    </view>
+  </view>
+</view>
+```
+
+**WXSS 关键值**（rpx 已 ×2）：
+```css
+.four-q {
+  margin: 52rpx 44rpx 0;
+}
+.four-q__inner {
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #0f2855 0%, #1a3a78 100%);
+  border-radius: 36rpx;
+  padding: 40rpx 40rpx 44rpx;
+}
+.four-q__inner::before { /* 右上金色光晕 */
+  content: ''; position: absolute; right: -32rpx; top: -32rpx;
+  width: 260rpx; height: 260rpx; border-radius: 50%;
+  background: radial-gradient(circle, rgba(233,185,73,0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+.four-q__inner::after { /* 左下金色光晕 */
+  content: ''; position: absolute; left: -40rpx; bottom: -56rpx;
+  width: 220rpx; height: 220rpx; border-radius: 50%;
+  background: radial-gradient(circle, rgba(233,185,73,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+.four-q__kicker {
+  font-family: var(--mono); font-size: 20rpx; letter-spacing: 6rpx;
+  color: #e9b949; margin-bottom: 16rpx;
+}
+.four-q__title {
+  font-family: var(--serif); font-size: 44rpx; font-weight: 700;
+  color: #fff; line-height: 1.3; letter-spacing: 2rpx; margin-bottom: 8rpx;
+}
+.four-q__subtitle {
+  font-size: 24rpx; color: rgba(255,255,255,0.6);
+  line-height: 1.55; margin-bottom: 32rpx;
+}
+.four-q__row {
+  padding: 28rpx 0 32rpx;
+  border-top: 1rpx solid rgba(255,255,255,0.16);
+}
+.four-q__row-top {
+  display: flex; gap: 24rpx; align-items: baseline; margin-bottom: 16rpx;
+}
+.four-q__no {
+  font-family: var(--mono); font-size: 20rpx; letter-spacing: 2rpx;
+  color: #e9b949; font-weight: 600; flex-shrink: 0;
+}
+.four-q__q {
+  flex: 1; font-family: var(--serif); font-size: 31rpx; font-weight: 600;
+  color: #fff; line-height: 1.4; letter-spacing: 0.6rpx;
+}
+.four-q__a {
+  padding-left: 60rpx;
+  font-size: 25rpx; line-height: 1.7;
+  color: rgba(241,245,251,0.78); text-wrap: pretty;
+}
+```
+
+#### D3 · 删除原下方 "HE WILL SHARE · 医美热的冷思考" 四张 point 卡（仅 vol03）
+
+**位置**：landing 页里"opening pitch"之后那段。
+**目标**：用 `wx:if="{{cur.id !== 'vol03'}}"` 把整个 `.points-list` 区块（含 kicker + 标题 + 四张 .point-card）包住，vol03 不渲染。vol02 完全保留。
+
+> 注意：`cur.points` 字段 vol03 还保留着（避免破坏数据 schema），只是 vol03 的 landing 不再消费它。如果之后 vol03 完全不需要，再删数据。
+
+#### 视觉验收点
+
+1. 整页 vol03 landing 应该看到：海报 → speaker → 诗化副题 → **唯一一张"医美热的冷思考"深蓝卡（含四问+四注脚）** → opening pitch → 留言墙 → 时间地点 → 菜单 → ...
+2. vol02 landing **不能**出现深蓝四问卡，但下方三张 points 卡照常显示。
+
+**粘贴给 Claude Code：**
+> 按 DESIGN-CHANGES.md 的 CHG-20260517-01 改 landing 页（D1 数据 + D2 WXML/WXSS + D3 删 vol03 的旧 points 区），只动 UI 和数据结构，别动报名逻辑。改完前后对比下 vol02 不要回归。
+
+---
+
 ### CHG-20260428-03 · 功能升级（报名状态记忆 / 日历 / 分享 / 海报 / 倒计时）
 
 **类型**：⚙️ 功能改动（**这条主要走 GitHub**，但相关 UI 元素的视觉规范放这里）

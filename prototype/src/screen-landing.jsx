@@ -220,40 +220,60 @@ function ScreenLanding({ go }) {
         </div>
       )}
 
-      {/* v3: 四个抛给讲者的问题 — hero 之后立刻给冲击 */}
+      {/* v3: 四个抛给讲者的问题（合并自原 "HE WILL SHARE / 冷思考"）—— 每题一句话注脚 */}
       {isV3 && cur.teaserQuestions && (
         <div style={{ padding: '26px 22px 0' }}>
           <div style={{
             background: 'linear-gradient(180deg, #0f2855 0%, #1a3a78 100%)',
-            borderRadius: 18, padding: '18px 18px 22px', position: 'relative', overflow: 'hidden',
+            borderRadius: 18, padding: '20px 20px 22px', position: 'relative', overflow: 'hidden',
           }}>
             <div style={{
-              position: 'absolute', right: -16, top: -16, width: 110, height: 110,
-              borderRadius: 55, background: 'radial-gradient(circle, rgba(233,185,73,0.22) 0%, transparent 70%)',
+              position: 'absolute', right: -16, top: -16, width: 130, height: 130,
+              borderRadius: 65, background: 'radial-gradient(circle, rgba(233,185,73,0.22) 0%, transparent 70%)',
               pointerEvents: 'none',
             }} />
+            <div style={{
+              position: 'absolute', left: -20, bottom: -28, width: 110, height: 110,
+              borderRadius: 55, background: 'radial-gradient(circle, rgba(233,185,73,0.10) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+
             <div className="mono" style={{
               fontSize: 10, letterSpacing: 3, color: '#e9b949', marginBottom: 8,
-            }}>FOUR QUESTIONS · 当晚我们会聊</div>
+            }}>HE WILL SHARE · 当晚的四个问题</div>
             <div className="serif" style={{
-              fontSize: 18, fontWeight: 700, color: '#fff', marginBottom: 14, lineHeight: 1.35,
-            }}>当我们谈论变美时，<br />我们在谈论什么？</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {cur.teaserQuestions.map((q, i) => (
-                <div key={i} style={{
-                  display: 'flex', gap: 12, alignItems: 'flex-start',
-                  padding: '10px 0',
-                  borderTop: i === 0 ? '0.5px solid rgba(255,255,255,0.16)' : 'none',
-                  borderBottom: '0.5px solid rgba(255,255,255,0.16)',
-                }}>
-                  <div className="mono" style={{
-                    fontSize: 10, color: '#e9b949', fontWeight: 600, letterSpacing: 1, paddingTop: 3,
-                  }}>Q.0{i + 1}</div>
-                  <div style={{
-                    flex: 1, fontSize: 13.5, color: '#f1f5fb', lineHeight: 1.55,
-                  }}>{q}</div>
-                </div>
-              ))}
+              fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 4, lineHeight: 1.3, letterSpacing: 1,
+            }}>“医美热” 的 “冷思考”</div>
+            <div style={{
+              fontSize: 12, color: 'rgba(255,255,255,0.6)', marginBottom: 16, lineHeight: 1.55,
+            }}>当我们谈论变美时，我们在谈论什么？</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {cur.teaserQuestions.map((item, i) => {
+                const q = typeof item === 'string' ? item : item.q;
+                const a = typeof item === 'string' ? '' : item.a;
+                return (
+                  <div key={i} style={{
+                    padding: '14px 0 16px',
+                    borderTop: '0.5px solid rgba(255,255,255,0.16)',
+                  }}>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', marginBottom: a ? 8 : 0 }}>
+                      <div className="mono" style={{
+                        fontSize: 10, color: '#e9b949', fontWeight: 600, letterSpacing: 1, flexShrink: 0,
+                      }}>Q.0{i + 1}</div>
+                      <div className="serif" style={{
+                        flex: 1, fontSize: 15.5, color: '#fff', fontWeight: 600, lineHeight: 1.4, letterSpacing: 0.3,
+                      }}>{q}</div>
+                    </div>
+                    {a && (
+                      <div style={{
+                        paddingLeft: 30,
+                        fontSize: 12.5, color: 'rgba(241,245,251,0.78)', lineHeight: 1.7, textWrap: 'pretty',
+                      }}>{a}</div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -289,13 +309,14 @@ function ScreenLanding({ go }) {
         </div>
       </div>
 
-      {/* SHE/HE WILL SHARE */}
+      {/* SHE/HE WILL SHARE · v2 专属（v3 已合并入上方"四问"） */}
+      {!isV3 && (
       <div style={{ padding: '26px 22px 0' }}>
         <div className="mono" style={{
           fontSize: 11, color: '#55709a', letterSpacing: 3, marginBottom: 4,
         }}>HE WILL SHARE</div>
         <div className="serif" style={{ fontSize: 18, color: '#0f2855', fontWeight: 700, marginBottom: 14 }}>
-          {isV3 ? '“医美热”的“冷思考”' : '从真实经历出发，三个侧面'}
+          从真实经历出发，三个侧面
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {cur.points.map((p, i) => (
@@ -329,6 +350,7 @@ function ScreenLanding({ go }) {
           ))}
         </div>
       </div>
+      )}
 
       {/* v3: 留言墙预告 */}
       {isV3 && (

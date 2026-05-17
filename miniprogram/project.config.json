@@ -1,5 +1,5 @@
 {
-  "description": "DCT 第二期报名 mini program",
+  "description": "DCT 学术沙龙 · 多期小程序（current=vol03 · 医美热时代的冷思考）",
   "miniprogramRoot": "./",
   "cloudfunctionRoot": "cloudfunctions/",
   "projectname": "dct-candidate",

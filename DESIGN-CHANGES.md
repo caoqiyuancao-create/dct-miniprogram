@@ -209,7 +209,39 @@
 
 ---
 
-### CHG-20260518-01 · H5 about 页起源动画用视频替代占位 6 幕 — 2026-05-18
+### CHG-20260518-02 · hotfix · docs/app.js 加 escapeHtml 函数定义 — 2026-05-18 · `0514daf`
+
+**类型**：🐛 hotfix · 一行函数定义补救
+**影响范围**：H5 往期回顾详情页 vol01 (night-talk) + vol02 (candle-track)
+
+**bug**：用户点开往期回顾任何一期，详情页空白，没有任何内容。
+
+**Root cause**：CHG-20260517-03 引入 `renderNightTalk()` 时 + CHG-20260517-04 引入 `renderCandleTrack()` 时，模板字符串里调用了 `escapeHtml()` 共 69 次，但**忘了在 `docs/app.js` 顶部定义这个函数**。escapeHtml 实际上定义在仓库另外几个文件（`docs/wall-tv.html` / `docs/feedback/admin/admin.js` / `docs/feedback/h5/app.js`），各自作用域独立，main app.js 引用不到。
+
+结果：进 `#/review-detail?id=vol01` 或 `?id=vol02` → 模板字符串求值时抛 `ReferenceError: escapeHtml is not defined` → `root.innerHTML` 赋值失败 → DOM 区域空 → 看起来像空白页。
+
+通用兜底版（`renderGenericReviewDetail`）不调 escapeHtml，所以问题只出现在 vol01 / vol02 自定义版式。
+
+**fix**：在 `getIssueById` 函数之后、`renderReviewDetail` 函数之前加 6 行：
+
+```js
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[<>&"']/g, c =>
+    ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+```
+
+**验证**：
+- `node -c docs/app.js` 通过
+- vm 沙盒里完整 require 不再报 ReferenceError
+- `escapeHtml("<b>")` 返回 `&lt;b&gt;`
+- `renderCandleTrack typeof === "function"`
+
+**后续防御**：跨多 commit 的 JS 模板拼接代码，必须做一次真机浏览器端到端测试再合并。本地 `node -c` 只验证语法树，捕获不到运行时 ReferenceError。
+
+---
+
+### CHG-20260518-01 · H5 about 页起源动画用视频替代占位 6 幕 — 2026-05-18 · `0b8b6e9`
 
 **类型**：🎨 UI 改动 · 资源依赖（新增 ~6 MB 视频资源）
 **兑现**：`CHG-20260428-09 · about 页 6 幕动画 — AE/Lottie 后期接入` 长期 TODO
@@ -246,7 +278,7 @@
 
 ---
 
-### CHG-20260517-04 · vol02 candle-track 自定义版式落地（兑现 03 推迟项）— 2026-05-17
+### CHG-20260517-04 · vol02 candle-track 自定义版式落地（兑现 03 推迟项）— 2026-05-17 · `921852d`
 
 **类型**：🎨 纯 UI 改动（不动数据 schema、不动报名 / 云函数 / wall）
 **对应原型**：`prototype/src/screen-review-vol02.jsx` Vol02CandleDetail（626 行 React）
@@ -288,7 +320,7 @@
 
 ---
 
-### CHG-20260517-03 · 往期回顾详情页变体 + 主创改名 + vol01/vol02 recap 数据 — 2026-05-17
+### CHG-20260517-03 · 往期回顾详情页变体 + 主创改名 + vol01/vol02 recap 数据 — 2026-05-17 · `abc2311`
 
 **类型**：⚙️ 功能改动 + 🎨 UI 改动（变体调度新机制）
 **对应原型**：设计端 handoff `nxDObHID5dI6uRqEssSFeA`（含 5 个 chat transcript 演化）

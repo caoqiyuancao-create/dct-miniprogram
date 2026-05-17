@@ -209,6 +209,43 @@
 
 ---
 
+### CHG-20260518-01 · H5 about 页起源动画用视频替代占位 6 幕 — 2026-05-18
+
+**类型**：🎨 UI 改动 · 资源依赖（新增 ~6 MB 视频资源）
+**兑现**：`CHG-20260428-09 · about 页 6 幕动画 — AE/Lottie 后期接入` 长期 TODO
+
+**背景**：原 H5 about 页的"起源故事"动画是用纯 CSS @keyframes 实现的占位版本（6 幕：sky / three / seedling / brand / living / invite），QY 长期不满意视觉效果。今天提供的 `master-direct.mp4`（6.1 MB）是 AE 渲染的视频版，可以直接替换。
+
+**完成内容**：
+
+- **新增资源**：`docs/assets/origin-story.mp4`（6.02 MB MP4 · ISO Media Base v1）
+- **`docs/index.html`** about screen：删除整个 `<div class="about-stage">` 块（约 60 行 6 个 scene + dots + replay 占位标签），用单个 `<div class="about-video">` 容器包 `<video>` 标签替代
+  - autoplay + muted + playsinline + loop + preload="metadata"
+  - webkit-playsinline + x5-playsinline（iOS Safari + 微信 X5 内核兼容）
+  - 右上角金色「↻ REPLAY」按钮（id=about-video-replay）
+- **`docs/app.js`**：
+  - 删除 ABOUT_SCENES 常量 + aboutSceneIdx/aboutPlaying/aboutTimer 状态变量
+  - 删除 renderAbout 里的 scene caption/dot/replay 6 幕渲染逻辑
+  - 删除 applyAboutSceneClass / startAboutAnim / stopAboutTimer / aboutReplay 函数
+  - 新增 startAboutVideo() / stopAboutVideo() · 路由进入/离开 about 时控制
+  - showScreen 简化为：`if (name === 'about') { renderAbout(); startAboutVideo(); } else stopAboutVideo();`
+  - replay 按钮点击 → `video.currentTime = 0; video.play()`
+- **`docs/style.css`**：
+  - 新增 `.about-video` 容器（16:9 aspect-ratio · max-height: 56vh · 深蓝背景兜底）
+  - `.about-video__el`（object-fit: cover）
+  - `.about-video__replay` 金色边胶囊按钮（backdrop-blur）
+  - 原 `.about-stage / .about-scene / .cloud / .role-orb / .field-tile / .sprout / .big-brand / .scene-caption / .about-dot / .replay` 等 ~150 行 6 幕 CSS **保留**（无 DOM 引用，无副作用，便于回滚或对照）
+
+**移动端浏览器兼容**：
+- iOS Safari：playsinline + muted + autoplay 组合可绕过用户手势要求
+- Android Chrome：muted + autoplay 同样
+- 微信内置浏览器：x5-playsinline + webkit-playsinline 防止全屏抢焦
+- 视频 6.1 MB，preload="metadata" 仅加载头部元数据（约 100 KB），用户进 about 页才开始流式播放
+
+**未触碰**：小程序 about 页（仍是 6 幕 CSS keyframes 占位 · 单独迭代）/ vol03 / vol01 / vol02 / 报名 / 云函数 / 留言墙 / 大屏
+
+---
+
 ### CHG-20260517-04 · vol02 candle-track 自定义版式落地（兑现 03 推迟项）— 2026-05-17
 
 **类型**：🎨 纯 UI 改动（不动数据 schema、不动报名 / 云函数 / wall）

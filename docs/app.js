@@ -193,15 +193,9 @@ const PAST_ISSUES = [
 ];
 const PAST_COUNT = PAST_ISSUES.length;
 
-// ===== About · 6 幕动画 ＋ 创办者 ＋ DCT 三层意思 =====
-const ABOUT_SCENES = [
-  { variant: 'sky',      caption: '一切从天时地利人和说起',     sub: '2026 · 一个客厅 · 三个 PhD' },
-  { variant: 'three',    caption: '一只狗、一道菜、一次对话',   sub: 'Dog · Chef · Therapist' },
-  { variant: 'seedling', caption: '在绩效之外',                 sub: '留一块精神自留地' },
-  { variant: 'brand',    caption: "Doctors' Crazy Thinking",   sub: '认真地胡思乱想' },
-  { variant: 'living',   caption: '客厅里的家庭学术沙龙',       sub: '一期一会 · 不功利的深度交流' },
-  { variant: 'invite',   caption: '欢迎你也来',                 sub: '一起建设这块自留地' }
-];
+// ===== About · 创办者 ＋ DCT 三层意思 =====
+// 注：原 ABOUT_SCENES 6 幕 CSS keyframes 动画已被 origin-story.mp4 视频替换
+// （CHG-20260518-01 · 兑现 CHG-20260428-09 长期 TODO）
 
 const ABOUT_CREATORS = [
   { letter: 'D', word: '"Dog"',     name: '包包大人', role: '狗子',
@@ -641,38 +635,11 @@ function stopHomeRotators() {
   if (homeAnnTimer)    { clearInterval(homeAnnTimer);    homeAnnTimer = null; }
 }
 
-// ===== About（关于 DCT）渲染 + 6 幕动画 =====
-let aboutSceneIdx = 0;
-let aboutPlaying = true;
-let aboutTimer = null;
+// ===== About（关于 DCT）渲染 + 起源动画视频 =====
+// CHG-20260518-01: 用 MP4 视频（assets/origin-story.mp4）替换原 6 幕 CSS keyframes
+// 占位动画（CHG-20260428-09 长期 TODO 兑现）。视频自动播放、静音、循环。
 
 function renderAbout() {
-  // 渲染 6 幕中的"当前幕标题/副题"
-  const cap = el('about-scene-title');
-  const sub = el('about-scene-sub');
-  if (cap) cap.textContent = ABOUT_SCENES[aboutSceneIdx].caption;
-  if (sub) sub.textContent = ABOUT_SCENES[aboutSceneIdx].sub;
-
-  // 渲染 dots
-  const dots = el('about-dots');
-  if (dots) {
-    dots.innerHTML = ABOUT_SCENES.map((_, i) =>
-      `<div class="about-dot ${i === aboutSceneIdx ? 'is-active' : ''}" data-idx="${i}"></div>`
-    ).join('');
-    dots.querySelectorAll('.about-dot').forEach(d => {
-      d.addEventListener('click', () => {
-        stopAboutTimer();
-        aboutSceneIdx = Number(d.dataset.idx);
-        aboutPlaying = false;
-        renderAbout();
-        applyAboutSceneClass();
-      });
-    });
-  }
-  // 渲染 replay 按钮
-  const replay = el('about-replay');
-  if (replay) replay.hidden = aboutPlaying;
-
   // 创办人卡片（只渲染一次）
   const creators = el('about-creators');
   if (creators && !creators.dataset.rendered) {
@@ -710,40 +677,20 @@ function renderAbout() {
   }
 }
 
-function applyAboutSceneClass() {
-  const stage = el('about-stage');
-  if (!stage) return;
-  // 给 stage 添加 scene-N class（让对应幕显示）
-  stage.classList.remove('scene-0','scene-1','scene-2','scene-3','scene-4','scene-5');
-  stage.classList.add('scene-' + aboutSceneIdx);
+// About 视频：进入 about 页时确保从头播放 / 离开时暂停
+function startAboutVideo() {
+  const v = el('about-video');
+  if (!v) return;
+  try {
+    v.currentTime = 0;
+    const p = v.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  } catch (e) { /* ignore autoplay block */ }
 }
-
-function startAboutAnim() {
-  stopAboutTimer();
-  if (!aboutPlaying) return;
-  aboutTimer = setInterval(() => {
-    const next = aboutSceneIdx + 1;
-    if (next >= ABOUT_SCENES.length) {
-      aboutPlaying = false;
-      stopAboutTimer();
-      renderAbout();
-      return;
-    }
-    aboutSceneIdx = next;
-    renderAbout();
-    applyAboutSceneClass();
-  }, 2400);
-}
-function stopAboutTimer() {
-  if (aboutTimer) { clearInterval(aboutTimer); aboutTimer = null; }
-}
-function aboutReplay() {
-  stopAboutTimer();
-  aboutSceneIdx = 0;
-  aboutPlaying = true;
-  renderAbout();
-  applyAboutSceneClass();
-  startAboutAnim();
+function stopAboutVideo() {
+  const v = el('about-video');
+  if (!v) return;
+  try { v.pause(); } catch (e) { /* ignore */ }
 }
 
 // ===== Review（往期回顾）渲染 =====
@@ -1259,9 +1206,8 @@ function showScreen(name) {
   if (name === 'wall') startWallTimers(); else stopWallTimers();
   if (name === 'home') { renderHome(); startHomeRotators(); } else stopHomeRotators();
   if (name === 'about') {
-    aboutSceneIdx = 0; aboutPlaying = true;
-    renderAbout(); applyAboutSceneClass(); startAboutAnim();
-  } else { stopAboutTimer(); }
+    renderAbout(); startAboutVideo();
+  } else { stopAboutVideo(); }
   if (name === 'review') renderReview();
   if (name === 'review-detail') renderReviewDetail();
   window.scrollTo(0, 0);
@@ -1440,9 +1386,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // About 页 replay
-  const replayBtn = el('about-replay');
-  if (replayBtn) replayBtn.addEventListener('click', aboutReplay);
+  // About 页视频 replay 按钮
+  const replayBtn = el('about-video-replay');
+  if (replayBtn) replayBtn.addEventListener('click', () => {
+    const v = el('about-video');
+    if (!v) return;
+    v.currentTime = 0;
+    const p = v.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  });
 
   // 预热匿名登录
   ensureAuth().catch(() => {});

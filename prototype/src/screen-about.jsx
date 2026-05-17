@@ -81,7 +81,13 @@ function ScreenAbout({ go }) {
       </div>
 
       {/* WHY · DCT 从何而来 */}
-      <AboutSection kicker="WHY" title="DCT 从何而来">
+      <AboutSection kicker="WHY" title={<>
+        DCT 从何而来<span style={{ fontSize: 14, color: '#8496b3', fontWeight: 600 }}>（此处待建）</span>
+        <div style={{
+          fontSize: 11.5, fontWeight: 400, color: '#8496b3', letterSpacing: 0.5,
+          marginTop: 4, fontStyle: 'italic',
+        }}>原谅牛马主创白天打白工、晚上打黑工</div>
+      </>}>
         <p>2026 年的春天，三个非典型的精神科 PhD 坐在同一个客厅里——发现彼此都在等待<strong>一种久违的状态</strong>：愿意慢下来，认真聊一些"不那么有用但很重要"的事。</p>
         <p>我们把这种状态称作 <strong>天时地利人和</strong>——天时是这一年都在心里酝酿的某种倦怠与好奇，地利是恰好可以容纳几个人坐下来的客厅，人和是这群愿意暴露自己、也愿意倾听别人的朋友。</p>
         <Quote>「天时地利人和——对知识和真诚深入交流的期待。」</Quote>
@@ -93,22 +99,22 @@ function ScreenAbout({ go }) {
 
         <CreatorCard
           letter="D"
-          word="Dog"
-          name="包文欣"
+          word={'“Dog”'}
+          name="包包大人"
           role="狗子"
           desc="重度爱狗人士。把对一只狗的耐心、好奇和温柔，复刻进对每一个人的提问里。"
         />
         <CreatorCard
           letter="C"
           word="Chef"
-          name="徐佳淇"
+          name="Gia"
           role="厨子"
           desc="家宴的策划者。相信好的食物能让人放松地说真话——所以每一期都有限定的甜品与酒。"
         />
         <CreatorCard
           letter="T"
           word="Therapist"
-          name="曹栖源"
+          name="曹叔"
           role="治疗师"
           desc={'日常工作是聆听与共情。把临床里训练出的「倾听肌肉」，搬进这间客厅。'}
         />

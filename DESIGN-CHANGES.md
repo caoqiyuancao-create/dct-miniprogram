@@ -209,6 +209,60 @@
 
 ---
 
+### CHG-20260517-03 · 往期回顾详情页变体 + 主创改名 + vol01/vol02 recap 数据 — 2026-05-17
+
+**类型**：⚙️ 功能改动 + 🎨 UI 改动（变体调度新机制）
+**对应原型**：设计端 handoff `nxDObHID5dI6uRqEssSFeA`（含 5 个 chat transcript 演化）
+**对应工作流**：设计端 chat 2 (vol01 客厅夜谈) + chat 5 (vol02 烛光与赛道)
+
+**完成内容**：
+
+1. **prototype/ 整包同步**：sync handoff prototype 到 repo
+   - 新增 `prototype/src/screen-review-vol01.jsx`（客厅夜谈 D 版 · 280 行）
+   - 新增 `prototype/src/screen-review-vol02.jsx`（烛光与赛道 B 版 · 626 行）
+   - 更新 `screen-review.jsx`：按 `issue.recap.variant` 派发
+   - 更新 `screen-about.jsx`：主创改名
+   - 更新 `app.jsx`：phone canvas 加 vol01 + vol02 review 入口
+   - 更新 `data/issues.js`：vol01 + vol02 entries 加 `recap` 结构化字段
+
+2. **新增 12 张资源**到 `prototype/assets/` + `miniprogram/assets/` + `docs/assets/`：
+   - vol01-*.jpg × 5（hero, speaker-dogs, talk, dessert, cocktail）
+   - vol02-*.jpg × 7（poster, cover, speaker, audience, cake-candle, cake-slice, bowl）
+
+3. **主创改名**（4 处）：
+   - 包文欣 → **包包大人**
+   - 徐佳淇 → **Gia**
+   - 曹栖源 → **曹叔**
+   - `DOG` → `"Dog"`（D 卡专属，加引号小写）
+   - 文件：`miniprogram/pages/about/about.js` · `docs/app.js` (`ABOUT_CREATORS`)
+
+4. **vol01/vol02 完整 recap 数据**落到生产：
+   - `miniprogram/data/issues.js`：vol02 entry 重写（含 `recap.variant='candle-track'` + heroImg/sixCities/stats/threads/habits/peakQuote/majors 等 18 个子字段）；vol01 entry 重写（title 从「回顾整理中」→「我们在客厅里聊了成人 ADHD」+ `recap.variant='night-talk'` + hook/threads/bigQuote/closing/keywords + 5 张 photos + 真实 speaker 曹叔）
+   - `docs/app.js`：`PAST_ISSUES` 镜像同步
+
+5. **review-detail 详情页改成 variant 调度**：
+   - **miniprogram/pages/review-detail/{js,wxml,wxss}**：按 `issue.recap.variant` 派发
+     - `night-talk` → 客厅夜谈 D 版（暗色长卷 + 暖纸收尾 · 完整 hero/title/hook/speaker-img/threads/side-imgs/big-quote/closing 7 段）
+     - `candle-track` → 暂用通用版兜底（自定义版式留下一个 PR · 见下方）
+     - 默认 → 通用版（含 photos 网格新增）
+   - **docs/app.js + docs/style.css**：H5 端同样实现 `renderNightTalk(issue)` + 510 行 night-* WXSS class
+
+**vol02 candle-track 自定义版式（不在本次范围）**：
+- 设计端 `prototype/src/screen-review-vol02.jsx` 是 626 行 React，含 7 大段（HERO badge + 两个世界对比 + sixCities + 4 stats + 4 threads + 6 habits + peak quote + 12 majors + 走丢的羊 closing）
+- 完整翻译到 WXML/WXSS + 同步到 docs/H5 预估 ~3 小时工作
+- **目前的 fallback**：vol02 走通用版渲染（cover + speaker + summary + highlights 金句 + photos 网格 5 张），数据完整呈现，只是视觉不是设计端的 candle-track 自定义版式
+- **下一个 PR 推迟实现**：等 vol03 上线稳定后单独迭代
+
+**视觉验收点**：
+- vol01 进入详情页：暗色长卷 + 全景照 + 4 条线索（amber 编号）+ 大引文（金色引号 + 81rpx 衬线斜体）+ 暖纸收尾 + 终幕 CTA「报名本期」
+- vol02 进入详情页：cover.jpg 全图 + 高晓蓉 + summary + 2 条金句卡 + 5 张照片网格
+- review 列表：vol02 cover 是新的 vol02-cover.jpg（不再是 gao-portrait）；vol01 cover 是 vol01-hero.jpg（不再是空占位）
+- about 主创卡：包包大人 / Gia / 曹叔 / `"Dog"`（D 卡）
+
+**未触碰**：报名 / 云函数 / 留言墙 / 大屏 wall-tv.html / vol03 任何内容。
+
+---
+
 ### CHG-20260517-02 · 第三期文案微调（4 处）— 2026-05-17 · `0740dc3`
 
 **类型**：🎨 纯 UI 改动 + 1 处配置常量（vol03 报名表 expectation 字段上限）

@@ -124,7 +124,7 @@ function ReviewCard({ issue, onClick }) {
             marginTop: 12, fontSize: 11.5, color: '#6b7a91', letterSpacing: 0.5,
             fontFamily: '"JetBrains Mono", monospace',
           }}>
-            主创 / {issue.speaker.name}
+            主讲人 / {issue.speaker.name}
           </div>
         )}
         {issue.summary && (
@@ -152,6 +152,14 @@ function ScreenReviewDetail({ go, reviewId }) {
   const D = window.DCT_DATA;
   const issue = D.getById(reviewId) || D.getPastIssues()[0];
   if (!issue) return null;
+
+  // 有结构化 recap 的期次走专属版式
+  if (issue.recap?.variant === 'candle-track' && window.Vol02CandleDetail) {
+    return <Vol02CandleDetail go={go} issue={issue} />;
+  }
+  if (issue.recap && window.Vol01NightDetail) {
+    return <Vol01NightDetail go={go} issue={issue} />;
+  }
 
   const hasPhotos = issue.photos && issue.photos.length > 0;
   const hasHighlights = issue.highlights && issue.highlights.length > 0;

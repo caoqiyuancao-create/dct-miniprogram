@@ -2,7 +2,7 @@
 const D = require('../../data/issues.js');
 
 const SELF_INTRO_MAX = 40;
-const EXPECTATION_MAX = 120;
+const EXPECTATION_MAX = 250;
 
 Page({
   data: {

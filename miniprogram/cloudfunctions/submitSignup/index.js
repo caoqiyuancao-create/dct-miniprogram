@@ -12,7 +12,7 @@ const MAIL_PASS = process.env.MAIL_PASS || '';
 const MAIL_TO   = process.env.MAIL_TO   || '';
 
 const SELF_INTRO_MAX = 40;
-const EXPECTATION_MAX = 120;
+const EXPECTATION_MAX = 250;
 
 const ISSUE_LABEL = {
   vol01: 'DCT 第一期报名',

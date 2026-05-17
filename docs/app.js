@@ -212,7 +212,7 @@ const WALL_QUESTIONS_SEED = [
   '如果只能给一个建议，你会对 45 岁的人说什么？'
 ];
 const SELF_INTRO_MAX = 40;
-const EXPECTATION_MAX = 120;
+const EXPECTATION_MAX = 250;
 
 // 留言墙实时数据缓存（getWallFeed 拉到 ≥3 条时替换 SEED）
 let WALL_INTROS = WALL_INTROS_SEED;

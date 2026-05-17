@@ -216,7 +216,6 @@
         <view class="serif gia-card__badge">G</view>
         <view class="gia-card__body">
           <view class="gia-card__main">甜品仍由 Gia 制作 ✦</view>
-          <view class="gia-card__sub">更多<text class="gia-card__sub-strong">主题饮品</text>正在打样中 · 敬请期待</view>
         </view>
       </view>
     </view>

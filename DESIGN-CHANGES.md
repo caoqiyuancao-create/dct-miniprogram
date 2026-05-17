@@ -209,6 +209,33 @@
 
 ---
 
+### CHG-20260517-01-D · landing 合并「四问」与「冷思考」 — 2026-05-17
+
+**类型**：🎨 纯 UI 改动 + 数据结构小调整（仅 vol03）
+**对应原型**：`prototype-v3` handoff zip · prototype/DESIGN-CHANGES.md 内 CHG-20260517-01 的 D1/D2/D3
+
+**背景**：原"四个抛给讲者的问题"和下方"HE WILL SHARE / '医美热'的'冷思考'"四张点卡内容重合——同一组主题在 vol03 landing 上出现两次。合并成一个深蓝卡片：四个 Q + 每题一句话注脚；下方 points 区在 vol03 完全移除。vol02 保持原样。
+
+**完成内容**：
+
+- **D1**：`miniprogram/data/issues.js` vol03 `teaserQuestions` 从 `string[]` 升级为 `{ q, a }[]`，4 条问题各带一句注脚（注脚内容来自原 points 卡 body）
+- **D1.5**：`landing.js` 预处理 teaserQuestions 兼容两种 schema（string 与 `{q,a}`），输出 `{ num, q, a }`
+- **D2**：`landing.wxml` 重写 `.four-q` 块：
+  - kicker `FOUR QUESTIONS · 当晚我们会聊` → `HE WILL SHARE · 当晚的四个问题`
+  - 大字 `当我们谈论变美时，我们在谈论什么？`（两行）→ 单行 `"医美热" 的 "冷思考"`
+  - 原大字降级为副题 `当我们谈论变美时，我们在谈论什么？`
+  - 每行结构改为 `[Q.0X + 问题] + 答案段`（左缩进 60rpx），与原型一致
+- **D2-CSS**：`landing.wxss` `.four-q` 加双侧光晕（右上 260rpx · 0.22 + 左下 220rpx · 0.10）；padding 调整为 `40rpx 40rpx 44rpx`；新增 `.four-q__subtitle / __row-top / __no / __q / __a` 类
+- **D3**：`landing.wxml` 把整段 `HE WILL SHARE` 四张 point 卡区块用 `wx:if="{{!isV3}}"` 包住——vol03 不再渲染，vol02 完整保留（含 lanes / footprint / compass 三个图标）
+
+**vol02 回归验证**：
+- 切到 `current: 'vol02'` 时：`isV3=false`、`teaserQuestions=[]`，四问深蓝卡 hidden；下方 HE WILL SHARE 三张 point 卡 + 「从真实经历出发，三个侧面」标题正常渲染；opening pitch 落到 v2 文案；其余 hero-subtitle / 留言墙 / Gia 备注 / WHAT IS DCT 文案均按 `!isV3` 走 v2 分支。无回归。
+
+**文件**：`miniprogram/data/issues.js` / `miniprogram/pages/landing/landing.{js,wxml,wxss}`
+**未改动**：报名 / 登记 / 云函数 / form / success / detail / wall 全部不动。
+
+---
+
 ### CHG-20260517-01 · 第三期 vol03 上线 — 2026-05-17
 
 **类型**：⚙️ 功能改动 + 🎨 UI 改动（混合 · 走 GitHub）

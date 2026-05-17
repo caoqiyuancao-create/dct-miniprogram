@@ -67,19 +67,21 @@
     </view>
   </view>
 
-  <!-- FOUR QUESTIONS（v3） -->
+  <!-- FOUR QUESTIONS · 合并自原"四问"+"医美热的冷思考"（CHG-20260517-01 · D2） -->
   <view wx:if="{{isV3 && teaserQuestions.length}}" class="four-q-wrap">
     <view class="four-q">
-      <view class="four-q__glow"></view>
-      <view class="mono four-q__kicker">FOUR QUESTIONS · 当晚我们会聊</view>
-      <view class="serif four-q__title">
-        <view>当我们谈论变美时，</view>
-        <view>我们在谈论什么？</view>
-      </view>
+      <view class="four-q__glow four-q__glow--tr"></view>
+      <view class="four-q__glow four-q__glow--bl"></view>
+      <view class="mono four-q__kicker">HE WILL SHARE · 当晚的四个问题</view>
+      <view class="serif four-q__title">“医美热” 的 “冷思考”</view>
+      <view class="four-q__subtitle">当我们谈论变美时，我们在谈论什么？</view>
       <view class="four-q__list">
-        <view wx:for="{{teaserQuestions}}" wx:key="num" class="four-q__row {{index === 0 ? 'four-q__row--first' : ''}}">
-          <view class="mono four-q__num">{{item.num}}</view>
-          <view class="four-q__text">{{item.text}}</view>
+        <view wx:for="{{teaserQuestions}}" wx:key="num" class="four-q__row">
+          <view class="four-q__row-top">
+            <view class="mono four-q__no">{{item.num}}</view>
+            <view class="serif four-q__q">{{item.q}}</view>
+          </view>
+          <view wx:if="{{item.a}}" class="four-q__a">{{item.a}}</view>
         </view>
       </view>
     </view>
@@ -101,10 +103,10 @@
     </view>
   </view>
 
-  <!-- HE WILL SHARE -->
-  <view class="section">
+  <!-- HE WILL SHARE · v2 专属（CHG-20260517-01 · D3 · v3 已合并入上方四问卡，不再渲染） -->
+  <view wx:if="{{!isV3}}" class="section">
     <view class="mono section-kicker">HE WILL SHARE</view>
-    <view class="serif section-title">{{isV3 ? '“医美热”的“冷思考”' : '从真实经历出发'}}</view>
+    <view class="serif section-title">从真实经历出发，三个侧面</view>
     <view class="points">
       <view class="point-card" wx:for="{{pointsWithIcons}}" wx:key="num">
         <view class="point-icon">

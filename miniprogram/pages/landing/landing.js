@@ -176,10 +176,12 @@ Page({
       pitchTitleL2: isV3 ? V3_PITCH_TITLE_L2 : '在生活中追求热爱。',
       pitchParagraphs: isV3 ? V3_PITCH_PARAGRAPHS : [],
       dctBody: isV3 ? V3_DCT_BODY : [],
-      teaserQuestions: (cur.teaserQuestions || []).map((q, i) => ({
-        num: `Q.0${i + 1}`,
-        text: q
-      })),
+      teaserQuestions: (cur.teaserQuestions || []).map((item, i) => {
+        // 兼容两种结构：string（旧）或 { q, a }（CHG-20260517-01 后新结构）
+        const q = typeof item === 'string' ? item : item.q;
+        const a = typeof item === 'string' ? '' : (item.a || '');
+        return { num: `Q.0${i + 1}`, q, a };
+      }),
       infoRows,
       posterSrc: cur.poster || '',
       speakerPhoto: (cur.speaker && cur.speaker.photo) || '',

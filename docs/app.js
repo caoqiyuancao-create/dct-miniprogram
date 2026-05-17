@@ -1,10 +1,89 @@
 // CHG-20260517-01 · H5 端第三期上线
 // 与小程序共用 cloudfunctions/submitSignup（issueId='vol03'）+ signups 集合
-// 四屏（landing / detail / form / success）+ 新增 wall 屏，靠 hash 路由切换
+// 八屏（home / about / review / review-detail / landing / detail / form / success / wall），靠 hash 路由切换
 
 // ===== 期号常量 =====
 const ISSUE_ID = 'vol03';
 const ISSUE_NUMBER_CN = '三';
+
+// ===== 全局 BRAND（home/about 共用） =====
+const BRAND = {
+  name: 'DCT',
+  fullName: "Doctors' Crazy Thinking · Dog, Chef & Therapist",
+  slogan: '认真地胡思乱想',
+  slogans: [
+    '在学术里保持严谨，在生活中追求热爱',
+    '认真地胡思乱想',
+    '客厅里的家庭学术沙龙',
+    '一块精神自留地',
+    '用科学的态度，聊天马行空的奇思妙想'
+  ],
+  announcements: [
+    { type: 'signup', text: '第三期 · 医美热时代的冷思考 · 报名开放中', date: '至 2026.05.20' },
+    { type: 'info',   text: '本期搬到武侯区棕南正街「陌生的朋友」咖啡厅', date: '' }
+  ]
+};
+
+// ===== 历史期次（往期回顾用） =====
+const PAST_ISSUES = [
+  {
+    id: 'vol02',
+    number: 2,
+    status: 'finished',
+    title: '六星之路',
+    subtitle: '我的目标管理与坚持哲学',
+    date: '2026.04.25',
+    speaker: { name: '高晓蓉', title: '教授', org: '西南交通大学光电工程研究所' },
+    poster: 'assets/gao-portrait.jpg',
+    summary: '第二期我们请到了西南交大光电工程研究所的高晓蓉教授——一位马拉松「六星跑者」。他们聊了多重身份下的年度目标管理、坚持哲学与「让期待落地」的生活实践。详细回顾与现场照片整理中，敬请期待。',
+    highlights: [
+      { quote: '我们不是在跑马拉松，是在用脚步丈量世界。', author: '高晓蓉' },
+      { quote: '目标不是结果，是你决心为它改变生活顺序的那一刻。', author: 'DCT 主创' }
+    ],
+    photos: []
+  },
+  {
+    id: 'vol01',
+    number: 1,
+    status: 'finished',
+    title: '（回顾整理中）',
+    subtitle: '第一期 · 2026.03.28',
+    date: '2026.03.28',
+    speaker: { name: '包文欣 / 徐佳淇 / 曹栖源', title: '主创' },
+    poster: '',
+    summary: 'DCT 的第一次聚会，三位主创分别以 Dog、Chef、Therapist 三个身份切入，分享了关于知识、真诚与深度交流的期待。回顾文章正在整理中，欢迎期待。',
+    highlights: [
+      { quote: '在绩效逻辑之外，留一块真诚分享的精神自留地。', author: 'DCT 主创' }
+    ],
+    photos: []
+  }
+];
+const PAST_COUNT = PAST_ISSUES.length;
+
+// ===== About · 6 幕动画 ＋ 创办者 ＋ DCT 三层意思 =====
+const ABOUT_SCENES = [
+  { variant: 'sky',      caption: '一切从天时地利人和说起',     sub: '2026 · 一个客厅 · 三个 PhD' },
+  { variant: 'three',    caption: '一只狗、一道菜、一次对话',   sub: 'Dog · Chef · Therapist' },
+  { variant: 'seedling', caption: '在绩效之外',                 sub: '留一块精神自留地' },
+  { variant: 'brand',    caption: "Doctors' Crazy Thinking",   sub: '认真地胡思乱想' },
+  { variant: 'living',   caption: '客厅里的家庭学术沙龙',       sub: '一期一会 · 不功利的深度交流' },
+  { variant: 'invite',   caption: '欢迎你也来',                 sub: '一起建设这块自留地' }
+];
+
+const ABOUT_CREATORS = [
+  { letter: 'D', word: 'Dog',       name: '包文欣', role: '狗子',
+    desc: '重度爱狗人士。把对一只狗的耐心、好奇和温柔，复刻进对每一个人的提问里。' },
+  { letter: 'C', word: 'Chef',      name: '徐佳淇', role: '厨子',
+    desc: '家宴的策划者。相信好的食物能让人放松地说真话——所以每一期都有限定的甜品与酒。' },
+  { letter: 'T', word: 'Therapist', name: '曹栖源', role: '治疗师',
+    desc: '日常工作是聆听与共情。把临床里训练出的「倾听肌肉」，搬进这间客厅。' }
+];
+
+const ABOUT_MEANINGS = [
+  { num: '01', en: 'Dog · Chef · Therapist',     zh: '三个人的三种身份' },
+  { num: '02', en: "Doctors' Crazy Thinking",    zh: '一群医生的胡思乱想' },
+  { num: '03', en: '认真地胡思乱想',              zh: '用科学的态度，聊天马行空的奇思妙想', highlight: true }
+];
 
 // ===== Data =====
 const SPEAKER = {
@@ -338,23 +417,288 @@ function stopWallTimers() {
   if (wallQTimer)     { clearInterval(wallQTimer);     wallQTimer = null; }
 }
 
+// ===== Home（首页）渲染 + 轮播 =====
+let homeSloganIdx = 0;
+let homeAnnIdx = 0;
+let homeSloganTimer = null;
+let homeAnnTimer = null;
+
+function renderHome() {
+  // brand line/title 等是静态 markup；这里渲染 slogans / announcements 列表
+  const sloganBox = el('home-slogans');
+  if (sloganBox) {
+    sloganBox.innerHTML = BRAND.slogans.map((s, i) => `
+      <div class="slogan-item ${i === homeSloganIdx ? 'is-active' : ''}">
+        <span class="star-bullet star-gold"></span>
+        <span>${s}</span>
+        <span class="star-bullet star-gold"></span>
+      </div>
+    `).join('');
+  }
+  const annCopy = el('home-ann-copy');
+  if (annCopy) {
+    annCopy.innerHTML = BRAND.announcements.map((a, i) => `
+      <div class="ann-item ${i === homeAnnIdx ? 'is-active' : ''}">
+        <span>${a.text}</span>
+        ${a.date ? `<span class="ann-date">${a.date}</span>` : ''}
+      </div>
+    `).join('');
+  }
+  // badge 根据当前 announcement type 切色
+  const badge = el('home-ann-badge');
+  if (badge) {
+    const a = BRAND.announcements[homeAnnIdx];
+    badge.className = `mono ann-badge ann-badge--${a.type}`;
+    badge.textContent = a.type === 'signup' ? 'OPEN' : 'NEWS';
+  }
+  // entry primary 卡片填本期号
+  const entryKicker = el('home-entry-kicker');
+  if (entryKicker) entryKicker.textContent = `VOL.0${3} · 报名开放中`;
+}
+
+function startHomeRotators() {
+  stopHomeRotators();
+  homeSloganTimer = setInterval(() => {
+    homeSloganIdx = (homeSloganIdx + 1) % BRAND.slogans.length;
+    renderHome();
+  }, 3600);
+  homeAnnTimer = setInterval(() => {
+    homeAnnIdx = (homeAnnIdx + 1) % BRAND.announcements.length;
+    renderHome();
+  }, 4800);
+}
+function stopHomeRotators() {
+  if (homeSloganTimer) { clearInterval(homeSloganTimer); homeSloganTimer = null; }
+  if (homeAnnTimer)    { clearInterval(homeAnnTimer);    homeAnnTimer = null; }
+}
+
+// ===== About（关于 DCT）渲染 + 6 幕动画 =====
+let aboutSceneIdx = 0;
+let aboutPlaying = true;
+let aboutTimer = null;
+
+function renderAbout() {
+  // 渲染 6 幕中的"当前幕标题/副题"
+  const cap = el('about-scene-title');
+  const sub = el('about-scene-sub');
+  if (cap) cap.textContent = ABOUT_SCENES[aboutSceneIdx].caption;
+  if (sub) sub.textContent = ABOUT_SCENES[aboutSceneIdx].sub;
+
+  // 渲染 dots
+  const dots = el('about-dots');
+  if (dots) {
+    dots.innerHTML = ABOUT_SCENES.map((_, i) =>
+      `<div class="about-dot ${i === aboutSceneIdx ? 'is-active' : ''}" data-idx="${i}"></div>`
+    ).join('');
+    dots.querySelectorAll('.about-dot').forEach(d => {
+      d.addEventListener('click', () => {
+        stopAboutTimer();
+        aboutSceneIdx = Number(d.dataset.idx);
+        aboutPlaying = false;
+        renderAbout();
+        applyAboutSceneClass();
+      });
+    });
+  }
+  // 渲染 replay 按钮
+  const replay = el('about-replay');
+  if (replay) replay.hidden = aboutPlaying;
+
+  // 创办人卡片（只渲染一次）
+  const creators = el('about-creators');
+  if (creators && !creators.dataset.rendered) {
+    creators.innerHTML = ABOUT_CREATORS.map(c => `
+      <div class="creator-card">
+        <div class="portrait-slot">
+          <div class="serif portrait-letter">${c.letter}</div>
+          <div class="mono portrait-tag">PORTRAIT</div>
+        </div>
+        <div class="creator-body">
+          <div class="creator-head">
+            <div class="serif creator-name">${c.name}</div>
+            <div class="mono creator-word">${c.word}</div>
+          </div>
+          <div class="creator-role">${c.role}</div>
+          <div class="creator-desc">${c.desc}</div>
+        </div>
+      </div>
+    `).join('');
+    creators.dataset.rendered = '1';
+  }
+  // 三层意思（只渲染一次）
+  const meanings = el('about-meanings');
+  if (meanings && !meanings.dataset.rendered) {
+    meanings.innerHTML = ABOUT_MEANINGS.map(m => `
+      <div class="meaning-row ${m.highlight ? 'meaning-row--highlight' : ''}">
+        <div class="mono meaning-num">${m.num}</div>
+        <div class="meaning-body">
+          <div class="serif meaning-en">${m.en}</div>
+          <div class="meaning-zh">${m.zh}</div>
+        </div>
+      </div>
+    `).join('');
+    meanings.dataset.rendered = '1';
+  }
+}
+
+function applyAboutSceneClass() {
+  const stage = el('about-stage');
+  if (!stage) return;
+  // 给 stage 添加 scene-N class（让对应幕显示）
+  stage.classList.remove('scene-0','scene-1','scene-2','scene-3','scene-4','scene-5');
+  stage.classList.add('scene-' + aboutSceneIdx);
+}
+
+function startAboutAnim() {
+  stopAboutTimer();
+  if (!aboutPlaying) return;
+  aboutTimer = setInterval(() => {
+    const next = aboutSceneIdx + 1;
+    if (next >= ABOUT_SCENES.length) {
+      aboutPlaying = false;
+      stopAboutTimer();
+      renderAbout();
+      return;
+    }
+    aboutSceneIdx = next;
+    renderAbout();
+    applyAboutSceneClass();
+  }, 2400);
+}
+function stopAboutTimer() {
+  if (aboutTimer) { clearInterval(aboutTimer); aboutTimer = null; }
+}
+function aboutReplay() {
+  stopAboutTimer();
+  aboutSceneIdx = 0;
+  aboutPlaying = true;
+  renderAbout();
+  applyAboutSceneClass();
+  startAboutAnim();
+}
+
+// ===== Review（往期回顾）渲染 =====
+function renderReview() {
+  const list = el('review-list');
+  if (!list) return;
+  list.innerHTML = PAST_ISSUES.map(item => `
+    <a class="review-card" href="#/review-detail?id=${item.id}">
+      <div class="cover ${item.poster ? 'cover--image' : 'cover--placeholder'}">
+        ${item.poster
+          ? `<img class="cover-img" src="${item.poster}" alt="${item.title}" />`
+          : `<div class="cover-placeholder"><div class="placeholder-star"></div><div class="serif placeholder-text">封面整理中</div></div>`}
+        <div class="mono vol-badge">VOL.0${item.number}</div>
+        ${item.date ? `<div class="mono date-badge">${item.date}</div>` : ''}
+      </div>
+      <div class="review-body">
+        <div class="serif card-title">${item.title}</div>
+        ${item.subtitle ? `<div class="card-sub">${item.subtitle}</div>` : ''}
+        ${item.speaker && item.speaker.name ? `<div class="mono card-speaker">主创 / ${item.speaker.name}</div>` : ''}
+        ${item.summary ? `<div class="card-summary">${item.summary}</div>` : ''}
+        <div class="card-foot">
+          <div class="mono read-more">READ MORE</div>
+          <div class="chevron"></div>
+        </div>
+      </div>
+    </a>
+  `).join('');
+}
+
+// ===== Review Detail（单期详情）渲染 =====
+function getIssueById(id) {
+  return PAST_ISSUES.find(i => i.id === id) || PAST_ISSUES[0];
+}
+
+function renderReviewDetail() {
+  // 从 hash 取 ?id=xxx
+  const hash = location.hash || '';
+  const qIdx = hash.indexOf('?');
+  let id = '';
+  if (qIdx >= 0) {
+    const qs = new URLSearchParams(hash.slice(qIdx + 1));
+    id = qs.get('id') || '';
+  }
+  const issue = getIssueById(id);
+  if (!issue) return;
+  const root = el('review-detail-content');
+  if (!root) return;
+
+  const hasHighlights = issue.highlights && issue.highlights.length > 0;
+  const hasPhotos     = issue.photos && issue.photos.length > 0;
+
+  root.innerHTML = `
+    <div class="rd-cover ${issue.poster ? 'rd-cover--image' : 'rd-cover--placeholder'}">
+      ${issue.poster ? `<img class="rd-cover-img" src="${issue.poster}" alt="${issue.title}" />` : `<div class="rd-cover-star"></div>`}
+      <div class="rd-cover-shade"></div>
+      <div class="rd-cover-copy">
+        <div class="mono rd-cover-kicker">VOL.0${issue.number} · ${issue.date || '—'}</div>
+        <div class="serif rd-cover-title">${issue.title}</div>
+        ${issue.subtitle ? `<div class="rd-cover-sub">${issue.subtitle}</div>` : ''}
+      </div>
+    </div>
+    ${issue.speaker && issue.speaker.name ? `
+      <div class="section">
+        <div class="speaker-card-rd">
+          <div class="mono card-kicker">SPEAKER</div>
+          <div class="serif speaker-name">${issue.speaker.name}<span class="speaker-title"> ${issue.speaker.title || ''}</span></div>
+          ${issue.speaker.org ? `<div class="speaker-org">${issue.speaker.org}</div>` : ''}
+        </div>
+      </div>` : ''}
+    ${issue.summary ? `
+      <div class="section">
+        <div class="mono section-kicker">RECAP</div>
+        <div class="serif section-title">当日留痕</div>
+        <div class="summary">${issue.summary}</div>
+      </div>` : ''}
+    ${hasHighlights ? `
+      <div class="section">
+        <div class="mono section-kicker">HIGHLIGHTS</div>
+        <div class="serif section-title">几句金句</div>
+        ${issue.highlights.map(h => `
+          <div class="quote-card">
+            <div class="serif quote-text">「${h.quote}」</div>
+            ${h.author ? `<div class="quote-author">— ${h.author}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>` : ''}
+    ${!hasPhotos ? `
+      <div class="section">
+        <div class="photos-card">
+          <div class="mono photos-kicker">PHOTOS</div>
+          <div class="photos-text">当日照片整理中</div>
+        </div>
+      </div>` : ''}
+    <div class="cta-wrap">
+      <a class="back-btn" href="#/review">返回往期列表</a>
+    </div>
+  `;
+}
+
 // ===== Router (hash) =====
-const ROUTES = ['landing', 'detail', 'form', 'success', 'wall'];
+const ROUTES = ['home', 'landing', 'detail', 'form', 'success', 'wall', 'about', 'review', 'review-detail'];
 
 function showScreen(name) {
-  if (!ROUTES.includes(name)) name = 'landing';
+  if (!ROUTES.includes(name)) name = 'home';
   document.querySelectorAll('.screen').forEach(s => {
     s.hidden = s.dataset.screen !== name;
   });
-  // wall timers
-  if (name === 'wall') startWallTimers();
-  else stopWallTimers();
+  // 路由专属副作用
+  if (name === 'wall') startWallTimers(); else stopWallTimers();
+  if (name === 'home') { renderHome(); startHomeRotators(); } else stopHomeRotators();
+  if (name === 'about') {
+    aboutSceneIdx = 0; aboutPlaying = true;
+    renderAbout(); applyAboutSceneClass(); startAboutAnim();
+  } else { stopAboutTimer(); }
+  if (name === 'review') renderReview();
+  if (name === 'review-detail') renderReviewDetail();
   window.scrollTo(0, 0);
 }
 
 function routeFromHash() {
   const hash = (location.hash || '').replace(/^#\/?/, '');
-  const name = hash || 'landing';
+  // 支持 review-detail?id=xxx
+  const qIdx = hash.indexOf('?');
+  const name = (qIdx >= 0 ? hash.slice(0, qIdx) : hash) || 'home';
   showScreen(name);
 }
 
@@ -522,6 +866,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // About 页 replay
+  const replayBtn = el('about-replay');
+  if (replayBtn) replayBtn.addEventListener('click', aboutReplay);
 
   // 预热匿名登录
   ensureAuth().catch(() => {});

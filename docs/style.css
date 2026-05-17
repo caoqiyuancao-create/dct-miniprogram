@@ -2079,3 +2079,248 @@ input, textarea { font: inherit; }
 .night-back { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; padding: 12px 14px; border: 0.5px solid #e7d7b3; border-radius: 12px; color: inherit; }
 .night-back__t { font-size: 13px; font-weight: 700; color: #8c3f1c; }
 .night-back__chev { font-size: 16px; color: #8a6a3e; }
+
+/* ===================================================================
+   CANDLE-TRACK 变体（vol02）· 烛光与赛道 B 版 · 蓝/金/烛光交织 8 段
+=================================================================== */
+.candle-track {
+  background: #fbf6ec;
+  min-height: 100vh;
+  color: #5a3a1e;
+  font-family: "PingFang SC", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+.candle-track .serif { font-family: "Songti SC", "STSong", serif; }
+.candle-track .mono  { font-family: "SF Mono", Menlo, ui-monospace, monospace; letter-spacing: 1px; }
+
+.ct-star {
+  display: inline-block;
+  width: 14px; height: 14px;
+  background: #c9a24a;
+  clip-path: polygon(50% 5%, 61% 39%, 96% 40%, 68% 60%, 79% 95%, 50% 73%, 21% 95%, 32% 60%, 4% 40%, 39% 39%);
+}
+.ct-star--small { width: 11px; height: 11px; }
+
+/* HERO */
+.ct-hero { position: relative; height: 560px; overflow: hidden; }
+.ct-hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; }
+.ct-hero__top-fade { position: absolute; top: 0; left: 0; right: 0; height: 90px; background: linear-gradient(180deg, rgba(15,40,85,0.55) 0%, transparent 100%); }
+.ct-hero__bottom-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 280px; background: linear-gradient(180deg, transparent 0%, rgba(15,40,85,0.4) 35%, rgba(58,36,18,0.92) 100%); }
+.ct-hero__meta { position: absolute; top: 56px; left: 22px; right: 22px; display: flex; justify-content: space-between; font-size: 10px; color: #e9b949; letter-spacing: 3px; }
+.ct-hero__meta-right { opacity: 0.85; }
+.ct-hero__bottom { position: absolute; left: 22px; right: 22px; bottom: 24px; color: #fff; }
+.ct-hero__badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px; background: #e9b949; color: #3a2412;
+  font-size: 9.5px; letter-spacing: 2px; margin-bottom: 14px; border-radius: 2px;
+}
+.ct-hero__badge-stars { display: flex; gap: 2px; }
+.ct-hero__badge-star { background: #3a2412; width: 9px; height: 9px; }
+.ct-hero__title { font-size: 27px; font-weight: 900; line-height: 1.32; letter-spacing: 1px; }
+.ct-hero__title-gold { color: #e9b949; }
+.ct-hero__title-candle { color: #e8a85e; }
+.ct-hero__sub { font-style: italic; font-size: 12.5px; opacity: 0.88; margin-top: 12px; line-height: 1.65; }
+
+/* Speaker bar */
+.ct-speaker-bar {
+  background: #1a0c06; color: #fff;
+  padding: 13px 22px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 10px; letter-spacing: 2px;
+  border-bottom: 1px solid rgba(201,162,74,0.33);
+}
+.ct-speaker-bar__avatar { width: 36px; height: 36px; border-radius: 18px; overflow: hidden; flex-shrink: 0; box-shadow: inset 0 0 0 1.5px #c9a24a; }
+.ct-speaker-bar__avatar-img { width: 100%; height: 100%; object-fit: cover; object-position: 74% 36%; display: block; }
+.ct-speaker-bar__body { flex: 1; min-width: 0; }
+.ct-speaker-bar__kicker { color: #e9b949; font-size: 9px; letter-spacing: 2px; }
+.ct-speaker-bar__name { font-family: "Songti SC", serif; font-size: 13.5px; font-weight: 700; letter-spacing: 1px; margin-top: 1px; }
+.ct-speaker-bar__date { color: #e9b949; opacity: 0.7; font-size: 10px; }
+
+/* § 01 */
+.ct-s1 { padding: 36px 26px 0; }
+.ct-s1__kicker { font-size: 10px; color: #c9a24a; letter-spacing: 4px; margin-bottom: 14px; }
+.ct-s1__h { font-size: 22px; font-weight: 900; color: #0f2855; line-height: 1.4; letter-spacing: 0.5px; }
+.ct-s1__h-gold { color: #c9a24a; }
+.ct-s1__cities {
+  display: flex; justify-content: space-between;
+  padding: 20px 4px;
+  border-top: 0.5px solid rgba(201,162,74,0.4);
+  border-bottom: 0.5px solid rgba(201,162,74,0.4);
+  margin-top: 22px;
+}
+.ct-city { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ct-city__star { display: block; width: 18px; height: 18px; background: #c9a24a; clip-path: polygon(50% 5%, 61% 39%, 96% 40%, 68% 60%, 79% 95%, 50% 73%, 21% 95%, 32% 60%, 4% 40%, 39% 39%); }
+.ct-city__name { font-size: 10px; font-weight: 700; color: #5a3a1e; letter-spacing: 0.3px; }
+.ct-city__num { font-size: 7.5px; color: #c9a24a; opacity: 0.8; letter-spacing: 1px; }
+
+.ct-s1__stats { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.ct-stat__num { font-family: "Songti SC", serif; font-size: 36px; font-weight: 900; color: #0f2855; line-height: 0.9; letter-spacing: -0.5px; }
+.ct-stat__unit { font-size: 14px; font-weight: 500; color: #8a6a3e; margin-left: 4px; }
+.ct-stat__label { font-size: 10px; color: #c9a24a; letter-spacing: 1.5px; margin-top: 8px; }
+
+.ct-s1__outro { margin-top: 22px; font-style: italic; font-size: 13px; color: #5a3a1e; opacity: 0.78; line-height: 1.8; }
+.ct-s1__outro-u { text-decoration-color: #c9a24a; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+
+/* § 02 烛光 */
+.ct-candle { position: relative; height: 380px; overflow: hidden; margin-top: 34px; }
+.ct-candle__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; display: block; }
+.ct-candle__top-fade { position: absolute; top: 0; left: 0; right: 0; height: 80px; background: linear-gradient(180deg, rgba(20,8,4,0.5) 0%, transparent 100%); }
+.ct-candle__bottom-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 140px; background: linear-gradient(180deg, transparent 0%, rgba(20,8,4,0.85) 100%); }
+.ct-candle__marker { position: absolute; top: 18px; left: 22px; right: 22px; font-size: 10px; color: #e9b949; letter-spacing: 4px; }
+.ct-candle__bottom { position: absolute; left: 22px; right: 22px; bottom: 18px; color: #fff; }
+.ct-candle__lines { font-size: 22px; font-weight: 800; line-height: 1.4; letter-spacing: 1px; }
+.ct-candle__hl { font-style: italic; color: #e8a85e; }
+
+/* LEAD */
+.ct-lead { padding: 32px 26px 0; font-size: 13.5px; color: #5a3a1e; line-height: 2; }
+.ct-lead__cap { float: left; font-family: "Songti SC", serif; font-size: 60px; font-weight: 900; color: #d97757; line-height: 0.85; margin-right: 8px; margin-top: 6px; }
+.ct-lead__hl {
+  font-style: normal; color: #0f2855; font-weight: 600;
+  background: linear-gradient(180deg, transparent 65%, rgba(243,217,122,0.8) 65%, rgba(243,217,122,0.8) 92%, transparent 92%);
+}
+
+/* HOOK */
+.ct-hook-wrap { padding: 32px 22px 0; }
+.ct-hook {
+  background: #fff; border: 1px solid #c9a24a;
+  padding: 26px 22px 22px; position: relative;
+  box-shadow: 6px 6px 0 #9dbfe3;
+}
+.ct-hook__tab {
+  position: absolute; top: -10px; left: 16px;
+  padding: 3px 9px;
+  background: #0f2855; color: #e9b949;
+  font-size: 9.5px; letter-spacing: 2px;
+}
+.ct-hook__lines { font-size: 19.5px; font-weight: 800; color: #0f2855; line-height: 1.65; letter-spacing: 0.6px; margin-top: 4px; }
+.ct-hook__gold { color: #c9a24a; }
+.ct-hook__u { text-decoration-color: #d97757; text-underline-offset: 5px; text-decoration-thickness: 2.5px; }
+
+/* § 03 */
+.ct-threads { padding: 36px 26px 0; }
+.ct-threads__kicker { font-size: 10px; color: #d97757; letter-spacing: 3px; margin-bottom: 16px; }
+.ct-thread { display: flex; gap: 16px; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 0.5px dashed rgba(201,162,74,0.4); }
+.ct-thread--last { border-bottom: none; }
+.ct-thread__num { font-size: 30px; font-weight: 900; color: #c9a24a; line-height: 0.9; width: 32px; flex-shrink: 0; letter-spacing: -1px; padding-top: 2px; }
+.ct-thread__text { font-size: 13px; color: #5a3a1e; line-height: 1.9; }
+.ct-thread--last .ct-thread__text { font-weight: 700; }
+
+/* 双图 */
+.ct-side { padding: 14px 22px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ct-side__img { width: 100%; height: 150px; object-fit: cover; border-radius: 4px; box-shadow: 0 6px 14px rgba(58,36,18,0.28); display: block; }
+.ct-side__cap { font-style: italic; font-size: 11px; color: #5a3a1e; opacity: 0.65; margin: 8px 26px 0; line-height: 1.65; text-align: center; }
+
+/* § 04 大金句 */
+.ct-bigq-wrap { padding: 32px 22px 0; }
+.ct-bigq {
+  background: linear-gradient(135deg, #2a180a 0%, #1a0c06 40%, #0f2855 100%);
+  padding: 32px 26px 28px; position: relative; color: #fff;
+  border-radius: 4px; overflow: hidden;
+}
+.ct-bigq__glow1 { position: absolute; right: -30px; top: -30px; width: 160px; height: 160px; border-radius: 80px; background: radial-gradient(circle, rgba(232,168,94,0.4) 0%, transparent 70%); }
+.ct-bigq__glow2 { position: absolute; left: -20px; bottom: -20px; width: 110px; height: 110px; border-radius: 55px; background: radial-gradient(circle, rgba(201,162,74,0.33) 0%, transparent 70%); }
+.ct-bigq__mark { font-size: 70px; color: #e9b949; line-height: 0.5; opacity: 0.6; position: relative; }
+.ct-bigq__text { font-style: italic; font-size: 17px; line-height: 1.9; letter-spacing: 0.5px; margin-top: 4px; position: relative; white-space: pre-line; }
+.ct-bigq__foot { display: flex; align-items: center; gap: 10px; margin-top: 20px; padding-top: 14px; border-top: 0.5px solid rgba(233,185,73,0.33); position: relative; }
+.ct-bigq__stars { display: flex; gap: 3px; }
+.ct-bigq__star { background: #e9b949; }
+.ct-bigq__cite { font-size: 9.5px; color: #e9b949; letter-spacing: 2px; flex: 1; }
+
+/* § 05 habits */
+.ct-habits { padding: 40px 26px 0; }
+.ct-habits__kicker { font-size: 10px; color: #c9a24a; letter-spacing: 4px; margin-bottom: 10px; }
+.ct-habits__title { font-size: 20px; font-weight: 800; color: #5a3a1e; line-height: 1.45; }
+.ct-habits__sub { font-style: italic; font-size: 12px; color: #5a3a1e; opacity: 0.65; margin-top: 6px; line-height: 1.65; }
+.ct-habits__rail { margin-top: 22px; padding-left: 16px; border-left: 2px solid #c9a24a; }
+.ct-habit { position: relative; padding-bottom: 18px; }
+.ct-habit__dot { position: absolute; left: -21px; top: 4px; width: 10px; height: 10px; border-radius: 5px; background: #fbf6ec; border: 2px solid #c9a24a; box-sizing: border-box; }
+.ct-habit__dot--first { background: #c9a24a; }
+.ct-habit__head { display: flex; align-items: baseline; gap: 8px; }
+.ct-habit__k { font-size: 14.5px; font-weight: 700; color: #5a3a1e; letter-spacing: 0.5px; }
+.ct-habit__line { flex: 1; height: 1px; background-image: linear-gradient(90deg, rgba(201,162,74,0.4) 0, rgba(201,162,74,0.4) 2px, transparent 2px, transparent 5px); background-size: 5px 1px; background-repeat: repeat-x; }
+.ct-habit__d { font-size: 11.5px; color: #5a3a1e; opacity: 0.72; margin-top: 4px; line-height: 1.65; }
+
+/* § 06 情感高点 */
+.ct-peak { margin-top: 36px; background: linear-gradient(180deg, #fbf6ec 0%, #f0e3c8 100%); }
+.ct-peak__photo { position: relative; height: 280px; overflow: hidden; }
+.ct-peak__photo-img { width: 100%; height: 100%; object-fit: cover; object-position: 76% 32%; filter: saturate(1.05) brightness(0.96); display: block; }
+.ct-peak__photo-fade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 0%, transparent 60%, rgba(58,36,18,0.5) 100%); }
+.ct-peak__photo-meta { position: absolute; left: 22px; right: 22px; bottom: 14px; color: #fff; font-size: 10px; letter-spacing: 3px; display: flex; justify-content: space-between; }
+.ct-peak__photo-meta-right { opacity: 0.85; }
+.ct-peak__body { padding: 32px 26px 36px; }
+.ct-peak__kicker { font-size: 10px; color: #d97757; letter-spacing: 4px; margin-bottom: 12px; }
+.ct-peak__mark { font-size: 60px; color: #c9a24a; line-height: 0.4; height: 20px; opacity: 0.8; }
+.ct-peak__quote { font-size: 19px; font-weight: 700; color: #5a3a1e; line-height: 1.8; letter-spacing: 0.6px; margin-top: 10px; }
+.ct-peak__hl { color: #d97757; background: linear-gradient(180deg, transparent 60%, rgba(243,217,122,0.8) 60%, rgba(243,217,122,0.8) 92%, transparent 92%); padding: 0 4px; }
+.ct-peak__essay { font-size: 12.5px; color: #5a3a1e; opacity: 0.75; line-height: 1.95; margin-top: 18px; }
+.ct-peak__essay-strong { color: #d97757; font-weight: 700; }
+
+/* § 07 12 majors */
+.ct-majors { padding: 36px 26px 0; }
+.ct-majors__kicker { font-size: 10px; color: #c9a24a; letter-spacing: 4px; margin-bottom: 12px; }
+.ct-majors__title { font-size: 20px; font-weight: 800; color: #5a3a1e; line-height: 1.5; }
+.ct-majors__hl { color: #0f2855; }
+.ct-majors__pills { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 5px; }
+.ct-pill { font-size: 11px; color: #5a3a1e; padding: 5px 10px; background: #fff; border: 0.5px solid rgba(201,162,74,0.5); border-radius: 14px; }
+.ct-majors__body { font-size: 12.5px; color: #5a3a1e; opacity: 0.82; line-height: 1.95; margin-top: 16px; }
+.ct-majors__body-u { text-decoration-color: #c9a24a; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+
+/* § 现场全景 */
+.ct-aud { padding: 24px 22px 0; }
+.ct-aud__img { width: 100%; height: 220px; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 24px rgba(58,36,18,0.4); filter: saturate(1.02) brightness(0.98); display: block; }
+.ct-aud__cap { font-style: italic; font-size: 11.5px; color: #5a3a1e; opacity: 0.72; margin-top: 10px; line-height: 1.7; text-align: center; }
+
+/* § 08 收尾 */
+.ct-closing { padding: 44px 26px 28px; position: relative; }
+.ct-closing__stars { display: flex; justify-content: center; gap: 7px; margin-bottom: 18px; }
+.ct-closing__kicker { font-size: 10px; color: #d97757; letter-spacing: 4px; text-align: center; margin-bottom: 10px; }
+.ct-closing__thanks { font-size: 16px; font-weight: 700; color: #5a3a1e; line-height: 1.7; letter-spacing: 0.3px; text-align: center; }
+.ct-closing__thanks-u { text-decoration-color: #c9a24a; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.ct-closing__essay { margin: 28px auto 0; max-width: 280px; font-size: 12.5px; color: #5a3a1e; opacity: 0.82; line-height: 2; text-align: center; }
+.ct-closing__essay-line { padding: 2px 0; }
+.ct-closing__essay-hl { text-decoration: underline; text-decoration-color: #d97757; text-underline-offset: 4px; }
+.ct-closing__essay-strong { font-weight: 700; }
+
+.ct-sheep {
+  margin-top: 36px; padding: 28px 22px;
+  background: #fff;
+  border: 1px solid #c9a24a; border-radius: 4px;
+  position: relative;
+  box-shadow: 5px 5px 0 #9dbfe3;
+}
+.ct-sheep__icon { position: absolute; top: -16px; right: 20px; font-size: 28px; background: #fbf6ec; padding: 2px 6px; }
+.ct-sheep__title { font-size: 23px; font-weight: 900; color: #3a2412; line-height: 1.5; letter-spacing: 0.5px; text-align: center; }
+.ct-sheep__hl { color: #d97757; background: linear-gradient(180deg, transparent 60%, rgba(243,217,122,0.67) 60%, rgba(243,217,122,0.67) 92%, transparent 92%); padding: 0 6px; }
+
+.ct-closing__p { font-size: 12.5px; color: #5a3a1e; opacity: 0.78; line-height: 1.95; margin-top: 24px; }
+.ct-closing__sig { font-style: italic; font-size: 11px; color: #5a3a1e; opacity: 0.55; margin-top: 24px; letter-spacing: 1px; text-align: center; }
+
+/* CTA */
+.ct-cta-wrap { padding: 0 22px 30px; background: #fbf6ec; }
+.ct-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, #1a0c06 0%, #0f2855 60%, #1a3a78 100%);
+  padding: 16px 18px; border-radius: 4px; color: #fff;
+  box-shadow: 0 10px 22px rgba(15,40,85,0.4);
+  position: relative; overflow: hidden;
+}
+.ct-cta__glow { position: absolute; right: -30px; top: -30px; width: 140px; height: 140px; border-radius: 70px; background: radial-gradient(circle, rgba(232,168,94,0.4) 0%, transparent 70%); }
+.ct-cta__left { position: relative; z-index: 2; flex: 1; min-width: 0; }
+.ct-cta__kicker { font-size: 9.5px; color: #e9b949; letter-spacing: 2px; }
+.ct-cta__title { font-size: 15.5px; font-weight: 800; margin-top: 4px; }
+.ct-cta__meta { font-style: italic; font-size: 10.5px; opacity: 0.85; margin-top: 3px; }
+.ct-cta__arrow {
+  width: 38px; height: 38px; border-radius: 19px;
+  background: #e9b949; color: #0f2855;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 700; flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: relative; z-index: 2;
+}
+.ct-back {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 10px; padding: 12px 14px;
+  border: 0.5px solid #e7d7b3; border-radius: 12px;
+  background: #fff; color: inherit;
+}
+.ct-back__t { font-size: 13px; font-weight: 700; color: #5a3a1e; }
+.ct-back__chev { font-size: 16px; color: #8a6a3e; }

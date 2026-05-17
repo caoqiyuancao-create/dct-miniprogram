@@ -209,6 +209,48 @@
 
 ---
 
+### CHG-20260517-04 · vol02 candle-track 自定义版式落地（兑现 03 推迟项）— 2026-05-17
+
+**类型**：🎨 纯 UI 改动（不动数据 schema、不动报名 / 云函数 / wall）
+**对应原型**：`prototype/src/screen-review-vol02.jsx` Vol02CandleDetail（626 行 React）
+
+**背景**：CHG-20260517-03 上线时 vol02 因为复杂度（626 行 + 8 大段 + 多处分段 highlight 拼接）走的通用版兜底。本次专门兑现，把烛光与赛道 B 版完整翻译到 miniprogram WXML/WXSS + docs H5。
+
+**完成内容**：
+
+1. **补齐 vol02.recap 数据**（miniprogram/data/issues.js + docs PAST_ISSUES）：
+   - 在 CHG-03 已有 18 子字段基础上，补全 candleChapter / leadCap+leadBody+leadHighlight / hook 七要素 / threadsKicker / sideCaption / habitsKicker+Title+Sub / peakKicker+peakMeta / majorsKicker+TitleLead+TitleHl+TitleTail+Body+BodyHl / audienceCaption / thanksKicker+Title+Hl+Tail / closingEssay+EssayHl / sheepTitle+Intro+Hl+Tail / signature 共 ~32 个字段
+   - 数据完整覆盖设计端 `prototype/data/issues.js` vol02 的全部 recap 子字段
+
+2. **miniprogram/pages/review-detail/** 三件套：
+   - `review-detail.js`：加 `candle-track` 分支，预切 6 段动态拼接（cTSection1OutroSplit / cTLeadSplit / cTPeakBodySplit / cTMajorsBodySplit / cTClosingEssay 标记 hasHl/hasStrong）
+   - `review-detail.wxml`：candle-track 完整 8 大段 + Hero/Speaker 过渡条/§1 一万公里+城市网格+stats/§2 烛光插页/Lead drop cap/Hook 卡（白底+蓝色硬阴影）/§3 四线索 dashed/双图/§4 大金句深蓝渐变+双光晕/§5 习惯时间轴（金色虚线）/§6 情感高点 speaker 大图 + 生命材料金色 highlight / §7 12 专业 pill grid / 现场全景 / §8 收尾 + 走丢的羊（白底 + 蓝阴影 + 🐑）+ CTA
+   - `review-detail.wxss`：~280 行新增 `.candle-track / .ct-*` 样式（蓝/金/烛光三色 token + 六角星 clip-path + drop cap + box-shadow 偏移 + dashed border + linear-gradient highlight）
+
+3. **docs/app.js + docs/style.css** 同步 H5：
+   - `renderCandleTrack(issue)` 函数 ~180 行，结构与 WXML 1:1 对应（用 `escapeHtml` + `<br/>` + `<u>` / `<em>` / `<strong>` / `<span>` 翻译 React inline）
+   - `style.css` ~210 行新增 .ct-* 样式（px 单位 · 与 H5 480px 宽容器适配）
+
+4. **WXML / React inline 翻译要点**：
+   - React 的 `text.split(hl).map(...)` 拼接 → 预处理为 `{ head, hl, tail }` 对象 + WXML wx:if
+   - React.Fragment + `<br/>` → `<text class="ct-br"></text>`（display:block; height:0）
+   - inline `style={{ ... }}` → 全部抽到 WXSS class
+   - SVG sheep icon → 🐑 emoji（小程序原生支持，不用 SVG 也能传达"走丢的羊"意象）
+   - SVG SixStars 组件 → 6 个 div + clip-path 六角星
+
+**视觉验收点**：
+- 进入 vol02 详情：看到完整 8 大段，**HERO 大金标签 + 6 颗深棕星** + 「白天她在跑道上 / 夜晚她在客厅里」（跑道金 / 客厅烛橙），不是通用版的小卡片
+- §1 一万公里：6 城市网格（每个城下面 0X 编号）+ 两个 stats 大数字
+- §2 烛光插页：全宽蛋糕烛光照 + "如何安放自己"金色斜体
+- Drop cap 「那」字 60px 焦糖色
+- Hook 卡：白底 + 蓝色硬阴影 + 蓝标签 + "六大满贯"金色 + "如何安放自己"焦糖下划线
+- 习惯时间轴：金色虚线 + 圆点（第一条实心）
+- 走丢的羊大字卡：白底 + 蓝阴影 + 🐑 angle 装饰 + 金色高亮
+
+**未触碰**：vol01 night-talk / vol03 / 报名 / 云函数 / 留言墙 / wall-tv.html / about / form / success / detail / landing
+
+---
+
 ### CHG-20260517-03 · 往期回顾详情页变体 + 主创改名 + vol01/vol02 recap 数据 — 2026-05-17
 
 **类型**：⚙️ 功能改动 + 🎨 UI 改动（变体调度新机制）

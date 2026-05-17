@@ -43,7 +43,6 @@ const PAST_ISSUES = [
       'assets/vol02-bowl.jpg',
       'assets/vol02-cake-slice.jpg'
     ],
-    // TODO: 自定义 candle-track 详情页待下一个 PR 实现，目前用通用版式渲染
     recap: {
       variant: 'candle-track',
       topic: '六星之路 · 我的目标管理与坚持哲学',
@@ -62,13 +61,37 @@ const PAST_ISSUES = [
         { num: '10,000', unit: '公里', label: '累计跑步里程' },
         { num: '1,314',  unit: '次',   label: '记录里的跑步次数' }
       ],
+      section1Outro: ['那晚真正打动我们的，不是这六颗星——', '而是她把这六颗星，变成生活的一部分的方式。'],
+      candleChapter: {
+        marker: '§ 02 · 然而那天晚上',
+        lines: ['她坐进我们小小的客厅，', '和我们聊起'],
+        hl: '"如何安放自己"'
+      },
+      leadCap: '那',
+      leadBody: '天晚上的客厅里，桌上是烛灯、橙玫瑰、莓果蛋糕；投影上是高老师跑过的六座城市。她讲马拉松，讲读书会，讲英语单词打卡，讲博物馆公益讲解——一件一件，都很认真。',
+      leadHighlight: '六座城市',
+      hook: {
+        kicker: '那晚的核心提问',
+        q1: '一个跑完',
+        q1Hl: '六大满贯',
+        q1Tail: '的人，',
+        q2: '为什么坐进我们小小的客厅，',
+        q3: '聊起',
+        q3Hl: '"如何安放自己"',
+        q3Tail: '？'
+      },
+      threadsKicker: '§ 03 · 我们顺着她，慢慢拆开了几条线索',
       threads: [
         '"六星"不是终点，而是一段日常生活的副产物',
         '怎样开始一件事，怎样重复，怎样在做了很多遍之后仍然重新看见它',
         '在不喜欢、甚至厌倦的时候，继续感受事情本身的细节',
         '我们缺的不是想象，是在想象成为现实之前，忍受焦虑的能力'
       ],
+      sideCaption: '↑ 莓果碗 + Lotus · 蓝莓黑莓樱桃慕斯 · 那晚的所有甜，都是夜里的颜色',
       bigQuote: '所谓"六星"，是六座城市、六条赛道、六次出发。\n但真正打动我们的，是她怎样把一件事，一点点做成生活的一部分。',
+      habitsKicker: '§ 04 · 那些"放进日常"的事',
+      habitsTitle: '她"坚持"的，远不止跑步',
+      habitsSub: '—— 单独拿出来每一件都不轻，她把它们放进了很多个普通的一天',
       habits: [
         { k: '跑步',           d: '日复一日，跑到 10,000 公里 · 第 1,314 次' },
         { k: '读书会',         d: '带领、组织、出席，不缺席' },
@@ -77,11 +100,37 @@ const PAST_ISSUES = [
         { k: '博物馆公益讲解', d: '把所学，反复讲给陌生人' },
         { k: '公益',           d: '建图书馆 · 资助学生 · 长期投入' }
       ],
+      peakKicker: '§ 05 · 她带来的',
+      peakMeta: ['FIELD · 04.25 · 21:08', '讲到第 1,314 次跑步时'],
       peakQuote: ['她带来的不是标准答案。', '而是一份非常具体、非常诚实的——'],
       peakHl: '生命材料',
       peakBody: '她身上有一种动人的生命力——那不是被包装出来的"励志感"，而是一种长期生活之后，仍然保有的敏锐、热情和安静。',
+      majorsKicker: '§ 06 · 一个不大的客厅',
+      majorsTitleLead: '坐下了',
+      majorsTitleHl: '12 个不同专业',
+      majorsTitleTail: '的思考',
       majors: ['光电', '电气', '医学', '哲学', '文字学', '人类学', '心理', '建筑', '法学', '材料', '历史', '计算机'],
-      closingP: '如果你也在某件事上长跑过、犹豫过、不喜欢过，又重新开始过——欢迎来 DCT 客厅坐坐 ～'
+      majorsBody: '每一次观点的碰撞，都让我们重新相信：跨学科交流的意义，不在于大家说同一种语言，而在于不同语言之间，仍然愿意互相翻译、互相靠近。',
+      majorsBodyHl: '仍然愿意互相翻译、互相靠近',
+      audienceCaption: ['那些原本悬浮在空中的想象，', '好像也因此慢慢有了——可以落脚的重量。'],
+      thanksKicker: 'FROM · YOUR · HOSTS',
+      thanksTitle: ['感谢那天晚上，', '来到 DCT 客厅坐坐的'],
+      thanksHl: '每一位',
+      thanksTail: '。',
+      closingEssay: [
+        '现代生活里，我们好像并不缺少想象——',
+        '真正缺少的，',
+        '是在想象变成现实的时间里，忍受焦虑的能力；',
+        '是在树欲静而风不止的现实里，',
+        '一次次学习——如何安放自己。'
+      ],
+      closingEssayHl: '如何安放自己',
+      sheepTitle: 'DCT 不是给答案，',
+      sheepIntro: '而是 ',
+      sheepHl: '一起找一只走丢的羊',
+      sheepTail: '。',
+      closingP: '如果你也在某件事上长跑过、犹豫过、不喜欢过，又重新开始过——欢迎来 DCT 客厅坐坐 ～',
+      signature: '— D · C · T · 2026 春末'
     },
     highlights: [
       { quote: '所谓"六星"，是六座城市、六条赛道、六次出发。但真正打动我们的，是她怎样把一件事，一点点做成生活的一部分。', author: 'DCT 第二期 · 现场金句' },
@@ -749,8 +798,298 @@ function renderReviewDetail() {
     root.innerHTML = renderNightTalk(issue);
     return;
   }
-  // candle-track 待下一个 PR 实现自定义版式，先走通用版兜底
+  if (r.variant === 'candle-track') {
+    root.innerHTML = renderCandleTrack(issue);
+    return;
+  }
   root.innerHTML = renderGenericReviewDetail(issue);
+}
+
+// 烛光与赛道 B 版（vol02）— 蓝/金/烛光交织 8 段长卷
+function renderCandleTrack(issue) {
+  const r = issue.recap || {};
+  const sp = issue.speaker || {};
+  const orgClean = (sp.org || '西南交通大学').replace('光电工程研究所', '').trim();
+  const speakerLine = `${sp.name || ''} ${sp.title || ''} · ${orgClean}`;
+  const dateChip = (issue.date || '').slice(5) + ' · 19:00';
+  const heroDateAttendees = (issue.date || '') + ' · ' + (r.attendees || '客厅夜场');
+
+  const splitAccent = (text, hl) => {
+    if (!text || !hl) return { hasAccent: false, plain: text || '' };
+    const idx = text.indexOf(hl);
+    if (idx < 0) return { hasAccent: false, plain: text };
+    return { hasAccent: true, head: text.slice(0, idx), hl, tail: text.slice(idx + hl.length) };
+  };
+
+  // 预切分
+  const outro2 = (r.section1Outro && r.section1Outro[1]) || '';
+  const outroSplit = splitAccent(outro2, '变成生活的一部分');
+  const leadSplit = splitAccent(r.leadBody, r.leadHighlight);
+  const peakBodySplit = splitAccent(r.peakBody, '敏锐、热情和安静');
+  const majorsBodySplit = splitAccent(r.majorsBody, r.majorsBodyHl);
+
+  const sixStars = (cls = 'ct-star') => Array.from({ length: 6 }, () => `<span class="${cls}"></span>`).join('');
+
+  const closingLines = (r.closingEssay || []).map(line => {
+    const hlEssay = r.closingEssayHl;
+    if (hlEssay && line.indexOf(hlEssay) >= 0) {
+      const p = line.split(hlEssay);
+      return `<div class="ct-closing__essay-line">${escapeHtml(p[0])}<span class="ct-closing__essay-hl">${escapeHtml(hlEssay)}</span>${escapeHtml(p[1] || '')}</div>`;
+    }
+    const tough = '忍受焦虑的能力';
+    if (line.indexOf(tough) >= 0) {
+      const p = line.split(tough);
+      return `<div class="ct-closing__essay-line">${escapeHtml(p[0])}<strong class="ct-closing__essay-strong">${escapeHtml(tough)}</strong>${escapeHtml(p[1] || '')}</div>`;
+    }
+    return `<div class="ct-closing__essay-line">${escapeHtml(line)}</div>`;
+  }).join('');
+
+  return `
+    <div class="candle-track">
+      <!-- HERO -->
+      <div class="ct-hero">
+        <img class="ct-hero__img" src="${r.heroImg || issue.poster}" alt="${escapeHtml(issue.title)}" />
+        <div class="ct-hero__top-fade"></div>
+        <div class="ct-hero__bottom-fade"></div>
+        <div class="ct-hero__meta">
+          <span class="mono">DCT · VOL.0${issue.number} · 回顾</span>
+          <span class="mono ct-hero__meta-right">${escapeHtml(heroDateAttendees)}</span>
+        </div>
+        <div class="ct-hero__bottom">
+          <div class="ct-hero__badge mono">
+            <span class="ct-hero__badge-stars">${sixStars('ct-star ct-hero__badge-star')}</span>
+            <span>${escapeHtml(r.heroBadge || '')}</span>
+          </div>
+          <div class="serif ct-hero__title">
+            白天她在<span class="ct-hero__title-gold">跑道</span>上，<br/>
+            夜晚她在<span class="ct-hero__title-candle">客厅</span>里。
+          </div>
+          <div class="serif ct-hero__sub">${escapeHtml(r.heroSub || '')}</div>
+        </div>
+      </div>
+
+      <!-- Speaker bar -->
+      <div class="ct-speaker-bar">
+        <div class="ct-speaker-bar__avatar">
+          <img class="ct-speaker-bar__avatar-img" src="${r.speakerImg}" alt="" />
+        </div>
+        <div class="ct-speaker-bar__body">
+          <div class="mono ct-speaker-bar__kicker">SPEAKER · 主讲</div>
+          <div class="serif ct-speaker-bar__name">${escapeHtml(speakerLine)}</div>
+        </div>
+        <div class="mono ct-speaker-bar__date">${escapeHtml(dateChip)}</div>
+      </div>
+
+      <!-- § 01 一万公里之外 -->
+      <div class="ct-s1">
+        <div class="mono ct-s1__kicker">§ 01 · 一万公里之外</div>
+        <div class="serif ct-s1__h">
+          所谓"六星"——<br/>
+          六座<span class="ct-s1__h-gold">城市</span>，
+          六条<span class="ct-s1__h-gold">赛道</span>，
+          六次<span class="ct-s1__h-gold">出发</span>。
+        </div>
+        <div class="ct-s1__cities">
+          ${(r.sixCities || []).map((c, i) => `
+            <div class="ct-city">
+              <span class="ct-city__star"></span>
+              <span class="serif ct-city__name">${escapeHtml(c)}</span>
+              <span class="mono ct-city__num">0${i + 1}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="ct-s1__stats">
+          ${(r.stats || []).map(s => `
+            <div class="ct-stat">
+              <div class="serif ct-stat__num">${escapeHtml(s.num)}<span class="ct-stat__unit">${escapeHtml(s.unit)}</span></div>
+              <div class="mono ct-stat__label">${escapeHtml(s.label)}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="serif ct-s1__outro">
+          ${escapeHtml((r.section1Outro && r.section1Outro[0]) || '')}<br/>
+          ${outroSplit.hasAccent
+            ? `${escapeHtml(outroSplit.head)}<u class="ct-s1__outro-u">${escapeHtml(outroSplit.hl)}</u>${escapeHtml(outroSplit.tail)}`
+            : escapeHtml(outroSplit.plain || '')}
+        </div>
+      </div>
+
+      <!-- § 02 烛光插页 -->
+      <div class="ct-candle">
+        <img class="ct-candle__img" src="${r.candleImg}" alt="" />
+        <div class="ct-candle__top-fade"></div>
+        <div class="ct-candle__bottom-fade"></div>
+        <div class="mono ct-candle__marker">${escapeHtml(r.candleChapter && r.candleChapter.marker || '')}</div>
+        <div class="ct-candle__bottom">
+          <div class="serif ct-candle__lines">
+            ${escapeHtml(r.candleChapter && r.candleChapter.lines && r.candleChapter.lines[0] || '')}<br/>
+            ${escapeHtml(r.candleChapter && r.candleChapter.lines && r.candleChapter.lines[1] || '')}<em class="ct-candle__hl">${escapeHtml(r.candleChapter && r.candleChapter.hl || '')}</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- § LEAD drop cap -->
+      <div class="ct-lead">
+        <span class="serif ct-lead__cap">${escapeHtml(r.leadCap || '')}</span>
+        ${leadSplit.hasAccent
+          ? `${escapeHtml(leadSplit.head)}<em class="ct-lead__hl">${escapeHtml(leadSplit.hl)}</em>${escapeHtml(leadSplit.tail)}`
+          : escapeHtml(leadSplit.plain || '')}
+      </div>
+
+      <!-- § HOOK -->
+      <div class="ct-hook-wrap">
+        <div class="ct-hook">
+          <div class="ct-hook__tab mono">${escapeHtml((r.hook && r.hook.kicker) || '')}</div>
+          <div class="serif ct-hook__lines">
+            ${escapeHtml(r.hook && r.hook.q1 || '')}<span class="ct-hook__gold">${escapeHtml(r.hook && r.hook.q1Hl || '')}</span>${escapeHtml(r.hook && r.hook.q1Tail || '')}<br/>
+            ${escapeHtml(r.hook && r.hook.q2 || '')}<br/>
+            ${escapeHtml(r.hook && r.hook.q3 || '')}<u class="ct-hook__u">${escapeHtml(r.hook && r.hook.q3Hl || '')}</u>${escapeHtml(r.hook && r.hook.q3Tail || '')}
+          </div>
+        </div>
+      </div>
+
+      <!-- § 03 四线索 -->
+      <div class="ct-threads">
+        <div class="mono ct-threads__kicker">${escapeHtml(r.threadsKicker || '')}</div>
+        ${(r.threads || []).map((t, i, arr) => `
+          <div class="ct-thread ${i === arr.length - 1 ? 'ct-thread--last' : ''}">
+            <div class="serif ct-thread__num">0${i + 1}</div>
+            <div class="ct-thread__text">${escapeHtml(t)}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- § 双图 -->
+      <div class="ct-side">
+        <img class="ct-side__img" src="${r.bowlImg}" alt="" />
+        <img class="ct-side__img" src="${r.cakeSliceImg}" alt="" />
+      </div>
+      <div class="serif ct-side__cap">${escapeHtml(r.sideCaption || '')}</div>
+
+      <!-- § 04 大金句 -->
+      <div class="ct-bigq-wrap">
+        <div class="ct-bigq">
+          <div class="ct-bigq__glow1"></div>
+          <div class="ct-bigq__glow2"></div>
+          <div class="serif ct-bigq__mark">"</div>
+          <div class="serif ct-bigq__text">${escapeHtml(r.bigQuote || '')}</div>
+          <div class="ct-bigq__foot">
+            <div class="ct-bigq__stars">${sixStars('ct-star ct-star--small ct-bigq__star')}</div>
+            <div class="mono ct-bigq__cite">· VOL.0${issue.number} · 现场金句</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- § 05 habits -->
+      <div class="ct-habits">
+        <div class="mono ct-habits__kicker">${escapeHtml(r.habitsKicker || '')}</div>
+        <div class="serif ct-habits__title">${escapeHtml(r.habitsTitle || '')}</div>
+        <div class="serif ct-habits__sub">${escapeHtml(r.habitsSub || '')}</div>
+        <div class="ct-habits__rail">
+          ${(r.habits || []).map((h, i) => `
+            <div class="ct-habit">
+              <div class="ct-habit__dot ${i === 0 ? 'ct-habit__dot--first' : ''}"></div>
+              <div class="ct-habit__head">
+                <div class="serif ct-habit__k">${escapeHtml(h.k)}</div>
+                <div class="ct-habit__line"></div>
+              </div>
+              <div class="ct-habit__d">${escapeHtml(h.d)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- § 06 情感高点 -->
+      <div class="ct-peak">
+        <div class="ct-peak__photo">
+          <img class="ct-peak__photo-img" src="${r.speakerImg}" alt="" />
+          <div class="ct-peak__photo-fade"></div>
+          <div class="ct-peak__photo-meta mono">
+            <span>${escapeHtml(r.peakMeta && r.peakMeta[0] || '')}</span>
+            <span class="ct-peak__photo-meta-right">${escapeHtml(r.peakMeta && r.peakMeta[1] || '')}</span>
+          </div>
+        </div>
+        <div class="ct-peak__body">
+          <div class="mono ct-peak__kicker">${escapeHtml(r.peakKicker || '')}</div>
+          <div class="serif ct-peak__mark">"</div>
+          <div class="serif ct-peak__quote">
+            ${escapeHtml(r.peakQuote && r.peakQuote[0] || '')}<br/>
+            ${escapeHtml(r.peakQuote && r.peakQuote[1] || '')}<br/>
+            <span class="ct-peak__hl">${escapeHtml(r.peakHl || '')}</span>。
+          </div>
+          <div class="ct-peak__essay">
+            ${peakBodySplit.hasAccent
+              ? `${escapeHtml(peakBodySplit.head)}<strong class="ct-peak__essay-strong">${escapeHtml(peakBodySplit.hl)}</strong>${escapeHtml(peakBodySplit.tail)}`
+              : escapeHtml(peakBodySplit.plain || '')}
+          </div>
+        </div>
+      </div>
+
+      <!-- § 07 12 majors -->
+      <div class="ct-majors">
+        <div class="mono ct-majors__kicker">${escapeHtml(r.majorsKicker || '')}</div>
+        <div class="serif ct-majors__title">
+          ${escapeHtml(r.majorsTitleLead || '')} <span class="ct-majors__hl">${escapeHtml(r.majorsTitleHl || '')}</span> ${escapeHtml(r.majorsTitleTail || '')}
+        </div>
+        <div class="ct-majors__pills">
+          ${(r.majors || []).map(m => `<div class="ct-pill">${escapeHtml(m)}</div>`).join('')}
+        </div>
+        <div class="ct-majors__body">
+          ${majorsBodySplit.hasAccent
+            ? `${escapeHtml(majorsBodySplit.head)}<u class="ct-majors__body-u">${escapeHtml(majorsBodySplit.hl)}</u>${escapeHtml(majorsBodySplit.tail)}`
+            : escapeHtml(majorsBodySplit.plain || '')}
+        </div>
+      </div>
+
+      <!-- § 现场全景 -->
+      <div class="ct-aud">
+        <img class="ct-aud__img" src="${r.audienceImg}" alt="" />
+        <div class="serif ct-aud__cap">
+          ${escapeHtml(r.audienceCaption && r.audienceCaption[0] || '')}<br/>
+          ${escapeHtml(r.audienceCaption && r.audienceCaption[1] || '')}
+        </div>
+      </div>
+
+      <!-- § 08 收尾 -->
+      <div class="ct-closing">
+        <div class="ct-closing__stars">${sixStars()}</div>
+        <div class="mono ct-closing__kicker">${escapeHtml(r.thanksKicker || '')}</div>
+        <div class="serif ct-closing__thanks">
+          ${escapeHtml(r.thanksTitle && r.thanksTitle[0] || '')}<br/>
+          ${escapeHtml(r.thanksTitle && r.thanksTitle[1] || '')}<u class="ct-closing__thanks-u">${escapeHtml(r.thanksHl || '')}</u>${escapeHtml(r.thanksTail || '')}
+        </div>
+        <div class="ct-closing__essay">${closingLines}</div>
+
+        <div class="ct-sheep">
+          <div class="ct-sheep__icon">🐑</div>
+          <div class="serif ct-sheep__title">
+            ${escapeHtml(r.sheepTitle || '')}<br/>
+            ${escapeHtml(r.sheepIntro || '')}<span class="ct-sheep__hl">${escapeHtml(r.sheepHl || '')}</span>${escapeHtml(r.sheepTail || '')}
+          </div>
+        </div>
+
+        <div class="ct-closing__p">${escapeHtml(r.closingP || '')}</div>
+        <div class="serif ct-closing__sig">${escapeHtml(r.signature || '')}</div>
+      </div>
+
+      <!-- CTA -->
+      <div class="ct-cta-wrap">
+        <a class="ct-cta" href="#/landing">
+          <div class="ct-cta__glow"></div>
+          <div class="ct-cta__left">
+            <div class="mono ct-cta__kicker">报名本期 · VOL.03</div>
+            <div class="serif ct-cta__title">医美热时代的冷思考</div>
+            <div class="serif ct-cta__meta">2026.05.23 · 陌生的朋友 · 88 元 / 位</div>
+          </div>
+          <div class="ct-cta__arrow">→</div>
+        </a>
+        <a class="ct-back" href="#/review">
+          <div class="serif ct-back__t">返回往期列表</div>
+          <div class="ct-back__chev">›</div>
+        </a>
+      </div>
+    </div>
+  `;
 }
 
 // 通用版 review-detail 渲染
